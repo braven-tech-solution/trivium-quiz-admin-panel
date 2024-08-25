@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-control {
+    @apply mb-2 space-y-1;
+  }
+  .auth-label {
+    @apply leading-[138%] lg:text-lg text-black font-semibold;
+  }
+
+  .auth-input {
+    @apply w-full p-2 bg-[#f8f5ed] text-black   border-[1px]  border-white rounded-md focus:outline-none focus:border-green-500;
+  }
+}

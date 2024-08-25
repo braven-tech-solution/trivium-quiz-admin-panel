@@ -1,0 +1,16 @@
+export const tableHeader = [
+  { name: "Customer_Name", key: "customerName" },
+  { name: "Customer_Type", key: "customerType" },
+  { name: "Description", key: "description" },
+  { name: "Outlate_Name", key: "outlateName" },
+  { name: "Phone", key: "phone" },
+  { name: "Food", key: "food" },
+  { name: "Service", key: "service" },
+  { name: "Delivery", key: "outlet" },
+  { name: "Accuracy", key: "accuracy" },
+  { name: "Recommend", key: "recommend" },
+  { name: "Invoice", key: "invoice" },
+  { name: "Email", key: "email" },
+  { name: "Customer_Date", key: "date" },
+  { name: "Feedback_Date", key: "createdAt" },
+];
