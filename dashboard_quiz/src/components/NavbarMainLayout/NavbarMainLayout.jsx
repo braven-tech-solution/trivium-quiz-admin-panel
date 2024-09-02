@@ -18,8 +18,21 @@ const NavbarMainLayout = () => {
               : " flex items-center p-2 space-x-3 rounded-md"
           }
         >
-          <BiAddToQueue className="text-2xl" />
-          <span>Add Quiz Category</span>
+          <TiEdit className="text-2xl" />
+          <span>Manage Quiz Category</span>
+        </NavLink>
+      </NavGaurd>
+      <NavGaurd accesslist={["admin", "accounts"]}>
+        <NavLink
+          to="/add-quiz-level"
+          className={({ isActive }) =>
+            isActive
+              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+              : " flex items-center p-2 space-x-3 rounded-md"
+          }
+        >
+          <TiEdit className="text-2xl" />
+          <span>Manage Quiz Level</span>
         </NavLink>
       </NavGaurd>
 

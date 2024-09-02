@@ -15,6 +15,7 @@ import AddQuizCategory from "../pages/AddQuizCategory/AddQuizCategory";
 import ManageQuizQuestion from "../pages/ManageQuizQuestion/ManageQuizQuestion";
 import AddScheduleQuiz from "../pages/AddScheduleQuiz/AddScheduleQuiz";
 import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageScheduleQuestion";
+import AddQuizLevel from "../pages/AddQuizLevel/AddQuizLevel";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/add-quiz-category",
         element: <AddQuizCategory />,
+      },
+      {
+        path: "/add-quiz-level",
+        element: <AddQuizLevel />,
       },
       {
         path: "/manage-quiz-question",

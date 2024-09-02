@@ -38,7 +38,8 @@ export default function Table({
       res = (
         <div className="flex justify-center items-center cursor-pointer">
           <PhotoView src={ensureHttps(item)}>
-            <img src={ensureHttps(item)} alt="" width={50} />
+            {/* <img src={ensureHttps(item)} alt="" width={50} /> */}
+            <img src={item} alt="" width={50} />
           </PhotoView>
         </div>
       );

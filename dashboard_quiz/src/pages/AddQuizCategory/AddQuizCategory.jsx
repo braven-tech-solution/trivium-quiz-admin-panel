@@ -7,7 +7,7 @@ import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/Dele
 import EditCategoryModal from "./EditCategoryModal/EditCategoryModal";
 import { getAllCategory } from "../../services/category/category";
 import { useQuery } from "@tanstack/react-query";
-import { baseURL } from "../../config";
+import { baseURL, imageBaseURL } from "../../config";
 
 const originalData = [
   {
@@ -33,8 +33,6 @@ const tableHeader = [
   { name: "Image", key: "image" },
   { name: "Category Name", key: "name" },
   { name: "Priority", key: "priority" },
-  { name: "Per Question Mark", key: "perQuestionMark" },
-  { name: "N Answer Mark", key: "negativeAnswerMark" },
   { name: "Status", key: "status" },
 ];
 
@@ -52,12 +50,13 @@ const AddQuizCategory = () => {
   });
 
   useEffect(() => {
-    // console.log({ bandata: data });
+    console.log({ bandata: data });
+    console.log(imageBaseURL);
     if (data?.length > 0) {
       const tempData = data?.map((item, index) => {
         return {
           id: item._id,
-          image: `${baseURL}${item?.photo}`,
+          image: `${imageBaseURL}${item?.image}`,
           priority: item?.priority,
           name: item?.name,
           perQuestionMark: item?.perQuestionMark,
@@ -95,7 +94,7 @@ const AddQuizCategory = () => {
     setShowDeleteModal(false);
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="w-[100%]">
@@ -128,7 +127,12 @@ const AddQuizCategory = () => {
           width={"w-[900px]"}
           title={selectedCategory.name}
           setModal={setShowEditModal}
-          body={<EditCategoryModal category={selectedCategory} />}
+          body={
+            <EditCategoryModal
+              category={selectedCategory}
+              setModal={setShowEditModal}
+            />
+          }
         />
       )}
 

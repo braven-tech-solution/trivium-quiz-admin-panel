@@ -9,8 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewCategory } from "../../../services/category/category";
+import { addLevel } from "../../../services/level/level";
 
-const CategoryAddModal = () => {
+const LevelAddModal = ({ allCategoryData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -30,8 +31,8 @@ const CategoryAddModal = () => {
     setError,
   } = useForm();
 
-  const categoryCreateMutation = useMutation({
-    mutationFn: createNewCategory,
+  const addLevelMutation = useMutation({
+    mutationFn: addLevel,
   });
 
   const handleImageUpload = (event) => {
@@ -39,6 +40,8 @@ const CategoryAddModal = () => {
 
     fileUploaderRef.current.addEventListener("change", updateImageDisplay);
     fileUploaderRef.current.click();
+
+    setError("root.random", {});
   };
 
   const updateImageDisplay = async () => {
@@ -74,14 +77,14 @@ const CategoryAddModal = () => {
 
     formData.append("image", selectedFile);
 
-    categoryCreateMutation.mutate(
+    addLevelMutation.mutate(
       {
         formData,
       },
       {
         onSuccess: (data) => {
-          queryClient.invalidateQueries(["allCategory"]);
-          toast.success("Category Create successfully");
+          queryClient.invalidateQueries(["allLevel"]);
+          toast.success("Level Create successfully");
         },
         onError: (err) => {
           console.log(err);
@@ -91,7 +94,7 @@ const CategoryAddModal = () => {
   };
 
   return (
-    <main className="  pt-4 ">
+    <main className="  pt-4   ">
       <section>
         <div className="container">
           <div
@@ -110,14 +113,14 @@ const CategoryAddModal = () => {
                   className="grid place-items-center absolute bottom-0 right-0 h-16 w-16 rounded-full   "
                 >
                   <img src={editSvg} alt="Edit" className="w-10" />
-                </button>{" "}
+                </button>
               </div>
             ) : (
               <div className="grid place-items-center cursor-pointer  h-40 rounded-md  ">
                 <div className="flex items-center gap-4 hover:scale-110 transition-all cursor-pointer">
                   <img src={previewSvg} alt="Edit" className="w-10" />
 
-                  <p className="">Upload Category Image</p>
+                  <p className="">Upload Level Image</p>
                 </div>
               </div>
             )}
@@ -130,28 +133,64 @@ const CategoryAddModal = () => {
             autoComplete="off"
             className="createBlog  "
           >
-            <Field error={errors.name} label={"Category Name"}>
+            <Field error={errors?.category} label={"Select Category Type"}>
+              <select
+                {...register("category", {
+                  required: "Category Type is Required",
+                })}
+                name="category"
+                id="category"
+                className="auth-input py-3"
+              >
+                {allCategoryData?.map((option) => (
+                  <option key={option} value={option.id} className="py-2">
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field error={errors.name} label={"Level Name"}>
               <input
                 {...register("name", {
-                  required: "Category Name is Required",
+                  required: "Level Name is Required",
                 })}
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Enter Category Name"
+                placeholder="Enter Level Name"
                 className="auth-input  "
               />
             </Field>
-
-            <Field
-              error={errors.priority}
-              label={"Category Priority ( 1 - 500 )"}
-            >
+            <Field error={errors.name} label={"Per Question Mark"}>
+              <input
+                {...register("perQuestionMark", {
+                  required: "Per Question Mark is Required",
+                })}
+                type="number"
+                name="perQuestionMark"
+                id="perQuestionMark"
+                placeholder="Enter Per Question Mark"
+                className="auth-input  "
+              />
+            </Field>
+            <Field error={errors.nagativeMark} label={"Nagative Answer Mark"}>
+              <input
+                {...register("nagativeMark", {
+                  required: "Nagative Answer Mark is Required",
+                })}
+                type="number"
+                name="nagativeMark"
+                id="nagativeMark"
+                placeholder="Enter Nagative Answer Mark"
+                className="auth-input  "
+              />
+            </Field>
+            <Field error={errors.priority} label={"Level Priority"}>
               <input
                 {...register("priority", {
                   required: "Priority is Required ",
-                  min: { value: 1, message: "Minimum value is 1" },
-                  max: { value: 500, message: "Maximum value is 500" },
+                  // min: { value: 1, message: "Minimum value is 1" },
+                  // max: { value: 500, message: "Maximum value is 500" },
                 })}
                 type="number"
                 name="priority"
@@ -161,11 +200,10 @@ const CategoryAddModal = () => {
                 defaultValue="1"
               />
             </Field>
-
-            <Field error={errors?.status} label={"Category Status"}>
+            <Field error={errors?.status} label={"Level Status"}>
               <select
                 {...register("status", {
-                  required: "Category Status is Required",
+                  required: "Level Status is Required",
                 })}
                 name="status"
                 id="status"
@@ -177,10 +215,9 @@ const CategoryAddModal = () => {
                 <option value="deactive">Deactive</option>
               </select>
             </Field>
-
             <Field>
               <button className="bg-green-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-[#2f727c] transition-all duration-200">
-                Create New Category
+                Create New Level
               </button>
             </Field>
           </form>
@@ -190,4 +227,4 @@ const CategoryAddModal = () => {
   );
 };
 
-export default CategoryAddModal;
+export default LevelAddModal;

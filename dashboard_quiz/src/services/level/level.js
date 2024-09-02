@@ -2,10 +2,10 @@ import { baseURL } from "../../config";
 import axiosInstance from "../../utils/axiosInstance";
 import axios from "axios";
 
-export const createNewCategory = async ({ formData }) => {
+export const addLevel = async ({ formData }) => {
   try {
     const response = await axios
-      .post(`${baseURL}/category/`, formData)
+      .post(`${baseURL}/level/`, formData)
       .catch((error) => {
         console.log(error);
         const errorResponse = error?.response?.data || {};
