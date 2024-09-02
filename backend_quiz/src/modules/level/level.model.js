@@ -28,11 +28,7 @@ const levelSchema = new Schema(
       type: Number,
       default: 0,
     },
-    totalMark: {
-      type: Number,
-      required: [true, "Total mark   Mark   is required"],
-    },
-    serial: {
+    priority: {
       type: Number,
       default: 1,
     },

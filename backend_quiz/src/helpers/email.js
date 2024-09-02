@@ -1,8 +1,8 @@
-const { createTransport } = require('nodemailer');
-const config = require('../config/index');
+const { createTransport } = require("nodemailer");
+const config = require("../config/index");
 
 const transporter = createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
@@ -24,9 +24,9 @@ const emailWithNodemailer = async (emailData) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent %s', info.response);
+    console.log("Email sent %s", info.response);
   } catch (error) {
-    console.error('Error sending mail', error);
+    console.error("Error sending mail", error);
     throw error;
   }
 };

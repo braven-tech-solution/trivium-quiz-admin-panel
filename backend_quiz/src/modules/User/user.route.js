@@ -13,7 +13,6 @@ userRouter
     upload.fields([{ name: "image", maxCount: 5 }]),
     userController.addUser
   )
-  .post("/verify-otp", userController.verifyUser)
   .post("/login", userController.login)
   .post("/forget-password", userController.forgetPassword)
   .get(

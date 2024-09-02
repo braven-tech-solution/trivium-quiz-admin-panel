@@ -14,6 +14,11 @@ categoryRouter
     upload.fields([{ name: "image", maxCount: 1 }]),
     categoryController.addCategory
   )
-  .get("", categoryController.getAllCategory);
+  .get("", categoryController.getAllCategory)
+  .patch(
+    "/:categoryId",
+    upload.fields([{ name: "image", maxCount: 1 }]),
+    categoryController.updateCategory
+  );
 
 module.exports = categoryRouter;

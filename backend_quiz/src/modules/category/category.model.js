@@ -5,6 +5,7 @@ const categorySchema = new Schema(
     name: {
       type: String,
       required: [true, "Category Name is required"],
+      unique: true,
     },
     description: {
       type: String,
@@ -14,9 +15,9 @@ const categorySchema = new Schema(
       type: String,
       default: "",
     },
-    serial: {
+    priority: {
       type: Number,
-      default: "",
+      default: 1,
     },
     status: {
       type: String,

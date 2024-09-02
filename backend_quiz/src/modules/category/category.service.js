@@ -15,9 +15,18 @@ const getAllCategory = async (payload) => {
   return getCategory;
 };
 
+const updateCategory = async (categoryId, payload) => {
+  const result = await Category.findByIdAndUpdate(categoryId, payload, {
+    new: true,
+  });
+  // nodeCache.flushAll();
+  return result;
+};
+
 const categoryService = {
   addCategory,
   getAllCategory,
+  updateCategory,
 };
 
 module.exports = categoryService;

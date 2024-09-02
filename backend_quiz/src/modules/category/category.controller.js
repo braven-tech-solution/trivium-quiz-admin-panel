@@ -10,9 +10,6 @@ const addCategory = catchAsync(async (req, res) => {
       payload.image = `/uploads/category/${image}`;
     }
   }
-
-  console.log(payload);
-
   const category = await categoryService.addCategory(payload);
 
   if (category) {
@@ -32,9 +29,30 @@ const getAllCategory = catchAsync(async (req, res) => {
   }
 });
 
+const updateCategory = catchAsync(async (req, res) => {
+  const payload = { ...req.body };
+
+  const { categoryId } = req.params;
+  if (req.files) {
+    if (req.files.image) {
+      const image = req.files.image[0].filename;
+      payload.image = `/uploads/category/${image}`;
+    }
+  }
+
+  const category = await categoryService.updateCategory(categoryId, payload);
+
+  if (category) {
+    sendResponse(res, 201, true, "Category added successfully", category);
+  } else {
+    sendResponse(res, 400, false, "Failed to add category", {});
+  }
+});
+
 const categoryController = {
   addCategory,
   getAllCategory,
+  updateCategory,
 };
 
 module.exports = categoryController;

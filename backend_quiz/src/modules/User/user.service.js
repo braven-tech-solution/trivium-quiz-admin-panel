@@ -12,6 +12,8 @@ const addUser = async (userBody) => {
   console.log(restData);
   const user = new User(restData);
   const saveUser = await user.save();
+
+  nodeCache.flushAll();
   return saveUser;
 };
 
@@ -42,6 +44,20 @@ const getSingleUser = async (userId) => {
   } else {
     user = await User.findById(userId).select("-password");
     nodeCache.set(`users${userId}`, JSON.stringify(user));
+  }
+
+  return user;
+};
+
+const getSingleUserByEmailAndPhone = async (email, phone) => {
+  let user;
+  if (nodeCache.has(`users${email}${phone}`)) {
+    user = JSON.parse(nodeCache.get(`users${email}${phone}`));
+  } else {
+    user = await User.findOne({
+      $or: [{ email }, { phone }],
+    });
+    nodeCache.set(`users${email}${phone}`, JSON.stringify(user));
   }
 
   return user;
@@ -153,6 +169,7 @@ const userService = {
   addUser,
   getAllUsers,
   getSingleUser,
+  getSingleUserByEmailAndPhone,
   changePassword,
   updateUser,
   deleteUser,

@@ -13,8 +13,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const addUser = catchAsync(async (req, res) => {
-  let otpPurpose = "email-verification";
-
   const userData = { ...req.body };
 
   if (req?.files?.photo) {
@@ -39,134 +37,51 @@ const addUser = catchAsync(async (req, res) => {
     );
   }
 
-  const userExist = await User.findOne({ email: userData.email });
+  const userExist = await userService.getSingleUserByEmailAndPhone(
+    userData.email,
+    userData.phone
+  );
+
+  console.log(userExist);
+
+  console.log(userData);
 
   if (userExist) {
-    return sendResponse(res, 406, false, "User email already exist");
-  }
-  const existingOTP = await otpService.checkOTPByEmail(userData.email);
-
-  // console.log("email-verification");
-  // console.log(req.body);
-
-  // console.log("From user controller", userData.email);
-  let message = "Check email for OTP";
-  let otpData;
-
-  if (existingOTP) {
-    message = "otp-exist";
-  } else {
-    await otpService.otpExpireDelete();
-    otpData = await otpService.sendOTP(
-      userData.fullName,
-      userData.email,
-      "email",
-      otpPurpose
-    );
-
-    console.log({ otpData });
-    if (otpData) {
-      message = "Check email for OTP";
-    }
+    return sendResponse(res, 406, false, "User email or phone already exist");
   }
 
-  const signupToken = jwt.sign({ userData }, config.access_secret, {
-    expiresIn: "1h",
-  });
-  sendResponse(res, 200, true, message, signupToken);
-});
+  const user = await userService.addUser(userData);
 
-const verifyUser = catchAsync(async (req, res) => {
-  const otpData = req.body;
+  const userJwtData = {
+    fullName: user.fullName,
+    role: user.role,
+    email: user.email,
+    phone: user.phone,
+    id: user._id,
+  };
 
-  console.log(otpData);
-  const verify = await otpService.verifiedUser(otpData.otp);
+  const accessToken = createToken(userJwtData, config.access_secret, "7d");
 
-  if (!otpData.userToken) {
-    return sendResponse(res, 401, false, "Missing user token", {});
-  }
-  if (verify.length > 0) {
-    console.log(otpData.userToken);
-    const { userData } = jwt.decode(otpData.userToken);
+  const refreshToken = createToken(userJwtData, config.refresh_secret, "365d");
 
-    // console.log(userData);
-    const userInfo = {
-      fullName: userData.fullName,
-      email: userData.email,
-      phone: userData.phone,
-      address: userData.address,
-      password: userData.password,
-      role: userData.role,
-      photo: userData.photo,
-    };
+  const responseData = {
+    fullName: user.fullName,
+    role: user.role,
+    email: user.email,
+    phone: user.phone,
+    photo: user.photo,
+    _id: user._id,
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+  };
 
-    const userExist = await User.findOne({ email: userData.email });
-    if (userExist) {
-      return sendResponse(res, 406, false, "User already exist");
-    }
-
-    const user = await userService.addUser(userInfo);
-
-    // console.log("opt delete...............");
-    // console.log(verify);
-    if (user) {
-      await otpService.deleteOTP(verify[0]._id);
-
-      const userJwtData = {
-        fullName: user.fullName,
-        role: user.role,
-        email: user.email,
-        phone: user.phone,
-        id: user._id,
-      };
-
-      const accessToken = createToken(userJwtData, config.access_secret, "7d");
-      const refreshToken = createToken(
-        userJwtData,
-        config.refresh_secret,
-        "365d"
-      );
-
-      res.cookie("token", accessToken, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-        path: "/",
-        expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
-      });
-
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-        path: "/",
-        expires: new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000),
-      });
-
-      const userData = {
-        fullName: user.fullName,
-        role: user.role,
-        email: user.email,
-        phone: user.phone,
-        photo: user.photo,
-        _id: user._id,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      };
-
-      return sendResponse(
-        res,
-        200,
-        true,
-        "Account Created Successfully",
-        userData
-      );
-    } else {
-      return sendResponse(res, 203, false, "Something went wrong", {});
-    }
-  } else {
-    return sendResponse(res, 401, false, "Invalid OTP", {});
-  }
+  return sendResponse(
+    res,
+    200,
+    true,
+    "Account Created Successfully",
+    responseData
+  );
 });
 
 const login = catchAsync(async (req, res) => {
@@ -480,7 +395,6 @@ const userController = {
   verifyForgetOtp,
   resetPassword,
   deleteUser,
-  verifyUser,
   usersStatistics,
 };
 
