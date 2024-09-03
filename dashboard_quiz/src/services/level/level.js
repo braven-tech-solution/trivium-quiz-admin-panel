@@ -19,13 +19,38 @@ export const addLevel = async ({ formData }) => {
   }
 };
 
-export const getAllCategory = async () => {
+export const getAllLevelByCategoryId = async (categoryId) => {
+  if (!categoryId) {
+    return null;
+  }
+  // console.log({ categoryId });
+
   try {
-    const response = await axios.get(`${baseURL}/category/`).catch((error) => {
+    const response = await axios
+      .get(`${baseURL}/level/${categoryId}`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+    // console.log("resonse");
+    // console.log(response);
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getAllLevel = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/level`).catch((error) => {
       const errorResponse = error?.response?.data || {};
 
       throw new Error(JSON.stringify(errorResponse));
     });
+    // console.log("resonse");
+    // console.log(response);
 
     return response;
   } catch (error) {

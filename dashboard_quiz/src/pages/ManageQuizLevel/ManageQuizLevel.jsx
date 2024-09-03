@@ -4,57 +4,54 @@ import FilterCategory from "./FilterCategory/FilterCategory";
 import Modal from "../../components/Modal";
 import LevelAddModal from "./LevelAddModal/LevelAddModal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
-import EditCategoryModal from "./EditCategoryModal/EditCategoryModal";
+import EditCategoryModal from "./EditLevelModal/EditLevelModal";
 import { getAllCategory } from "../../services/category/category";
 import { useQuery } from "@tanstack/react-query";
 import { baseURL, imageBaseURL } from "../../config";
-
-const originalData = [
-  {
-    name: "Flutter",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-    id: "1",
-    priority: 1,
-    status: "deactive",
-  },
-  {
-    name: "React",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-
-    id: "2",
-    priority: 2,
-    status: "active",
-  },
-];
+import { getAllLevelByCategoryId } from "../../services/level/level";
+import useCategory from "../../hooks/useCategory";
 
 const tableHeader = [
   { name: "Image", key: "image" },
-  { name: "Category Name", key: "name" },
+  { name: "Level Name", key: "name" },
+  { name: "Per Question Mark", key: "perQuestionMark" },
+  { name: "Negative Answer Mark", key: "negativeAnswerMark" },
   { name: "Priority", key: "priority" },
   { name: "Status", key: "status" },
 ];
 
-const AddQuizLevel = () => {
-  const [allCategoryData, setAllCategoryData] = useState([]);
+const ManageQuizLevel = () => {
+  const [allLevelData, setAllLevelData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [filterData, setFilterData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [slectCategory, setSlectCategory] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState({});
+  // const [categoryId, setCategoryId] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState({});
 
-  const { data: { data: { data } } = { data: { data: null } } } = useQuery({
-    queryKey: ["allCategory"],
-    queryFn: getAllCategory,
+  const { allCategoryData } = useCategory();
+  // console.log(categoryData?.[0]?._id);
+
+  const { data: levelData } = useQuery({
+    queryKey: ["levelData", slectCategory],
+    queryFn: () => getAllLevelByCategoryId(slectCategory),
   });
 
   useEffect(() => {
-    console.log({ bandata: data });
-    console.log(imageBaseURL);
-    if (data?.length > 0) {
-      const tempData = data?.map((item, index) => {
+    if (allCategoryData?.length > 0) {
+      setSlectCategory(allCategoryData?.[0]?._id);
+    }
+  }, [allCategoryData]);
+
+  // console.log(levelData);
+
+  useEffect(() => {
+    // console.log({ bandata: data });
+    // console.log(imageBaseURL);
+    if (levelData?.data?.data?.length > 0) {
+      console.log(levelData?.data?.data);
+      const tempData = levelData?.data?.data?.map((item, index) => {
         return {
           id: item._id,
           image: `${imageBaseURL}${item?.image}`,
@@ -65,19 +62,19 @@ const AddQuizLevel = () => {
           status: item?.status === "Deactive" ? "Deactive" : "Active",
         };
       });
-      setAllCategoryData(tempData);
+      setAllLevelData(tempData);
       setFilterData(tempData);
     } else {
-      setAllCategoryData([]);
+      setAllLevelData([]);
       setFilterData([]);
     }
-  }, [data]);
+  }, [levelData?.data?.data]);
 
   const handleActionClick = async (type, id) => {
-    let clickCategory = filterData?.find((food) => food.id == id);
-    console.log({ clickCategory });
+    let clickLevel = filterData?.find((item) => item.id == id);
+    // console.log({ clickCategory });
 
-    setSelectedCategory(clickCategory);
+    setSelectedLevel(clickLevel);
 
     switch (type) {
       case "edit":
@@ -97,15 +94,17 @@ const AddQuizLevel = () => {
 
   // console.log(data);
 
+  // console.log(slectCategory);
+
   return (
     <div className="w-[100%]">
       <FilterCategory
-        originalData={originalData}
-        setFilterData={setFilterData}
+        allLevelData={allLevelData}
         setAddModal={setAddModal}
-        filterData={filterData}
+        allCategoryData={allCategoryData}
         slectCategory={slectCategory}
         setSlectCategory={setSlectCategory}
+        setFilterData={setFilterData}
       />
       <Table
         title={"All Quiz Category List"}
@@ -129,12 +128,13 @@ const AddQuizLevel = () => {
       {showEditModal && (
         <Modal
           width={"w-[900px]"}
-          title={selectedCategory.name}
+          title={selectedLevel.name}
           setModal={setShowEditModal}
           body={
             <EditCategoryModal
-              category={selectedCategory}
+              level={selectedLevel}
               setModal={setShowEditModal}
+              allCategoryData={allCategoryData}
             />
           }
         />
@@ -157,4 +157,4 @@ const AddQuizLevel = () => {
   );
 };
 
-export default AddQuizLevel;
+export default ManageQuizLevel;

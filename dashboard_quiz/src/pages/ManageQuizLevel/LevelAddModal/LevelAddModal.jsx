@@ -173,14 +173,17 @@ const LevelAddModal = ({ allCategoryData }) => {
                 className="auth-input  "
               />
             </Field>
-            <Field error={errors.nagativeMark} label={"Nagative Answer Mark"}>
+            <Field
+              error={errors.negativeAnswerMark}
+              label={"Nagative Answer Mark"}
+            >
               <input
-                {...register("nagativeMark", {
+                {...register("negativeAnswerMark", {
                   required: "Nagative Answer Mark is Required",
                 })}
                 type="number"
-                name="nagativeMark"
-                id="nagativeMark"
+                name="negativeAnswerMark"
+                id="negativeAnswerMark"
                 placeholder="Enter Nagative Answer Mark"
                 className="auth-input  "
               />

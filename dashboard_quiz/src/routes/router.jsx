@@ -11,11 +11,11 @@ import ManageAllFood from "../pages/ManageAllFood/ManageAllFood";
 import ManageAllBanner from "../pages/ManageAllBanner/ManageAllBanner";
 import ManagePassword from "../pages/ManagePassword/ManagePassword";
 import ManageFeedback from "../pages/ManageFeedback/ManageFeedback";
-import AddQuizCategory from "../pages/AddQuizCategory/AddQuizCategory";
 import ManageQuizQuestion from "../pages/ManageQuizQuestion/ManageQuizQuestion";
 import AddScheduleQuiz from "../pages/AddScheduleQuiz/AddScheduleQuiz";
 import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageScheduleQuestion";
-import AddQuizLevel from "../pages/AddQuizLevel/AddQuizLevel";
+import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
+import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
 
 const router = createBrowserRouter([
   {
@@ -32,11 +32,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/add-quiz-category",
-        element: <AddQuizCategory />,
+        element: <ManageQuizCategory />,
       },
       {
         path: "/add-quiz-level",
-        element: <AddQuizLevel />,
+        element: <ManageQuizLevel />,
       },
       {
         path: "/manage-quiz-question",

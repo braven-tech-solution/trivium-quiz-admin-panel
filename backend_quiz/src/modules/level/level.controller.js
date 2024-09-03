@@ -24,8 +24,18 @@ const addLevel = catchAsync(async (req, res) => {
 const getAllLevelByCategoryId = catchAsync(async (req, res) => {
   const { categoryId } = req.params;
 
-  console.log(categoryId);
+  // console.log({ categoryId });
   const level = await levelService.getAllLevelByCategoryId(categoryId);
+
+  if (level) {
+    sendResponse(res, 200, true, "Level get successfully", level);
+  } else {
+    sendResponse(res, 400, false, "Failed to get level", {});
+  }
+});
+
+const getAllLevel = catchAsync(async (req, res) => {
+  const level = await levelService.getAllLevel();
 
   if (level) {
     sendResponse(res, 200, true, "Level get successfully", level);
@@ -37,6 +47,7 @@ const getAllLevelByCategoryId = catchAsync(async (req, res) => {
 const levelController = {
   addLevel,
   getAllLevelByCategoryId,
+  getAllLevel,
 };
 
 module.exports = levelController;

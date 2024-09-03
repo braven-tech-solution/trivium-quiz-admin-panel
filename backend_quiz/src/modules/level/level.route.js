@@ -13,6 +13,7 @@ levelRouter
     upload.fields([{ name: "image", maxCount: 1 }]),
     levelController.addLevel
   )
+  .get("", levelController.getAllLevel)
   .get("/:categoryId", levelController.getAllLevelByCategoryId);
 
 module.exports = levelRouter;

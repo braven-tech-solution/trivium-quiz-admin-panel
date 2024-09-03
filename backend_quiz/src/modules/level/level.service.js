@@ -10,7 +10,17 @@ const addLevel = async (payload) => {
 };
 
 const getAllLevelByCategoryId = async (categoryId) => {
+  // console.log({ object: categoryId });
   const getLevel = await Level.find({ category: categoryId });
+  // console.log({ getLevel });
+  // nodeCache.flushAll();
+  return getLevel;
+};
+
+const getAllLevel = async () => {
+  // console.log({ object: categoryId });
+  const getLevel = await Level.find({});
+  // console.log({ getLevel });
   // nodeCache.flushAll();
   return getLevel;
 };
@@ -18,6 +28,7 @@ const getAllLevelByCategoryId = async (categoryId) => {
 const levelService = {
   addLevel,
   getAllLevelByCategoryId,
+  getAllLevel,
 };
 
 module.exports = levelService;

@@ -36,7 +36,7 @@ const tableHeader = [
   { name: "Status", key: "status" },
 ];
 
-const AddQuizCategory = () => {
+const ManageQuizCategory = () => {
   const [allCategoryData, setAllCategoryData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -153,4 +153,4 @@ const AddQuizCategory = () => {
   );
 };
 
-export default AddQuizCategory;
+export default ManageQuizCategory;

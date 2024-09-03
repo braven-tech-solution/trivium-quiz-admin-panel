@@ -24,7 +24,7 @@ const levelSchema = new Schema(
       required: [true, "Per Question Mark   is required"],
       default: 1,
     },
-    nagativeMark: {
+    negativeAnswerMark: {
       type: Number,
       default: 0,
     },

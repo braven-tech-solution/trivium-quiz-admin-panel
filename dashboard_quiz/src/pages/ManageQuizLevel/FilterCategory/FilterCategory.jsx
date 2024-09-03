@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 
 const FilterCategory = ({
-  originalData,
-  setFilterData,
+  allLevelData,
   setAddModal,
-  filterData,
+  allCategoryData,
   slectCategory,
   setSlectCategory,
+  setFilterData,
 }) => {
   const [checkstatus, setCheckStatus] = useState("");
 
@@ -15,32 +15,23 @@ const FilterCategory = ({
     const clickCategory = event.target.value;
     console.log({ clickCategory });
     setSlectCategory(clickCategory);
-
-    // let tempData = originalData.find((item) => item?.name === clickCategory);
-
-    // setFilterData(tempData.questions);
   };
 
   const handleStatusChange = (event) => {
-    const checkstatus = event.target.value;
-    setCheckStatus(checkstatus);
-
-    let categoryData = originalData.find(
-      (item) => item?.name === slectCategory
-    );
-
-    let options = categoryData?.questions?.filter(
-      (item) => item?.status === checkstatus
-    );
-
-    if (checkstatus === "all") {
-      options = categoryData?.questions;
-    }
-
-    // console.log(tempData);
-    // console.log(filterType);
-
-    setFilterData(options);
+    // const checkstatus = event.target.value;
+    // setCheckStatus(checkstatus);
+    // let categoryData = allLevelData.find(
+    //   (item) => item?.name === slectCategory
+    // );
+    // let options = categoryData?.questions?.filter(
+    //   (item) => item?.status === checkstatus
+    // );
+    // if (checkstatus === "all") {
+    //   options = categoryData?.questions;
+    // }
+    // // console.log(tempData);
+    // // console.log(filterType);
+    // setFilterData(options);
   };
 
   return (
@@ -60,15 +51,15 @@ const FilterCategory = ({
             onChange={handleCategoryChange}
             className="mt-1   w-60 text-slate-600 pl-3  p-2 bg-white  border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500   rounded-md"
           >
-            {filterData.map((option) => (
-              <option key={option} value={option.id} className="py-2">
+            {allCategoryData?.map((option) => (
+              <option key={option.name} value={option.id} className="py-2">
                 {option.name}
               </option>
             ))}
           </select>
         </div>
 
-        <div>
+        {/* <div>
           <label
             htmlFor="foodType"
             className="block text-sm font-medium text-gray-700"
@@ -90,7 +81,7 @@ const FilterCategory = ({
             </option>
             <option value="deactive">Deactive</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       <button

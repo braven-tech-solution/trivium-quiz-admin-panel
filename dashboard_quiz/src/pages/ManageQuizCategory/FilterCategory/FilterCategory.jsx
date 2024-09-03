@@ -26,7 +26,7 @@ const FilterCategory = ({ originalData, setFilterData, setAddModal }) => {
           htmlFor="foodType"
           className="block text-sm font-medium text-gray-700"
         >
-          Filter Quiz Status
+          Filter Quiz Category Status
         </label>
         <select
           id="foodType"

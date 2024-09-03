@@ -11,7 +11,7 @@ import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCategory } from "../../../services/category/category";
 
-const EditCategoryModal = ({ category, setModal }) => {
+const EditLevelModal = ({ level, setModal, allCategoryData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -38,16 +38,15 @@ const EditCategoryModal = ({ category, setModal }) => {
   });
 
   useEffect(() => {
-    if (category?.id) {
-      setValue("priority", category?.priority);
-      setValue("name", category?.name);
-      setValue(
-        "status",
-        category?.status === "deactive" ? "deactive" : "active"
-      );
-      setPreviewImage(category?.image);
+    if (level?.id) {
+      setValue("priority", level?.priority);
+      setValue("name", level?.name);
+      setValue("perQuestionMark", level?.perQuestionMark);
+      setValue("negativeAnswerMark", level?.negativeAnswerMark);
+      setValue("status", level?.status === "deactive" ? "deactive" : "active");
+      setPreviewImage(level?.image);
     }
-  }, [category?.id]);
+  }, [level?.id]);
 
   const handleImageUpload = (event) => {
     event.preventDefault();
@@ -79,22 +78,22 @@ const EditCategoryModal = ({ category, setModal }) => {
       formData.append(key, data[key]);
     }
 
-    categoryUpdateMutation.mutate(
-      {
-        id: category?.id,
-        formData,
-      },
-      {
-        onSuccess: (data) => {
-          queryClient.invalidateQueries(["allCategory"]);
-          toast.success("Category update successfully");
-          setModal(false);
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      }
-    );
+    // categoryUpdateMutation.mutate(
+    //   {
+    //     id: category?.id,
+    //     formData,
+    //   },
+    //   {
+    //     onSuccess: (data) => {
+    //       queryClient.invalidateQueries(["allCategory"]);
+    //       toast.success("Category update successfully");
+    //       setModal(false);
+    //     },
+    //     onError: (err) => {
+    //       console.log(err);
+    //     },
+    //   }
+    // );
   };
 
   return (
@@ -117,14 +116,14 @@ const EditCategoryModal = ({ category, setModal }) => {
                   className="grid place-items-center absolute bottom-0 right-0 h-16 w-16 rounded-full   "
                 >
                   <img src={editSvg} alt="Edit" className="w-10" />
-                </button>{" "}
+                </button>
               </div>
             ) : (
               <div className="grid place-items-center cursor-pointer  h-40 rounded-md  ">
                 <div className="flex items-center gap-4 hover:scale-110 transition-all cursor-pointer">
                   <img src={previewSvg} alt="Edit" className="w-10" />
 
-                  <p className="">Upload Category Image</p>
+                  <p className="">Upload Level Image</p>
                 </div>
               </div>
             )}
@@ -137,27 +136,67 @@ const EditCategoryModal = ({ category, setModal }) => {
             autoComplete="off"
             className="createBlog  "
           >
-            <Field error={errors.name} label={"Category Name"}>
+            <Field error={errors?.category} label={"Select Category Type"}>
+              <select
+                {...register("category", {
+                  required: "Category Type is Required",
+                })}
+                name="category"
+                id="category"
+                className="auth-input py-3"
+              >
+                {allCategoryData?.map((option) => (
+                  <option key={option} value={option.id} className="py-2">
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field error={errors.name} label={"Level Name"}>
               <input
                 {...register("name", {
-                  required: "Category Name is Required",
+                  required: "Level Name is Required",
                 })}
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Enter Category Name"
+                placeholder="Enter Level Name"
+                className="auth-input  "
+              />
+            </Field>
+            <Field error={errors.name} label={"Per Question Mark"}>
+              <input
+                {...register("perQuestionMark", {
+                  required: "Per Question Mark is Required",
+                })}
+                type="number"
+                name="perQuestionMark"
+                id="perQuestionMark"
+                placeholder="Enter Per Question Mark"
                 className="auth-input  "
               />
             </Field>
             <Field
-              error={errors.priority}
-              label={"Category Priority ( 1 - 500 )"}
+              error={errors.negativeAnswerMark}
+              label={"Nagative Answer Mark"}
             >
               <input
+                {...register("negativeAnswerMark", {
+                  required: "Nagative Answer Mark is Required",
+                })}
+                type="number"
+                name="negativeAnswerMark"
+                id="negativeAnswerMark"
+                placeholder="Enter Nagative Answer Mark"
+                className="auth-input  "
+              />
+            </Field>
+            <Field error={errors.priority} label={"Level Priority"}>
+              <input
                 {...register("priority", {
-                  required: "Priority is Required",
-                  min: { value: 1, message: "Minimum value is 1" },
-                  max: { value: 500, message: "Maximum value is 500" },
+                  required: "Priority is Required ",
+                  // min: { value: 1, message: "Minimum value is 1" },
+                  // max: { value: 500, message: "Maximum value is 500" },
                 })}
                 type="number"
                 name="priority"
@@ -167,11 +206,10 @@ const EditCategoryModal = ({ category, setModal }) => {
                 defaultValue="1"
               />
             </Field>
-
-            <Field error={errors?.status} label={"Category Status"}>
+            <Field error={errors?.status} label={"Level Status"}>
               <select
                 {...register("status", {
-                  required: "Category Status is Required",
+                  required: "Level Status is Required",
                 })}
                 name="status"
                 id="status"
@@ -183,10 +221,9 @@ const EditCategoryModal = ({ category, setModal }) => {
                 <option value="deactive">Deactive</option>
               </select>
             </Field>
-
             <Field>
               <button className="bg-green-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-[#2f727c] transition-all duration-200">
-                Update Category
+                Update New Level
               </button>
             </Field>
           </form>
@@ -196,4 +233,4 @@ const EditCategoryModal = ({ category, setModal }) => {
   );
 };
 
-export default EditCategoryModal;
+export default EditLevelModal;

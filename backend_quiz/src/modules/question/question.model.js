@@ -16,10 +16,6 @@ const questionSchema = new Schema(
       type: String,
       required: [true, "title is required"],
     },
-    serial: {
-      type: Number,
-      default: "",
-    },
     option1: {
       type: String,
       required: true,
@@ -39,6 +35,10 @@ const questionSchema = new Schema(
     correctAnswer: {
       type: String,
       required: true,
+    },
+    priority: {
+      type: Number,
+      default: "",
     },
     status: {
       type: String,

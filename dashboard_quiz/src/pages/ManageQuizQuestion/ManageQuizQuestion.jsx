@@ -1,10 +1,13 @@
 import { useState } from "react";
 import Table from "../../components/Table/Table";
-import FilterCategory from "./FilterCategory/FilterCategory";
 import Modal from "../../components/Modal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
 import QuestionAddModal from "./QuestionAddModal/QuestionAddModal";
 import EditQuestionModal from "./EditQuestionModal/EditQuestionModal";
+import useCategory from "../../hooks/useCategory";
+import FilterQuestion from "./FilterQuestion/FilterQuestion";
+import { getAllLevel } from "../../services/level/level";
+import { useQuery } from "@tanstack/react-query";
 
 const originalData = [
   {
@@ -77,6 +80,14 @@ const ManageQuizQuestion = () => {
   const [slectCategory, setSlectCategory] = useState("");
   const [selectedQuestion, setSelectedQuestion] = useState({});
 
+  const { allCategoryData } = useCategory();
+
+  const { data: { data: { data: allLevelData } } = { data: { data: null } } } =
+    useQuery({
+      queryKey: ["allLevelData"],
+      queryFn: getAllLevel,
+    });
+
   const handleActionClick = async (type, id) => {
     let clickQuestion = filterData?.find((item) => item.id == id);
     // console.log({ clickQuestion });
@@ -103,11 +114,13 @@ const ManageQuizQuestion = () => {
 
   return (
     <div className="w-[100%]">
-      <FilterCategory
+      <FilterQuestion
         originalData={originalData}
         setFilterData={setFilterData}
         setAddModal={setAddModal}
         filterOption={filterOption}
+        allCategoryData={allCategoryData}
+        allLevelData={allLevelData}
         slectCategory={slectCategory}
         setSlectCategory={setSlectCategory}
       />
@@ -126,7 +139,15 @@ const ManageQuizQuestion = () => {
           width={"w-[900px]"}
           title={"Question Add"}
           setModal={setAddModal}
-          body={<QuestionAddModal filterOption={filterOption} />}
+          body={
+            <QuestionAddModal
+              filterOption={filterOption}
+              allCategoryData={allCategoryData}
+              allLevelData={allLevelData}
+              slectCategory={slectCategory}
+              setSlectCategory={setSlectCategory}
+            />
+          }
         />
       )}
 
