@@ -9,7 +9,12 @@ const addQuestion = async (payload) => {
   return savedQuestion;
 };
 
-const getAllQuestionByTopId = async (id) => {
+const getAllQuestion = async () => {
+  const getLevel = await Question.find({});
+  return getLevel;
+};
+
+const getAllQuestionByLevelId = async (id) => {
   const getQuestion = await Question.find({ model_id: id });
   // nodeCache.flushAll();
   return getQuestion;
@@ -17,7 +22,8 @@ const getAllQuestionByTopId = async (id) => {
 
 const questionService = {
   addQuestion,
-  getAllQuestionByTopId,
+  getAllQuestion,
+  getAllQuestionByLevelId,
 };
 
 module.exports = questionService;

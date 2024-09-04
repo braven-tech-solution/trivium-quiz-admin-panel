@@ -18,7 +18,7 @@ const FilterQuestion = ({
   const [selectLevelId, setSelectLevelId] = useState("");
 
   useEffect(() => {
-    if (allCategoryData.length > 0) {
+    if (allCategoryData?.length > 0 && allLevelData.length > 0) {
       // console.log(allCategoryData);
       let level = allLevelData?.filter(
         (item) => item?.category === allCategoryData?.[0]?.id
@@ -28,7 +28,7 @@ const FilterQuestion = ({
       // console.log(allLevelData);
       // console.log(level);
       setLevelOption(level);
-      setSelectLevelId(level[0]._id);
+      setSelectLevelId(level?.[0]?._id);
     }
   }, [allCategoryData, allLevelData]);
 

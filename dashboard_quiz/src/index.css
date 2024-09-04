@@ -11,6 +11,6 @@
   }
 
   .auth-input {
-    @apply w-full p-2 bg-[#f8f5ed] text-black   border-[1px]  border-white rounded-md focus:outline-none focus:border-green-500;
+    @apply w-full p-2 bg-[#84bac4] text-black   border-[1px] placeholder-slate-500 border-white rounded-md focus:outline-none focus:border-green-500;
   }
 }

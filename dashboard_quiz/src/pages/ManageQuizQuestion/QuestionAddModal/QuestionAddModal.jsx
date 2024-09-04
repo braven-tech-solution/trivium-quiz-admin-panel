@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdDelete } from "react-icons/md";
+import { addQuestion } from "../../../services/question/question";
 
 const QuestionAddModal = ({
   filterOption,
@@ -30,6 +31,8 @@ const QuestionAddModal = ({
     option4: "",
   });
 
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -37,6 +40,10 @@ const QuestionAddModal = ({
     setValue,
     setError,
   } = useForm();
+
+  const addQuestionMutation = useMutation({
+    mutationFn: addQuestion,
+  });
 
   useEffect(() => {
     if (allCategoryData.length > 0) {
@@ -79,7 +86,28 @@ const QuestionAddModal = ({
   };
 
   const submitForm = async (data) => {
-    console.log(data);
+    const { category, level, ...rest } = data;
+    const modifyData = {
+      ...rest,
+      model_type: "Level",
+      model_id: level,
+    };
+    console.log(modifyData);
+
+    addQuestionMutation.mutate(
+      {
+        payload: modifyData,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries(["allQuestionData"]);
+          toast.success("Level Create successfully");
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
   };
 
   return (

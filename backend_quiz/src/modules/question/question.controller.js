@@ -13,14 +13,25 @@ const addQuestion = catchAsync(async (req, res) => {
     sendResponse(res, 400, false, "Failed to add question", {});
   }
 });
-const getAllQuestionByTopId = catchAsync(async (req, res) => {
+
+const getAllQuestion = catchAsync(async (req, res) => {
+  const question = await questionService.getAllQuestion();
+
+  if (question) {
+    sendResponse(res, 200, true, "question get successfully", question);
+  } else {
+    sendResponse(res, 400, false, "Failed to get question", {});
+  }
+});
+
+const getAllQuestionByLevelId = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   console.log(id);
-  const level = await questionService.getAllQuestionByTopId(id);
+  const question = await questionService.getAllQuestionByLevelId(id);
 
-  if (level) {
-    sendResponse(res, 200, true, "Question get successfully", level);
+  if (question) {
+    sendResponse(res, 200, true, "Question get successfully", question);
   } else {
     sendResponse(res, 400, false, "Failed to get question", {});
   }
@@ -28,7 +39,8 @@ const getAllQuestionByTopId = catchAsync(async (req, res) => {
 
 const questionController = {
   addQuestion,
-  getAllQuestionByTopId,
+  getAllQuestion,
+  getAllQuestionByLevelId,
 };
 
 module.exports = questionController;

@@ -9,6 +9,7 @@ questionRouter
     // auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     questionController.addQuestion
   )
-  .get("/:id", questionController.getAllQuestionByTopId);
+  .get("/", questionController.getAllQuestion)
+  .get("/:id", questionController.getAllQuestionByLevelId);
 
 module.exports = questionRouter;

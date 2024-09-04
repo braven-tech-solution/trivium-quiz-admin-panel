@@ -8,6 +8,7 @@ import useCategory from "../../hooks/useCategory";
 import FilterQuestion from "./FilterQuestion/FilterQuestion";
 import { getAllLevel } from "../../services/level/level";
 import { useQuery } from "@tanstack/react-query";
+import { getAllQuestion } from "../../services/question/question";
 
 const originalData = [
   {
@@ -87,6 +88,14 @@ const ManageQuizQuestion = () => {
       queryKey: ["allLevelData"],
       queryFn: getAllLevel,
     });
+  const {
+    data: { data: { data: allQuestionData } } = { data: { data: null } },
+  } = useQuery({
+    queryKey: ["allQuestionData"],
+    queryFn: getAllQuestion,
+  });
+
+  console.log(allQuestionData);
 
   const handleActionClick = async (type, id) => {
     let clickQuestion = filterData?.find((item) => item.id == id);
@@ -125,7 +134,7 @@ const ManageQuizQuestion = () => {
         setSlectCategory={setSlectCategory}
       />
       <Table
-        title={"All Quiz Category List"}
+        title={"All Quiz Question List"}
         data={filterData ?? []}
         headers={tableHeader}
         actions={true}
