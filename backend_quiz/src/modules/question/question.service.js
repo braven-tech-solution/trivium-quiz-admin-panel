@@ -10,8 +10,12 @@ const addQuestion = async (payload) => {
 };
 
 const getAllQuestion = async () => {
-  const getLevel = await Question.find({});
-  return getLevel;
+  const allquestion = await Question.find({});
+  return allquestion;
+};
+const getLevelQuestion = async () => {
+  const levelQuestion = await Question.find({ model_type: "Level" });
+  return levelQuestion;
 };
 
 const getAllQuestionByLevelId = async (id) => {
@@ -23,6 +27,7 @@ const getAllQuestionByLevelId = async (id) => {
 const questionService = {
   addQuestion,
   getAllQuestion,
+  getLevelQuestion,
   getAllQuestionByLevelId,
 };
 

@@ -21,11 +21,13 @@ export const addQuestion = async ({ payload }) => {
 
 export const getAllQuestion = async () => {
   try {
-    const response = await axios.get(`${baseURL}/question`).catch((error) => {
-      const errorResponse = error?.response?.data || {};
+    const response = await axios
+      .get(`${baseURL}/question/level`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
 
-      throw new Error(JSON.stringify(errorResponse));
-    });
+        throw new Error(JSON.stringify(errorResponse));
+      });
     // console.log("resonse");
     // console.log(response);
 

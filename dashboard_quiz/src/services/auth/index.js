@@ -7,7 +7,7 @@ const cookies = new Cookies();
 export const login = async (data) => {
   // console.log({ data });
   const response = await axios
-    .post(`${baseURL}/auth/login`, data, {
+    .post(`${baseURL}/users/login`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,23 +19,24 @@ export const login = async (data) => {
     });
 
   if (response?.data?.success) {
-    let { user, token } = response.data.data;
+    let data = response.data.data;
 
-    cookies.set("cpd_userId", user?._id, { path: "/" });
-    cookies.set("cpd_userEmail", user?.email, { path: "/" });
-    cookies.set("cpd_userRole", user?.role, { path: "/" });
-    cookies.set("cpd_userName", user?.userName, { path: "/" });
-    cookies.set("cpd_accessToken", token?.accessToken, { path: "/" });
-    cookies.set("cpd_refreshToken", token?.refreshToken, { path: "/" });
+    // console.log(data);
+    cookies.set("quiz_userId", data?._id, { path: "/" });
+    cookies.set("quiz_userEmail", data?.email, { path: "/" });
+    cookies.set("quiz_userRole", data?.role, { path: "/" });
+    cookies.set("quiz_userName", data?.userName, { path: "/" });
+    cookies.set("quiz_accessToken", data?.accessToken, { path: "/" });
+    cookies.set("quiz_refreshToken", data?.refreshToken, { path: "/" });
 
-    return response.data.data;
+    return data;
   }
   throw new Error("Something went wrong");
 };
 
 export const registerFn = async (data) => {
   const response = await axios
-    .post(`${baseURL}/auth/create`, data, {
+    .post(`${baseURL}/users/create`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -50,12 +51,12 @@ export const registerFn = async (data) => {
 
 export const logout = async () => {
   try {
-    cookies.remove("cpd_userId", { path: "/" });
-    cookies.remove("cpd_userEmail", { path: "/" });
-    cookies.remove("cpd_userRole", { path: "/" });
-    cookies.remove("cpd_userName", { path: "/" });
-    cookies.remove("cpd_accessToken", { path: "/" });
-    cookies.remove("cpd_refreshToken", { path: "/" });
+    cookies.remove("quiz_userId", { path: "/" });
+    cookies.remove("quiz_userEmail", { path: "/" });
+    cookies.remove("quiz_userRole", { path: "/" });
+    cookies.remove("quiz_userName", { path: "/" });
+    cookies.remove("quiz_accessToken", { path: "/" });
+    cookies.remove("quiz_refreshToken", { path: "/" });
   } catch (error) {
     throw new Error(error.response);
   }

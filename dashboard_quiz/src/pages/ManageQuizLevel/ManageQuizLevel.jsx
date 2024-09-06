@@ -39,8 +39,12 @@ const ManageQuizLevel = () => {
   });
 
   useEffect(() => {
+    // console.log("object");
+    // console.log(allCategoryData?.length);
+
     if (allCategoryData?.length > 0) {
-      setSlectCategory(allCategoryData?.[0]?._id);
+      // console.log(allCategoryData?.[0].id);
+      setSlectCategory(allCategoryData?.[0]?.id);
     }
   }, [allCategoryData]);
 
@@ -68,7 +72,9 @@ const ManageQuizLevel = () => {
       setAllLevelData([]);
       setFilterData([]);
     }
-  }, [levelData?.data?.data]);
+  }, [levelData?.data?.data, slectCategory]);
+
+  console.log(levelData?.data);
 
   const handleActionClick = async (type, id) => {
     let clickLevel = filterData?.find((item) => item.id == id);
@@ -113,7 +119,7 @@ const ManageQuizLevel = () => {
         actions={true}
         actionName={"Actions"}
         handleActionClick={handleActionClick}
-        actionValue={{ edit: true, delete: true }}
+        // actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (

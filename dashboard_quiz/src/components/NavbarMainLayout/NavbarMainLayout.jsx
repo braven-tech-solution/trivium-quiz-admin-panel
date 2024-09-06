@@ -50,7 +50,7 @@ const NavbarMainLayout = () => {
         </NavLink>
       </NavGaurd>
 
-      <NavGaurd accesslist={["admin", "accounts"]}>
+      {/* <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
           to="/add-schedule-quiz"
           className={({ isActive }) =>
@@ -89,7 +89,7 @@ const NavbarMainLayout = () => {
           <IoSettingsOutline className="text-2xl" />
           <span>Setting</span>
         </NavLink>
-      </NavGaurd>
+      </NavGaurd> */}
     </ul>
   );
 };

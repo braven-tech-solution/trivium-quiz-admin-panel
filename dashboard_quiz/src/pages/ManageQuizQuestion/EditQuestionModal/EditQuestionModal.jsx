@@ -12,7 +12,7 @@ import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdDelete } from "react-icons/md";
 
-const EditQuestionModal = ({ question, filterOption, slectCategory }) => {
+const EditQuestionModal = ({ question, allCategoryData, slectCategory }) => {
   const [option, setOption] = useState("");
   const [questionOptions, setQuestionOptions] = useState([]);
 
@@ -79,9 +79,9 @@ const EditQuestionModal = ({ question, filterOption, slectCategory }) => {
                 id="categoryType"
                 className="auth-input py-3"
               >
-                {filterOption?.map((option) => (
-                  <option key={option} value={option} className="py-2">
-                    {option}
+                {allCategoryData?.map((option) => (
+                  <option key={option.id} value={option.id} className="py-2">
+                    {option.name}
                   </option>
                 ))}
               </select>

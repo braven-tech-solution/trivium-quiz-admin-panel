@@ -29,12 +29,12 @@ const LoginForm = () => {
     try {
       loginMutation.mutate(formData, {
         onSuccess: (data) => {
-          const { user } = data;
-          // console.log({ user });
+          // const { data } = data;
+          console.log({ data });
           toast.success("Login successfully");
-          setAuth({ ...user });
+          setAuth({ ...data });
 
-          navigate("/manage-all-food");
+          navigate("/");
         },
         onError: (error) => {
           const errorResponse =

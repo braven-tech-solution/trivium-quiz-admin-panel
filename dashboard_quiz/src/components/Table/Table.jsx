@@ -44,15 +44,16 @@ export default function Table({
         </div>
       );
     } else if (headerItem?.key === "option") {
+      // console.log("rowItem");
+      // console.log(rowItem);
+      // console.log(itemKey);
+      // console.log(headerItem);
       res = (
         <ul className="flex flex-col justify-center items-start pl-2 cursor-pointer space-y-0 py-1">
-          {item?.map((option, index) => (
-            <>
-              <li key={option}>
-                {index + 1}. {option}
-              </li>
-            </>
-          ))}
+          <li>1. {rowItem.option1}</li>
+          <li>2. {rowItem.option2}</li>
+          <li>3. {rowItem.option3}</li>
+          <li>4. {rowItem.option4}</li>
         </ul>
       );
     }
@@ -104,7 +105,7 @@ export default function Table({
               <tbody>
                 {rows?.map((item, index) => (
                   <tr
-                    key={item.id}
+                    key={item._id || item.id}
                     className={`${
                       index % 2 !== 0 ? "bg-[#a69078] " : "bg-[#70706f] "
                     }  `}

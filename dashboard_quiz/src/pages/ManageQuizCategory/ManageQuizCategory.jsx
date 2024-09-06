@@ -110,7 +110,7 @@ const ManageQuizCategory = () => {
         actions={true}
         actionName={"Actions"}
         handleActionClick={handleActionClick}
-        actionValue={{ edit: true, delete: true }}
+        // actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (

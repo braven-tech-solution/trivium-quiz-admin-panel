@@ -10,6 +10,7 @@ questionRouter
     questionController.addQuestion
   )
   .get("/", questionController.getAllQuestion)
+  .get("/level", questionController.getLevelQuestion)
   .get("/:id", questionController.getAllQuestionByLevelId);
 
 module.exports = questionRouter;

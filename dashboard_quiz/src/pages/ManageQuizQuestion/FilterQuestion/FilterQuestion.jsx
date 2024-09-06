@@ -7,18 +7,18 @@ const FilterQuestion = ({
   originalData,
   setFilterData,
   setAddModal,
-  filterOption,
   slectCategory,
   setSlectCategory,
   allCategoryData,
   allLevelData,
+  selectLevelId,
+  setSelectLevelId,
 }) => {
   const [checkstatus, setCheckStatus] = useState("");
   const [levelOption, setLevelOption] = useState([]);
-  const [selectLevelId, setSelectLevelId] = useState("");
 
   useEffect(() => {
-    if (allCategoryData?.length > 0 && allLevelData.length > 0) {
+    if (allCategoryData?.length > 0 && allLevelData?.length > 0) {
       // console.log(allCategoryData);
       let level = allLevelData?.filter(
         (item) => item?.category === allCategoryData?.[0]?.id
@@ -40,10 +40,11 @@ const FilterQuestion = ({
       (item) => item?.category === clickCategory
     );
 
-    console.log(level);
+    // console.log(level);
     setLevelOption(level);
+    setSelectLevelId(level[0]?._id);
 
-    // console.log(clickCategory);
+    // console.log(level);
   };
 
   const handleLevelChange = (event) => {
@@ -60,7 +61,7 @@ const FilterQuestion = ({
     // console.log(clickCategory);
   };
 
-  console.log({ selectLevelId });
+  // console.log({ selectLevelId });
 
   const handleStatusChange = (event) => {
     const checkstatus = event.target.value;

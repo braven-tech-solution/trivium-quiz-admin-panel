@@ -13,11 +13,11 @@ import { MdDelete } from "react-icons/md";
 import { addQuestion } from "../../../services/question/question";
 
 const QuestionAddModal = ({
-  filterOption,
   allCategoryData,
   allLevelData,
   slectCategory,
   setSlectCategory,
+  setModal,
 }) => {
   const [option, setOption] = useState("");
   const [selectLevelId, setSelectLevelId] = useState("");
@@ -46,7 +46,7 @@ const QuestionAddModal = ({
   });
 
   useEffect(() => {
-    if (allCategoryData.length > 0) {
+    if (allCategoryData?.length > 0) {
       // console.log(allCategoryData);
       let level = allLevelData?.filter(
         (item) => item?.category === allCategoryData?.[0]?.id
@@ -102,6 +102,7 @@ const QuestionAddModal = ({
         onSuccess: (data) => {
           queryClient.invalidateQueries(["allQuestionData"]);
           toast.success("Level Create successfully");
+          setModal(false);
         },
         onError: (err) => {
           console.log(err);
