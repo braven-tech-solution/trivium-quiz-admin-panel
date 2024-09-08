@@ -10,62 +10,6 @@ import { getAllLevel } from "../../services/level/level";
 import { useQuery } from "@tanstack/react-query";
 import { getAllQuestion } from "../../services/question/question";
 
-// const originalData = [
-//   {
-//     name: "Flutter",
-//     image:
-//       "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-//     id: "1",
-//     priority: 1,
-//     status: "deactive",
-//     perQuestionMark: 1,
-//     negativeAnswerMark: 0.25,
-//     questions: [
-//       {
-//         id: 1,
-//         title: "What is Flutter?",
-//         option: ["abs", "ccdd", "asd ge"],
-//         correct: "ccdd",
-//         status: "active",
-//       },
-//       {
-//         id: 2,
-//         title: "What is advantage of Flutter?",
-//         option: ["abs", "as asd as", "asd ge"],
-//         correct: "asd ge",
-//         status: "deactive",
-//       },
-//     ],
-//   },
-//   {
-//     name: "React",
-//     image:
-//       "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-
-//     id: "2",
-//     priority: 2,
-//     status: "active",
-//     perQuestionMark: 1,
-//     negativeAnswerMark: 0.25,
-//     questions: [
-//       {
-//         id: 1,
-//         title: "What is React?",
-//         option: ["abs", "ccdd", "asd ge"],
-//         correct: "ccdd",
-//         status: "active",
-//       },
-//       {
-//         id: 2,
-//         title: "What is advantage of React?",
-//         option: ["abs", "as asd as", "asd ge"],
-//         correct: "asd ge",
-//         status: "active",
-//       },
-//     ],
-//   },
-// ];
-
 const tableHeader = [
   { name: "Title", key: "title" },
   { name: "Option", key: "option" },
@@ -90,6 +34,7 @@ const ManageQuizQuestion = () => {
       queryKey: ["allLevelData"],
       queryFn: getAllLevel,
     });
+
   const {
     data: { data: { data: allQuestionData } } = { data: { data: null } },
   } = useQuery({
@@ -117,6 +62,7 @@ const ManageQuizQuestion = () => {
       setFilterData([]);
     }
   }, [allQuestionData, allCategoryData, allLevelData]);
+
   useEffect(() => {
     if (slectCategory && selectLevelId) {
       let level =
@@ -165,6 +111,12 @@ const ManageQuizQuestion = () => {
     setShowDeleteModal(false);
   };
 
+  const selectLeveldata = allLevelData?.find(
+    (level) => level._id === selectLevelId
+  );
+
+  console.log(selectLeveldata);
+
   return (
     <div className="w-[100%]">
       <FilterQuestion
@@ -179,11 +131,11 @@ const ManageQuizQuestion = () => {
         setSelectLevelId={setSelectLevelId}
       />
       <Table
-        title={"All Quiz Question List"}
+        title={`${selectLeveldata?.name} Level Question List`}
         data={filterData ?? []}
         headers={tableHeader}
-        actions={true}
-        actionName={"Actions"}
+        // actions={true}
+        // actionName={"Actions"}
         handleActionClick={handleActionClick}
         // actionValue={{ edit: true, delete: true }}
       />

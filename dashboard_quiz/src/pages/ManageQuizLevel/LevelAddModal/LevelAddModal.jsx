@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewCategory } from "../../../services/category/category";
 import { addLevel } from "../../../services/level/level";
 
-const LevelAddModal = ({ allCategoryData }) => {
+const LevelAddModal = ({ setModal, allCategoryData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -85,6 +85,7 @@ const LevelAddModal = ({ allCategoryData }) => {
         onSuccess: (data) => {
           queryClient.invalidateQueries(["allLevel"]);
           toast.success("Level Create successfully");
+          setModal(false);
         },
         onError: (err) => {
           console.log(err);
@@ -161,6 +162,21 @@ const LevelAddModal = ({ allCategoryData }) => {
                 className="auth-input  "
               />
             </Field>
+            <Field error={errors.priority} label={"Quiz duration ( Minute ) "}>
+              <input
+                {...register("duration", {
+                  required: "Duration is Required ",
+                  min: { value: 10, message: "Minimum value is 10" },
+                  max: { value: 200, message: "Maximum value is 200" },
+                })}
+                type="number"
+                name="duration"
+                id="duration"
+                placeholder="Enter quiz duration"
+                className="auth-input  "
+                defaultValue={10}
+              />
+            </Field>
             <Field error={errors.name} label={"Per Question Mark"}>
               <input
                 {...register("perQuestionMark", {
@@ -181,7 +197,7 @@ const LevelAddModal = ({ allCategoryData }) => {
                 {...register("negativeAnswerMark", {
                   required: "Nagative Answer Mark is Required",
                 })}
-                type="number"
+                type="text"
                 name="negativeAnswerMark"
                 id="negativeAnswerMark"
                 placeholder="Enter Nagative Answer Mark"

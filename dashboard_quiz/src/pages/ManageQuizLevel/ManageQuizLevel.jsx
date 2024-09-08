@@ -14,6 +14,7 @@ import useCategory from "../../hooks/useCategory";
 const tableHeader = [
   { name: "Image", key: "image" },
   { name: "Level Name", key: "name" },
+  { name: "Quiz Duration (m)", key: "duration" },
   { name: "Per Question Mark", key: "perQuestionMark" },
   { name: "Negative Answer Mark", key: "negativeAnswerMark" },
   { name: "Priority", key: "priority" },
@@ -61,6 +62,7 @@ const ManageQuizLevel = () => {
           image: `${imageBaseURL}${item?.image}`,
           priority: item?.priority,
           name: item?.name,
+          duration: item?.duration,
           perQuestionMark: item?.perQuestionMark,
           negativeAnswerMark: item?.negativeAnswerMark,
           status: item?.status === "Deactive" ? "Deactive" : "Active",
@@ -116,8 +118,8 @@ const ManageQuizLevel = () => {
         title={"All Quiz Category List"}
         data={filterData ?? []}
         headers={tableHeader}
-        actions={true}
-        actionName={"Actions"}
+        // actions={true}
+        // actionName={"Actions"}
         handleActionClick={handleActionClick}
         // actionValue={{ edit: true, delete: true }}
       />
@@ -127,7 +129,12 @@ const ManageQuizLevel = () => {
           width={"w-[900px]"}
           title={"Category Add"}
           setModal={setAddModal}
-          body={<LevelAddModal allCategoryData={allCategoryData} />}
+          body={
+            <LevelAddModal
+              setModal={setAddModal}
+              allCategoryData={allCategoryData}
+            />
+          }
         />
       )}
 

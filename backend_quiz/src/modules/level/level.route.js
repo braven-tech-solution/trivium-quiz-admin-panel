@@ -14,6 +14,7 @@ levelRouter
     levelController.addLevel
   )
   .get("", levelController.getAllLevel)
-  .get("/:categoryId", levelController.getAllLevelByCategoryId);
+  .get("/:categoryId", levelController.getAllLevelByCategoryId)
+  .get("/app/:categoryId", levelController.getAllLevelByCategoryId);
 
 module.exports = levelRouter;

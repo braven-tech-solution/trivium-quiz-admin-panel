@@ -25,10 +25,22 @@ const getAllLevel = async () => {
   return getLevel;
 };
 
+const updateNumberOfQuestions = async (levelId) => {
+  console.log({ levelId });
+  const res = await Level.findByIdAndUpdate(
+    levelId,
+    { $inc: { numberOfQuestion: 1 } }, // Increment by 1
+    { new: true } // Return the updated document
+  );
+
+  return res;
+};
+
 const levelService = {
   addLevel,
   getAllLevelByCategoryId,
   getAllLevel,
+  updateNumberOfQuestions,
 };
 
 module.exports = levelService;

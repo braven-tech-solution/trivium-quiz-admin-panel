@@ -10,7 +10,7 @@ import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewCategory } from "../../../services/category/category";
 
-const CategoryAddModal = () => {
+const CategoryAddModal = ({ setModal }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -82,6 +82,8 @@ const CategoryAddModal = () => {
         onSuccess: (data) => {
           queryClient.invalidateQueries(["allCategory"]);
           toast.success("Category Create successfully");
+          // console.log("Category Create successfully");
+          setModal(false);
         },
         onError: (err) => {
           console.log(err);
@@ -142,7 +144,6 @@ const CategoryAddModal = () => {
                 className="auth-input  "
               />
             </Field>
-
             <Field
               error={errors.priority}
               label={"Category Priority ( 1 - 500 )"}
@@ -162,6 +163,24 @@ const CategoryAddModal = () => {
               />
             </Field>
 
+            <Field
+              error={errors.priority}
+              label={"Category Priority ( 1 - 500 )"}
+            >
+              <input
+                {...register("priority", {
+                  required: "Priority is Required ",
+                  min: { value: 1, message: "Minimum value is 1" },
+                  max: { value: 500, message: "Maximum value is 500" },
+                })}
+                type="number"
+                name="priority"
+                id="priority"
+                placeholder="Enter category priority"
+                className="auth-input  "
+                defaultValue="1"
+              />
+            </Field>
             <Field error={errors?.status} label={"Category Status"}>
               <select
                 {...register("status", {
@@ -177,7 +196,6 @@ const CategoryAddModal = () => {
                 <option value="deactive">Deactive</option>
               </select>
             </Field>
-
             <Field>
               <button className="bg-green-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-[#2f727c] transition-all duration-200">
                 Create New Category

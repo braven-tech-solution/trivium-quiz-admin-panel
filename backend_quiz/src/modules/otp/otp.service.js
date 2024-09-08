@@ -3,7 +3,7 @@ const emailWithNodemailer = require("../../helpers/email.js");
 const OTP = require("./otp.model.js");
 
 const sendOTP = async (name, sentTo, receiverType, purpose) => {
-  const otp = Math.floor(100000 + Math.random() * 900000);
+  const otp = Math.floor(1000 + Math.random() * 9000);
   const subject =
     purpose === "email-verification"
       ? "Email verification code"

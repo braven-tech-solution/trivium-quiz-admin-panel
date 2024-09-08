@@ -128,7 +128,7 @@ const QuestionAddModal = ({
                 })}
                 name="category"
                 id="category"
-                className="auth-input py-3"
+                className="bg-slate-200 auth-input py-3"
               >
                 {allCategoryData?.map((option) => (
                   <option key={option.id} value={option.id} className="py-2">
@@ -144,7 +144,7 @@ const QuestionAddModal = ({
                 })}
                 name="level"
                 id="level"
-                className="auth-input py-3"
+                className="bg-slate-200  auth-input py-3"
               >
                 {levelOption?.map((option) => (
                   <option key={option._id} value={option._id} className="py-2">
@@ -162,7 +162,7 @@ const QuestionAddModal = ({
                 name="title"
                 id="title"
                 placeholder="Enter Question Title"
-                className="auth-input  "
+                className="bg-slate-200  auth-input  "
               />
             </Field>
             <Field error={errors.option1} label={"Option 1"}>
@@ -174,7 +174,7 @@ const QuestionAddModal = ({
                 name="option1"
                 id="option1"
                 placeholder="Enter Option 1"
-                className="auth-input  "
+                className="bg-slate-200  auth-input  "
                 value={options.option1}
                 onChange={handleInputChange}
               />
@@ -188,7 +188,7 @@ const QuestionAddModal = ({
                 name="option2"
                 id="option2"
                 placeholder="Enter Option 2"
-                className="auth-input  "
+                className="bg-slate-200 auth-input  "
                 value={options.option2}
                 onChange={handleInputChange}
               />
@@ -202,7 +202,7 @@ const QuestionAddModal = ({
                 name="option3"
                 id="option3"
                 placeholder="Enter Option 1"
-                className="auth-input  "
+                className="bg-slate-200 auth-input  "
                 value={options.option3}
                 onChange={handleInputChange}
               />
@@ -216,7 +216,7 @@ const QuestionAddModal = ({
                 name="option4"
                 id="option4"
                 placeholder="Enter Option 4"
-                className="auth-input  "
+                className="bg-slate-200 auth-input  "
                 value={options.option4}
                 onChange={handleInputChange}
               />
@@ -228,12 +228,12 @@ const QuestionAddModal = ({
                 })}
                 name="correctAnswer"
                 id="correctAnswer"
-                className="auth-input py-3"
+                className="bg-slate-200 auth-input py-3"
               >
                 <option value={options.option1}>{options.option1}</option>
                 <option value={options.option2}>{options.option2}</option>
-                <option value={options.option2}>{options.option3}</option>
-                <option value={options.option2}>{options.option4}</option>
+                <option value={options.option3}>{options.option3}</option>
+                <option value={options.option4}>{options.option4}</option>
               </select>
             </Field>
 
@@ -246,7 +246,7 @@ const QuestionAddModal = ({
                 name="priority"
                 id="priority"
                 placeholder="Enter category priority"
-                className="auth-input  "
+                className="bg-slate-200 auth-input  "
                 defaultValue="1"
               />
             </Field>
@@ -257,7 +257,7 @@ const QuestionAddModal = ({
                 })}
                 name="status"
                 id="status"
-                className="auth-input   py-3"
+                className="bg-slate-200 auth-input   py-3"
               >
                 <option value="active" className="py-2">
                   Active

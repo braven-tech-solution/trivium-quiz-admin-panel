@@ -1,5 +1,6 @@
 const catchAsync = require("../../shared/catchAsync");
 const sendResponse = require("../../shared/sendResponse");
+const levelService = require("../level/level.service");
 const questionService = require("./question.service");
 
 const addQuestion = catchAsync(async (req, res) => {
@@ -8,6 +9,9 @@ const addQuestion = catchAsync(async (req, res) => {
   const question = await questionService.addQuestion(payload);
 
   if (question) {
+    if (payload?.model_type === "Level") {
+      await levelService.updateNumberOfQuestions(payload?.model_id);
+    }
     sendResponse(res, 200, true, "Question added successfully", question);
   } else {
     sendResponse(res, 400, false, "Failed to add question", {});

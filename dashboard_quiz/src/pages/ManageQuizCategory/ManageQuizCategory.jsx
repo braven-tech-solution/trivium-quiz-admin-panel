@@ -107,8 +107,8 @@ const ManageQuizCategory = () => {
         title={"All Quiz Category List"}
         data={filterData ?? []}
         headers={tableHeader}
-        actions={true}
-        actionName={"Actions"}
+        // actions={true}
+        // actionName={"Actions"}
         handleActionClick={handleActionClick}
         // actionValue={{ edit: true, delete: true }}
       />
@@ -118,7 +118,7 @@ const ManageQuizCategory = () => {
           width={"w-[900px]"}
           title={"Category Add"}
           setModal={setAddModal}
-          body={<CategoryAddModal />}
+          body={<CategoryAddModal setModal={setAddModal} />}
         />
       )}
 

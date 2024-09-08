@@ -5,9 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import NotFound from "../pages/NotFound";
 import DashBoard from "../pages/DashBoard/DashBoard";
 import Register from "../pages/Register";
-import CreateNewFood from "../pages/CreateNewFood/CreateNewFood";
 import CreateNewBanner from "../pages/CreateNewBanner/CreateNewBanner";
-import ManageAllFood from "../pages/ManageAllFood/ManageAllFood";
 import ManageAllBanner from "../pages/ManageAllBanner/ManageAllBanner";
 import ManagePassword from "../pages/ManagePassword/ManagePassword";
 import ManageFeedback from "../pages/ManageFeedback/ManageFeedback";
@@ -53,10 +51,6 @@ const router = createBrowserRouter([
       {
         path: "/setting",
         element: <h1>Working </h1>,
-      },
-      {
-        path: "/manage-all-food",
-        element: <ManageAllFood />,
       },
 
       {

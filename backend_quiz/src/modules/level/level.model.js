@@ -15,6 +15,14 @@ const levelSchema = new Schema(
       type: String,
       default: "",
     },
+    duration: {
+      type: String,
+      default: "",
+    },
+    numberOfQuestion: {
+      type: Number,
+      default: 0,
+    },
     description: {
       type: String,
       default: "",

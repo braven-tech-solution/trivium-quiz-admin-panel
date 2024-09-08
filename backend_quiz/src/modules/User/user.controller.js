@@ -257,13 +257,18 @@ const forgetPassword = catchAsync(async (req, res) => {
   //   expiresIn: "1h",
   // });
 
-  const existingOTP = await otp.checkOTPByEmail(email);
+  const existingOTP = await otpService.checkOTPByEmail(email);
 
   let otpData;
   if (existingOTP) {
     return sendResponse(res, 200, true, "otp-exist", verifyToken);
   } else {
-    otpData = await otp.sendOTP(user.fullName, email, "email", otpPurpose);
+    otpData = await otpService.sendOTP(
+      user.fullName,
+      email,
+      "email",
+      otpPurpose
+    );
     return sendResponse(res, 200, true, "Check email for OTP", verifyToken);
   }
 });
