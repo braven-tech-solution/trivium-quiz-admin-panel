@@ -13,6 +13,7 @@ levelRouter
     upload.fields([{ name: "image", maxCount: 1 }]),
     levelController.addLevel
   )
+  .post("/submit/:id", levelController.submitQuiz)
   .get("", levelController.getAllLevel)
   .get("/:categoryId", levelController.getAllLevelByCategoryId)
   .get("/app/:categoryId", levelController.getAllLevelByCategoryId);

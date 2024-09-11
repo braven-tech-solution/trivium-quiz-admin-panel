@@ -1,5 +1,6 @@
 const catchAsync = require("../../shared/catchAsync");
 const sendResponse = require("../../shared/sendResponse");
+const questionService = require("../question/question.service");
 const levelService = require("./level.service.js");
 
 const addLevel = catchAsync(async (req, res) => {
@@ -16,6 +17,58 @@ const addLevel = catchAsync(async (req, res) => {
 
   if (quiz) {
     sendResponse(res, 200, true, "level added successfully", quiz);
+  } else {
+    sendResponse(res, 400, false, "Failed to add level", {});
+  }
+});
+
+const submitQuiz = catchAsync(async (req, res) => {
+  const userAnswers = req.body;
+  const { id } = req.params;
+
+  console.log(userAnswers);
+  console.log(id);
+
+  const allQuestions = await questionService.getAllQuestionByLevelId(id);
+
+  let correctCount = 0;
+  let correctAnswers = [];
+
+  console.log(allQuestions);
+
+  allQuestions.forEach((question) => {
+    const userAnswer = userAnswers[question._id];
+    if (userAnswer === question.correctAnswer) {
+      correctCount += 1;
+      correctAnswers.push({
+        ...question._doc,
+        userAnswer,
+        correctAnswer: question.correctAnswer,
+      });
+    } else {
+      correctAnswers.push({
+        ...question._doc,
+        userAnswer: "",
+        correctAnswer: question.correctAnswer,
+      });
+    }
+  });
+
+  // res.json({
+  //   correctCount,
+  //   correctAnswers,
+  //   totalQuestions: allQuestions.length,
+  // });
+
+  // const quiz = await levelService.addLevel(payload);
+  const payload = {
+    correctCount,
+    correctAnswers,
+    totalQuestions: allQuestions.length,
+  };
+
+  if (payload) {
+    sendResponse(res, 200, true, "quiz submit successfully", payload);
   } else {
     sendResponse(res, 400, false, "Failed to add level", {});
   }
@@ -46,6 +99,7 @@ const getAllLevel = catchAsync(async (req, res) => {
 
 const levelController = {
   addLevel,
+  submitQuiz,
   getAllLevelByCategoryId,
   getAllLevel,
 };
