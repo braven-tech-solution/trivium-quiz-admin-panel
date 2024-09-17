@@ -1,5 +1,5 @@
 const express = require("express");
-const userRouter = require("../modules/User/user.route");
+const userRouter = require("../modules/user/user.route");
 const categoryRouter = require("../modules/category/category.route");
 const levelRouter = require("../modules/level/level.route");
 const questionRouter = require("../modules/question/question.route");

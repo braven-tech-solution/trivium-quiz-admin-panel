@@ -20,6 +20,7 @@ userRouter
     auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     userController.getAllUsers
   )
+  .get("/leaderboard", userController.getUserLeaderboard)
   .get("/:id", userController.getSingleUser)
   .get("/user/statistics", userController.usersStatistics)
   .get("/user/logout/true", userController.logout)

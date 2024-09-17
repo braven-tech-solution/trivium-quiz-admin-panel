@@ -64,8 +64,6 @@ const verifyRole = (...roles) => {
 
       req.user = verifiedUser;
 
-      console.log(verifiedUser);
-
       if (roles.length && !roles.includes(verifiedUser.role)) {
         return sendResponse(res, 403, false, "Roles doesn't match", {});
       }

@@ -1,6 +1,8 @@
 const express = require("express");
 const levelController = require("./level.controller.js");
 const fileUpload = require("../../middlewares/fileUpload.js");
+const auth = require("../../middlewares/auth.js");
+const USER_ROLE = require("../../helpers/userRole.js");
 
 const upload = fileUpload("./src/uploads/level/");
 
@@ -13,7 +15,11 @@ levelRouter
     upload.fields([{ name: "image", maxCount: 1 }]),
     levelController.addLevel
   )
-  .post("/submit/:id", levelController.submitQuiz)
+  .post(
+    "/submit/:id",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    levelController.submitQuiz
+  )
   .get("", levelController.getAllLevel)
   .get("/:categoryId", levelController.getAllLevelByCategoryId)
   .get("/app/:categoryId", levelController.getAllLevelByCategoryId);

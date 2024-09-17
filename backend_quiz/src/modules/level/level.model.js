@@ -23,6 +23,10 @@ const levelSchema = new Schema(
       type: Number,
       default: 0,
     },
+    point: {
+      type: Number,
+      default: 0,
+    },
     description: {
       type: String,
       default: "",
@@ -44,6 +48,18 @@ const levelSchema = new Schema(
       type: String,
       enum: ["active", "deactive", "deleted"],
       default: "active",
+    },
+    point: {
+      type: Number,
+      default: 0,
+    },
+    avarageCorrectPercent: {
+      type: Number,
+      default: 0,
+    },
+    submissionCount: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

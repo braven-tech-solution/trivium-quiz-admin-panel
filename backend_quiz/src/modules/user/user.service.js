@@ -49,6 +49,21 @@ const getSingleUser = async (userId) => {
   return user;
 };
 
+const getUserLeaderboard = async () => {
+  let user = await User.find(
+    { isDelete: false }, // Filter condition (optional, if you want to filter by some conditions)
+    {
+      point: 1,
+      submissionCount: 1,
+      image: 1,
+      fullName: 1,
+      avarageCorrectPercent: 1,
+    } // Projection to only include specified fields
+  ).sort({ point: -1 });
+
+  return user;
+};
+
 const getSingleUserByEmailAndPhone = async (email, phone) => {
   let user;
   if (nodeCache.has(`users${email}${phone}`)) {
@@ -169,6 +184,7 @@ const userService = {
   addUser,
   getAllUsers,
   getSingleUser,
+  getUserLeaderboard,
   getSingleUserByEmailAndPhone,
   changePassword,
   updateUser,

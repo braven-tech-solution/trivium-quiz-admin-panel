@@ -17,12 +17,29 @@ const getAllLevelByCategoryId = async (categoryId) => {
   return getLevel;
 };
 
+const getSingleLeveById = async (levelId) => {
+  const res = await Level.findById(levelId);
+
+  return res;
+};
+
 const getAllLevel = async () => {
   // console.log({ object: categoryId });
   const getLevel = await Level.find({});
   // console.log({ getLevel });
   // nodeCache.flushAll();
   return getLevel;
+};
+
+const updateLevelById = async (levelId, payload) => {
+  console.log({ levelId });
+  const res = await Level.findByIdAndUpdate(
+    levelId,
+    payload, // Increment by 1
+    { new: true } // Return the updated document
+  );
+
+  return res;
 };
 
 const updateNumberOfQuestions = async (levelId) => {
@@ -39,7 +56,9 @@ const updateNumberOfQuestions = async (levelId) => {
 const levelService = {
   addLevel,
   getAllLevelByCategoryId,
+  getSingleLeveById,
   getAllLevel,
+  updateLevelById,
   updateNumberOfQuestions,
 };
 

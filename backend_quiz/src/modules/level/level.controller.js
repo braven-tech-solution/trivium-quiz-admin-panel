@@ -2,6 +2,7 @@ const catchAsync = require("../../shared/catchAsync");
 const sendResponse = require("../../shared/sendResponse");
 const questionService = require("../question/question.service");
 const levelService = require("./level.service.js");
+const userService = require("../user/user.service");
 
 const addLevel = catchAsync(async (req, res) => {
   const payload = { ...req.body };
@@ -23,30 +24,34 @@ const addLevel = catchAsync(async (req, res) => {
 });
 
 const submitQuiz = catchAsync(async (req, res) => {
+  const user = req.user;
   const userAnswers = req.body;
   const { id } = req.params;
 
-  console.log(userAnswers);
-  console.log(id);
+  console.log("aaaaaaaaaaa");
 
-  const allQuestions = await questionService.getAllQuestionByLevelId(id);
+  console.log(user);
+
+  const questions = await questionService.getAllQuestionByLevelId(id);
+  const level = await levelService.getSingleLeveById(id);
+  const userData = await userService.getSingleUser(user.id);
+
+  console.log(userData);
 
   let correctCount = 0;
-  let correctAnswers = [];
+  let answerWithQuestion = [];
 
-  console.log(allQuestions);
-
-  allQuestions.forEach((question) => {
+  questions.forEach((question) => {
     const userAnswer = userAnswers[question._id];
     if (userAnswer === question.correctAnswer) {
       correctCount += 1;
-      correctAnswers.push({
+      answerWithQuestion.push({
         ...question._doc,
         userAnswer,
         correctAnswer: question.correctAnswer,
       });
     } else {
-      correctAnswers.push({
+      answerWithQuestion.push({
         ...question._doc,
         userAnswer: "",
         correctAnswer: question.correctAnswer,
@@ -54,21 +59,57 @@ const submitQuiz = catchAsync(async (req, res) => {
     }
   });
 
-  // res.json({
-  //   correctCount,
-  //   correctAnswers,
-  //   totalQuestions: allQuestions.length,
-  // });
+  const totalQuestions = questions.length;
+  const percentageCorrect = (correctCount / totalQuestions) * 100;
 
-  // const quiz = await levelService.addLevel(payload);
+  // Update average correct percentage
+  const currentAverage = level.avarageCorrectPercent || 0;
+  const submissionCount = level.submissionCount || 0;
+
+  const newAverage =
+    (currentAverage * submissionCount + percentageCorrect) /
+    (submissionCount + 1);
+
   const payload = {
-    correctCount,
-    correctAnswers,
-    totalQuestions: allQuestions.length,
+    avarageCorrectPercent: newAverage.toFixed(2),
+    submissionCount: submissionCount + 1,
   };
 
-  if (payload) {
-    sendResponse(res, 200, true, "quiz submit successfully", payload);
+  // update level data
+
+  // update level data asynchronously
+  process.nextTick(async () => {
+    await levelService.updateLevelById(id, payload);
+  });
+
+  const userCurrentAverage = userData.avarageCorrectPercent || 0;
+  const userSubmissionCount = userData.submissionCount || 0;
+
+  const newUserAverage =
+    (userCurrentAverage * userSubmissionCount + percentageCorrect) /
+    (userSubmissionCount + 1);
+
+  const userPayload = {
+    avarageCorrectPercent: newUserAverage.toFixed(2),
+    submissionCount: userSubmissionCount + 1,
+    point: Number(userData.point) + Number(level.point),
+  };
+
+  // update user profile data asynchronously
+  process.nextTick(async () => {
+    await userService.updateUser(user.id, userPayload);
+  });
+
+  const responseData = {
+    correctCount,
+    totalQuestions: questions.length,
+    yourCorrectPercent: Number(percentageCorrect.toFixed(2)),
+    avarageCorrectPercent: Number(newAverage.toFixed(2)),
+    answerWithQuestion,
+  };
+
+  if (responseData) {
+    sendResponse(res, 200, true, "quiz submit successfully", responseData);
   } else {
     sendResponse(res, 400, false, "Failed to add level", {});
   }
