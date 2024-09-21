@@ -27,7 +27,7 @@ const getAllUsers = async (page, limit) => {
     users = await User.find({ isDelete: "no" })
       .skip((page - 1) * limit)
       .limit(limit);
-    nodeCache.set(cacheKey, JSON.stringify(users));
+    // nodeCache.set(cacheKey, JSON.stringify(users));
   }
 
   return users;
@@ -43,7 +43,7 @@ const getSingleUser = async (userId) => {
     user = JSON.parse(nodeCache.get(`users${userId}`));
   } else {
     user = await User.findById(userId).select("-password");
-    nodeCache.set(`users${userId}`, JSON.stringify(user));
+    // nodeCache.set(`users${userId}`, JSON.stringify(user));
   }
 
   return user;
@@ -54,14 +54,48 @@ const getUserLeaderboard = async () => {
     { isDelete: false }, // Filter condition (optional, if you want to filter by some conditions)
     {
       point: 1,
-      submissionCount: 1,
+      strength: 1,
       image: 1,
       fullName: 1,
-      avarageCorrectPercent: 1,
     } // Projection to only include specified fields
   ).sort({ point: -1 });
 
   return user;
+};
+const getSingleUserLeaderboard = async (id) => {
+  let user = await User.aggregate([
+    // Match all users to calculate ranks
+    {
+      $setWindowFields: {
+        sortBy: { point: -1 }, // Sort by 'point' in descending order
+        output: {
+          rank: {
+            $rank: {}, // Assign rank based on sorted points
+          },
+        },
+      },
+    },
+    // Project the necessary fields
+    {
+      $project: {
+        point: { $ifNull: ["$point", 0] },
+        rank: 1, // Include rank in the result
+        strength: { $ifNull: ["$strength", 0] },
+        completeQuiz: { $ifNull: ["$completeQuiz", 0] },
+        questionAnswer: { $ifNull: ["$questionAnswer", 0] },
+        correctAnswer: { $ifNull: ["$correctAnswer", 0] },
+        incorrectAnswer: { $ifNull: ["$incorrectAnswer", 0] },
+        image: { $ifNull: ["$image", "/uploads/profile/default-user.jpg"] },
+        fullName: { $ifNull: ["$fullName", ""] },
+      },
+    },
+    // Match only the user with the specific id
+    {
+      $match: { _id: new mongoose.Types.ObjectId(id) },
+    },
+  ]);
+
+  return user?.[0];
 };
 
 const getSingleUserByEmailAndPhone = async (email, phone) => {
@@ -72,19 +106,32 @@ const getSingleUserByEmailAndPhone = async (email, phone) => {
     user = await User.findOne({
       $or: [{ email }, { phone }],
     });
-    nodeCache.set(`users${email}${phone}`, JSON.stringify(user));
+    // nodeCache.set(`users${email}${phone}`, JSON.stringify(user));
   }
 
   return user;
 };
 
-const updateUser = async (userId, userBody) => {
+const updateUser = async (userId, userBody, levelId) => {
   const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
   if (!isValidObjectId) {
     return null;
   }
 
-  const user = await User.findByIdAndUpdate(userId, userBody, {
+  let payload = {
+    ...userBody,
+  };
+
+  if (levelId) {
+    payload = {
+      ...userBody,
+      $push: {
+        submitQuizLevelIds: levelId,
+      },
+    };
+  }
+
+  const user = await User.findByIdAndUpdate(userId, payload, {
     new: true,
   });
   nodeCache.flushAll();
@@ -185,6 +232,7 @@ const userService = {
   getAllUsers,
   getSingleUser,
   getUserLeaderboard,
+  getSingleUserLeaderboard,
   getSingleUserByEmailAndPhone,
   changePassword,
   updateUser,

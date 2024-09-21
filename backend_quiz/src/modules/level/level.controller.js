@@ -30,13 +30,25 @@ const submitQuiz = catchAsync(async (req, res) => {
 
   console.log("aaaaaaaaaaa");
 
-  console.log(user);
+  // console.log(user);
 
   const questions = await questionService.getAllQuestionByLevelId(id);
   const level = await levelService.getSingleLeveById(id);
   const userData = await userService.getSingleUser(user.id);
 
-  console.log(userData);
+  console.log(userData.submitQuizLevelIds.includes(id));
+
+  if (userData?.submitQuizLevelIds?.includes(id)) {
+    sendResponse(
+      res,
+      400,
+      true,
+      "The user has already participated in this quiz.",
+      {}
+    );
+
+    return;
+  }
 
   let correctCount = 0;
   let answerWithQuestion = [];
@@ -60,19 +72,19 @@ const submitQuiz = catchAsync(async (req, res) => {
   });
 
   const totalQuestions = questions.length;
-  const percentageCorrect = (correctCount / totalQuestions) * 100;
+  const newStrength = (correctCount / totalQuestions) * 100;
 
   // Update average correct percentage
-  const currentAverage = level.avarageCorrectPercent || 0;
-  const submissionCount = level.submissionCount || 0;
+  const oldAverageStrength = level.averageStrength || 0;
+  const totalCompleteQuiz = level.totalCompleteQuiz || 0;
 
-  const newAverage =
-    (currentAverage * submissionCount + percentageCorrect) /
-    (submissionCount + 1);
+  const newAverageStrength =
+    (oldAverageStrength * totalCompleteQuiz + newStrength) /
+    (totalCompleteQuiz + 1);
 
   const payload = {
-    avarageCorrectPercent: newAverage.toFixed(2),
-    submissionCount: submissionCount + 1,
+    averageStrength: newAverageStrength.toFixed(2),
+    totalCompleteQuiz: totalCompleteQuiz + 1,
   };
 
   // update level data
@@ -82,29 +94,37 @@ const submitQuiz = catchAsync(async (req, res) => {
     await levelService.updateLevelById(id, payload);
   });
 
-  const userCurrentAverage = userData.avarageCorrectPercent || 0;
-  const userSubmissionCount = userData.submissionCount || 0;
+  const userOldStrength = userData.strength || 0;
+  const userCompleteQuiz = userData.completeQuiz || 0;
+  const questionAnswer = userData.questionAnswer || 0;
+  const correctAnswer = userData.correctAnswer || 0;
+  const incorrectAnswer = userData.incorrectAnswer || 0;
+  const addPoint = (correctCount / totalQuestions) * Number(level.point);
 
-  const newUserAverage =
-    (userCurrentAverage * userSubmissionCount + percentageCorrect) /
-    (userSubmissionCount + 1);
+  const newUserAverageStrength =
+    (userOldStrength * userCompleteQuiz + newStrength) / (userCompleteQuiz + 1);
 
   const userPayload = {
-    avarageCorrectPercent: newUserAverage.toFixed(2),
-    submissionCount: userSubmissionCount + 1,
-    point: Number(userData.point) + Number(level.point),
+    point: Number((Number(userData.point) + addPoint).toFixed(2)),
+    strength: newUserAverageStrength.toFixed(2),
+    completeQuiz: userCompleteQuiz + 1,
+    questionAnswer: questionAnswer + Number(totalQuestions),
+    correctAnswer: correctAnswer + Number(correctCount),
+    incorrectAnswer:
+      Number(incorrectAnswer) + Number(totalQuestions) - Number(correctCount),
   };
 
   // update user profile data asynchronously
   process.nextTick(async () => {
-    await userService.updateUser(user.id, userPayload);
+    await userService.updateUser(user.id, userPayload, id);
   });
 
   const responseData = {
-    correctCount,
+    point: Number(addPoint.toFixed(2)),
+    correctAnswer: correctCount,
     totalQuestions: questions.length,
-    yourCorrectPercent: Number(percentageCorrect.toFixed(2)),
-    avarageCorrectPercent: Number(newAverage.toFixed(2)),
+    yourStrength: Number(newStrength.toFixed(2)),
+    averageStrengthOfLevel: Number(oldAverageStrength.toFixed(2)),
     answerWithQuestion,
   };
 

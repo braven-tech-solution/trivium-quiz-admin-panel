@@ -21,6 +21,12 @@ userRouter
     userController.getAllUsers
   )
   .get("/leaderboard", userController.getUserLeaderboard)
+  .get(
+    "/leaderboard/login-user",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    userController.getLoginUserLeaderboard
+  )
+  .get("/leaderboard/:id", userController.getSingleUserLeaderboard)
   .get("/:id", userController.getSingleUser)
   .get("/user/statistics", userController.usersStatistics)
   .get("/user/logout/true", userController.logout)

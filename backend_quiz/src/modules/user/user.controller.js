@@ -204,6 +204,28 @@ const getUserLeaderboard = catchAsync(async (req, res) => {
   }
 });
 
+const getLoginUserLeaderboard = catchAsync(async (req, res) => {
+  const { id } = req.user;
+  const user = await userService.getSingleUserLeaderboard(id);
+
+  if (user) {
+    sendResponse(res, 200, true, "User Found", user);
+  } else {
+    sendResponse(res, 404, false, "No user found", {});
+  }
+});
+
+const getSingleUserLeaderboard = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const user = await userService.getSingleUserLeaderboard(id);
+
+  if (user) {
+    sendResponse(res, 200, true, "User Found", user);
+  } else {
+    sendResponse(res, 404, false, "No user found", {});
+  }
+});
+
 const updateUser = catchAsync(async (req, res) => {
   const { fullName, phone, address, photo, current_password } = { ...req.body };
   const { id: userID } = req.user;
@@ -405,6 +427,8 @@ const userController = {
   getAllUsers,
   getSingleUser,
   getUserLeaderboard,
+  getLoginUserLeaderboard,
+  getSingleUserLeaderboard,
   updateUser,
   changePassword,
   forgetPassword,

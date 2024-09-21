@@ -53,11 +53,11 @@ const levelSchema = new Schema(
       type: Number,
       default: 0,
     },
-    avarageCorrectPercent: {
+    averageStrength: {
       type: Number,
       default: 0,
     },
-    submissionCount: {
+    totalCompleteQuiz: {
       type: Number,
       default: 0,
     },

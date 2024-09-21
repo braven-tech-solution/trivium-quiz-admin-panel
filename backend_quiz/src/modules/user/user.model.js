@@ -51,14 +51,31 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
-    avarageCorrectPercent: {
+    strength: {
       type: Number,
       default: 0,
     },
-    submissionCount: {
+    completeQuiz: {
       type: Number,
       default: 0,
     },
+    questionAnswer: {
+      type: Number,
+      default: 0,
+    },
+    correctAnswer: {
+      type: Number,
+      default: 0,
+    },
+    incorrectAnswer: {
+      type: Number,
+      default: 0,
+    },
+    submitQuizLevelIds: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
