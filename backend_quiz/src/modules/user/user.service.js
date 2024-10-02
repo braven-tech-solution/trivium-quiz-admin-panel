@@ -49,6 +49,17 @@ const getSingleUser = async (userId) => {
   return user;
 };
 
+const getSubmittedQuizsId = async (id) => {
+  let user = await User.findById(
+    id, // Filter condition (optional, if you want to filter by some conditions)
+    {
+      submitQuizLevelIds: 1,
+    } // Projection to only include specified fields
+  );
+
+  return user;
+};
+
 const getUserLeaderboard = async () => {
   let user = await User.find(
     { isDelete: false }, // Filter condition (optional, if you want to filter by some conditions)
@@ -62,6 +73,7 @@ const getUserLeaderboard = async () => {
 
   return user;
 };
+
 const getSingleUserLeaderboard = async (id) => {
   let user = await User.aggregate([
     // Match all users to calculate ranks
@@ -231,6 +243,7 @@ const userService = {
   addUser,
   getAllUsers,
   getSingleUser,
+  getSubmittedQuizsId,
   getUserLeaderboard,
   getSingleUserLeaderboard,
   getSingleUserByEmailAndPhone,

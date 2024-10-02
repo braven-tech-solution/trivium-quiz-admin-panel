@@ -119,26 +119,49 @@ const ScheduleQuizAddModal = () => {
               />
             </Field>
 
-            <Field error={errors.name} label={"Schedule Quiz Time"}>
-              <Controller
-                control={control}
-                name="startDate"
-                defaultValue={startDate}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    selected={value}
-                    onChange={(date) => {
-                      setStartDate(date);
-                      onChange(date);
-                    }}
-                    className="auth-input  "
-                    showTimeSelect
-                    filterTime={filterPassedTime}
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                )}
-              />
-            </Field>
+            <div className="grid grid-cols-2 gap-5">
+              <Field error={errors.name} label={"  Start Time"}>
+                <Controller
+                  control={control}
+                  name="startDate"
+                  defaultValue={startDate}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={(date) => {
+                        setStartDate(date);
+                        onChange(date);
+                      }}
+                      className="auth-input  "
+                      showTimeSelect
+                      filterTime={filterPassedTime}
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                    />
+                  )}
+                />
+              </Field>
+
+              <Field error={errors.name} label={"  End Time"}>
+                <Controller
+                  control={control}
+                  name="endDate"
+                  defaultValue={startDate}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={(date) => {
+                        setStartDate(date);
+                        onChange(date);
+                      }}
+                      className="auth-input  "
+                      showTimeSelect
+                      filterTime={filterPassedTime}
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                    />
+                  )}
+                />
+              </Field>
+            </div>
 
             <Field
               error={errors.perCorrectAnswerMark}

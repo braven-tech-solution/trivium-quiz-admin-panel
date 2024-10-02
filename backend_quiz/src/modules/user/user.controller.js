@@ -194,6 +194,18 @@ const getSingleUser = catchAsync(async (req, res) => {
   }
 });
 
+const getSubmittedQuizsId = catchAsync(async (req, res) => {
+  const { id } = req.user;
+  console.log(id);
+  const result = await userService.getSubmittedQuizsId(id);
+
+  if (result) {
+    sendResponse(res, 200, true, "User Found", result);
+  } else {
+    sendResponse(res, 404, false, "No user found", {});
+  }
+});
+
 const getUserLeaderboard = catchAsync(async (req, res) => {
   const user = await userService.getUserLeaderboard();
 
@@ -426,6 +438,7 @@ const userController = {
   logout,
   getAllUsers,
   getSingleUser,
+  getSubmittedQuizsId,
   getUserLeaderboard,
   getLoginUserLeaderboard,
   getSingleUserLeaderboard,

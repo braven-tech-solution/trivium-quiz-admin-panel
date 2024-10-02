@@ -20,6 +20,11 @@ userRouter
     auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     userController.getAllUsers
   )
+  .get(
+    "/submitted-quizs-id",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    userController.getSubmittedQuizsId
+  )
   .get("/leaderboard", userController.getUserLeaderboard)
   .get(
     "/leaderboard/login-user",

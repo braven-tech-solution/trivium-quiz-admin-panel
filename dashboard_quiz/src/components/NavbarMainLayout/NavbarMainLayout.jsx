@@ -50,7 +50,7 @@ const NavbarMainLayout = () => {
         </NavLink>
       </NavGaurd>
 
-      {/* <NavGaurd accesslist={["admin", "accounts"]}>
+      <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
           to="/add-schedule-quiz"
           className={({ isActive }) =>
@@ -63,7 +63,7 @@ const NavbarMainLayout = () => {
           <span>Add Schedule Quiz</span>
         </NavLink>
       </NavGaurd>
-
+      {/*
       <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
           to="/manage-schedule-question"
