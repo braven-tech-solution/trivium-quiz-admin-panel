@@ -10,7 +10,6 @@ import ManageAllBanner from "../pages/ManageAllBanner/ManageAllBanner";
 import ManagePassword from "../pages/ManagePassword/ManagePassword";
 import ManageFeedback from "../pages/ManageFeedback/ManageFeedback";
 import ManageQuizQuestion from "../pages/ManageQuizQuestion/ManageQuizQuestion";
-import AddScheduleQuiz from "../pages/AddScheduleQuiz/AddScheduleQuiz";
 import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageScheduleQuestion";
 import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
 import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
@@ -40,10 +39,7 @@ const router = createBrowserRouter([
         path: "/manage-quiz-question",
         element: <ManageQuizQuestion />,
       },
-      {
-        path: "/add-schedule-quiz",
-        element: <AddScheduleQuiz />,
-      },
+
       {
         path: "/manage-schedule-question",
         element: <ManageScheduleQuestion />,

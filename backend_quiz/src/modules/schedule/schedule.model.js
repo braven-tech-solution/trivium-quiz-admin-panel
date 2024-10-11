@@ -14,14 +14,47 @@ const scheduleSchema = new Schema(
       type: String,
       default: "",
     },
-    serial: {
-      type: Number,
+    startTime: {
+      type: Date,
       default: "",
+    },
+    endTime: {
+      type: Date,
+      default: "",
+    },
+    numberOfQuestion: {
+      type: Number,
+      default: 0,
+    },
+    perQuestionMark: {
+      type: Number,
+      required: [true, "Per Question Mark   is required"],
+      default: 1,
+    },
+    negativeAnswerMark: {
+      type: Number,
+      default: 0,
+    },
+    priority: {
+      type: Number,
+      default: 1,
     },
     status: {
       type: String,
       enum: ["active", "deactive", "deleted"],
       default: "active",
+    },
+    point: {
+      type: Number,
+      default: 0,
+    },
+    averageStrength: {
+      type: Number,
+      default: 0,
+    },
+    totalCompleteQuiz: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

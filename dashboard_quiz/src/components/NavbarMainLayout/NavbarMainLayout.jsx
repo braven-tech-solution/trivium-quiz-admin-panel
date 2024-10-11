@@ -52,7 +52,7 @@ const NavbarMainLayout = () => {
 
       <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
-          to="/add-schedule-quiz"
+          to="/manage-schedule-question"
           className={({ isActive }) =>
             isActive
               ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
@@ -60,7 +60,7 @@ const NavbarMainLayout = () => {
           }
         >
           <BiAddToQueue className="text-2xl" />
-          <span>Add Schedule Quiz</span>
+          <span>Manage Schedule Quiz</span>
         </NavLink>
       </NavGaurd>
       {/*

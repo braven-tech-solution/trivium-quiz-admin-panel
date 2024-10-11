@@ -18,6 +18,9 @@ const ScheduleQuizAddModal = () => {
   const [startDate, setStartDate] = useState(
     setHours(setMinutes(new Date(), 0), 9)
   );
+  const [endDate, setEndDate] = useState(
+    setHours(setMinutes(new Date(), 0), 9)
+  );
 
   const { auth } = useAuth();
 
@@ -120,7 +123,8 @@ const ScheduleQuizAddModal = () => {
             </Field>
 
             <div className="grid grid-cols-2 gap-5">
-              <Field error={errors.name} label={"  Start Time"}>
+              {/* Start Time */}
+              <Field error={errors.name} label={"Start Time"}>
                 <Controller
                   control={control}
                   name="startDate"
@@ -131,9 +135,14 @@ const ScheduleQuizAddModal = () => {
                       onChange={(date) => {
                         setStartDate(date);
                         onChange(date);
+                        // If the endDate is less than startDate, reset the endDate
+                        if (endDate && date >= endDate) {
+                          setEndDate(null);
+                        }
                       }}
-                      className="auth-input  "
+                      className="auth-input"
                       showTimeSelect
+                      timeIntervals={5}
                       filterTime={filterPassedTime}
                       dateFormat="MMMM d, yyyy h:mm aa"
                     />
@@ -141,21 +150,27 @@ const ScheduleQuizAddModal = () => {
                 />
               </Field>
 
-              <Field error={errors.name} label={"  End Time"}>
+              {/* End Time */}
+              <Field error={errors.name} label={"End Time"}>
                 <Controller
                   control={control}
                   name="endDate"
-                  defaultValue={startDate}
+                  defaultValue={endDate}
                   render={({ field: { onChange, value } }) => (
                     <DatePicker
                       selected={value}
                       onChange={(date) => {
-                        setStartDate(date);
+                        setEndDate(date);
                         onChange(date);
                       }}
-                      className="auth-input  "
+                      className="auth-input"
                       showTimeSelect
-                      filterTime={filterPassedTime}
+                      timeIntervals={5}
+                      filterTime={(time) => {
+                        // Only allow times after the selected start date and time
+                        return startDate ? time > startDate : true;
+                      }}
+                      minDate={startDate} // Disable dates before the selected start date
                       dateFormat="MMMM d, yyyy h:mm aa"
                     />
                   )}
