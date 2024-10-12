@@ -49,10 +49,7 @@ const levelSchema = new Schema(
       enum: ["active", "deactive", "deleted"],
       default: "active",
     },
-    point: {
-      type: Number,
-      default: 0,
-    },
+
     averageStrength: {
       type: Number,
       default: 0,

@@ -17,10 +17,12 @@ const scheduleSchema = new Schema(
     startTime: {
       type: Date,
       default: "",
+      required: [true, "Start time is required"],
     },
     endTime: {
       type: Date,
       default: "",
+      required: [true, "End time is required"],
     },
     numberOfQuestion: {
       type: Number,
@@ -43,10 +45,6 @@ const scheduleSchema = new Schema(
       type: String,
       enum: ["active", "deactive", "deleted"],
       default: "active",
-    },
-    point: {
-      type: Number,
-      default: 0,
     },
     averageStrength: {
       type: Number,
