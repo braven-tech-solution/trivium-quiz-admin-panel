@@ -36,7 +36,7 @@ const DashboardStatistic = () => {
               Total User
             </p>
             <p className="sm:text-2xl md:text-3xl font-medium text-white text-center">
-              {totalUsers}
+              {totalUsers - 1}
             </p>
           </div>
         </div>

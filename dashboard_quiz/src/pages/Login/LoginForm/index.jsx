@@ -94,7 +94,7 @@ const LoginForm = () => {
       <p className="text-red-600 pb-4">{errors?.root?.random?.message}</p>
 
       <Field>
-        <button className="w-full bg-green-500 text-white p-2 text-2xl rounded-md hover:bg-green-600 transition-all duration-200">
+        <button className="w-full bg-[#1c545e] text-white p-2 text-2xl rounded-md hover:bg-[#135f6b] transition-all duration-200">
           LOGIN
         </button>
       </Field>

@@ -12,12 +12,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (req) => {
   try {
-    let cpd_accessToken = cookies.get("cpd_accessToken")
-      ? cookies.get("cpd_accessToken")
+    let quiz_accessToken = cookies.get("quiz_accessToken")
+      ? cookies.get("quiz_accessToken")
       : null;
-    req.headers.Authorization = `Bearer ${cpd_accessToken}`;
 
-    const accessToken = jwtDecode(cpd_accessToken);
+    console.log({ quiz_accessToken });
+    req.headers.Authorization = `${quiz_accessToken}`;
+
+    const accessToken = jwtDecode(quiz_accessToken);
 
     const isExpired = dayjs.unix(accessToken.exp).diff(dayjs()) < 1;
 
@@ -31,7 +33,7 @@ axiosInstance.interceptors.request.use(async (req) => {
 
     // let { token } = response.data.data;
 
-    // cookies.set("cpd_accessToken", token?.accessToken, { path: "/" });
+    // cookies.set("quiz_accessToken", token?.accessToken, { path: "/" });
     // cookies.set("cpd_refreshToken", token?.refreshToken, { path: "/" });
 
     // req.headers.Authorization = `Bearer ${token?.accessToken}`;
