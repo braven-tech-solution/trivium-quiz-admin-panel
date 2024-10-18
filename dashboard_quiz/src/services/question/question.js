@@ -36,3 +36,20 @@ export const getAllQuestion = async () => {
     throw new Error(error);
   }
 };
+export const questionCount = async () => {
+  try {
+    const response = await axios
+      .get(`${baseURL}/question/count`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+    // console.log("resonse");
+    // console.log(response);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

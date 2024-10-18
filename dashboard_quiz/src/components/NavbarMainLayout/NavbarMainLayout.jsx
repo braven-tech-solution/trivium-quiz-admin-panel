@@ -5,10 +5,24 @@ import { MdFeedback } from "react-icons/md";
 import { BiAddToQueue } from "react-icons/bi";
 import { TiEdit } from "react-icons/ti";
 import { IoSettingsOutline } from "react-icons/io5";
+import { FaUsers } from "react-icons/fa";
 
 const NavbarMainLayout = () => {
   return (
     <ul className="pt-2 pb-4 space-y-1 text-sm">
+      <NavGaurd accesslist={["admin", "accounts"]}>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+              : " flex items-center p-2 space-x-3 rounded-md"
+          }
+        >
+          <TiEdit className="text-2xl" />
+          <span>Dashboard</span>
+        </NavLink>
+      </NavGaurd>
       <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
           to="/add-quiz-category"
@@ -61,6 +75,32 @@ const NavbarMainLayout = () => {
         >
           <BiAddToQueue className="text-2xl" />
           <span>Manage Schedule Quiz</span>
+        </NavLink>
+      </NavGaurd>
+      <NavGaurd accesslist={["admin", "accounts"]}>
+        <NavLink
+          to="/users-history"
+          className={({ isActive }) =>
+            isActive
+              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+              : " flex items-center p-2 space-x-3 rounded-md"
+          }
+        >
+          <FaUsers className="text-2xl" />
+          <span> Users History</span>
+        </NavLink>
+      </NavGaurd>
+      <NavGaurd accesslist={["admin", "accounts"]}>
+        <NavLink
+          to="/setting"
+          className={({ isActive }) =>
+            isActive
+              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+              : " flex items-center p-2 space-x-3 rounded-md"
+          }
+        >
+          <BiAddToQueue className="text-2xl" />
+          <span> Setting</span>
         </NavLink>
       </NavGaurd>
       {/*

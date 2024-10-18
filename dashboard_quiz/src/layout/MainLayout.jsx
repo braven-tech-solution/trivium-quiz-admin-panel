@@ -40,7 +40,7 @@ const MainLayout = () => {
 
       <div className="drawer lg:drawer-open  ">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content pt-5 bg-[#CCBFB0] px-10 ">
+        <div className="drawer-content p-2 bg-[#CCBFB0]   ">
           <Outlet></Outlet>
         </div>
 

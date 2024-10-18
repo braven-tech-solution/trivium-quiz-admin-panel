@@ -12,8 +12,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.25.0",
     "@types/dompurify": "^3.0.5",
+    "antd": "^5.21.4",
     "axios": "^1.6.7",
-    "dayjs": "^1.11.10",
+    "dayjs": "^1.11.13",
     "dompurify": "^3.0.9",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
@@ -25,6 +26,7 @@
     "react-router-dom": "^6.22.3",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.4",
+    "recharts": "^2.13.0",
     "universal-cookie": "^7.1.0"
   },
   "devDependencies": {

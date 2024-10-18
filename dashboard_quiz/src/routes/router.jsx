@@ -4,15 +4,12 @@ import Login from "../pages/Login";
 import PrivateRoute from "./PrivateRoute";
 import NotFound from "../pages/NotFound";
 import DashBoard from "../pages/DashBoard/DashBoard";
-import Register from "../pages/Register";
-import CreateNewBanner from "../pages/CreateNewBanner/CreateNewBanner";
-import ManageAllBanner from "../pages/ManageAllBanner/ManageAllBanner";
 import ManagePassword from "../pages/ManagePassword/ManagePassword";
-import ManageFeedback from "../pages/ManageFeedback/ManageFeedback";
 import ManageQuizQuestion from "../pages/ManageQuizQuestion/ManageQuizQuestion";
 import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageScheduleQuestion";
 import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
 import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
+import UserHistory from "../pages/UserHistory/UserHistory";
 
 const router = createBrowserRouter([
   {
@@ -45,25 +42,16 @@ const router = createBrowserRouter([
         element: <ManageScheduleQuestion />,
       },
       {
+        path: "/users-history",
+        element: <UserHistory />,
+      },
+      {
         path: "/setting",
         element: <h1>Working </h1>,
-      },
-
-      {
-        path: "/create-new-banner",
-        element: <CreateNewBanner />,
-      },
-      {
-        path: "/manage-all-banner",
-        element: <ManageAllBanner />,
       },
       {
         path: "/manage-password",
         element: <ManagePassword />,
-      },
-      {
-        path: "/manage-feedback",
-        element: <ManageFeedback />,
       },
     ],
   },

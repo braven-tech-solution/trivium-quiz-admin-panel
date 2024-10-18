@@ -33,6 +33,22 @@ export const getAllCategory = async () => {
   }
 };
 
+export const totalCategoryQuiz = async () => {
+  try {
+    const response = await axios
+      .get(`${baseURL}/category/total-category-quiz`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const updateCategory = async ({ id, formData }) => {
   try {
     const response = await axios
