@@ -55,12 +55,22 @@ const getAllQuestionByLevelId = catchAsync(async (req, res) => {
     sendResponse(res, 400, false, "Failed to get question", {});
   }
 });
+const totalQuestionCount = catchAsync(async (req, res) => {
+  const count = await questionService.totalQuestionCount();
+
+  if (count) {
+    sendResponse(res, 200, true, "Question count successfully", count);
+  } else {
+    sendResponse(res, 400, false, "Failed to count question", {});
+  }
+});
 
 const questionController = {
   addQuestion,
   getAllQuestion,
   getLevelQuestion,
   getAllQuestionByLevelId,
+  totalQuestionCount,
 };
 
 module.exports = questionController;

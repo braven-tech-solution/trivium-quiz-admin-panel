@@ -15,6 +15,11 @@ const getAllCategory = async (payload) => {
   return getCategory;
 };
 
+const getTotalCategoryQuiz = async (email, phone) => {
+  const totalUserCount = await Category.countDocuments({});
+  return totalUserCount;
+};
+
 const updateCategory = async (categoryId, payload) => {
   const result = await Category.findByIdAndUpdate(categoryId, payload, {
     new: true,
@@ -26,6 +31,7 @@ const updateCategory = async (categoryId, payload) => {
 const categoryService = {
   addCategory,
   getAllCategory,
+  getTotalCategoryQuiz,
   updateCategory,
 };
 

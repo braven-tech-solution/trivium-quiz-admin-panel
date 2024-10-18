@@ -26,14 +26,16 @@ userRouter
     userController.getSubmittedQuizsId
   )
   .get("/leaderboard", userController.getUserLeaderboard)
+  .get("/statistics", userController.usersStatistics)
+  .get("/total-user", userController.getTotalUser)
+  .get("/:id", userController.getSingleUser)
   .get(
     "/leaderboard/login-user",
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     userController.getLoginUserLeaderboard
   )
   .get("/leaderboard/:id", userController.getSingleUserLeaderboard)
-  .get("/:id", userController.getSingleUser)
-  .get("/user/statistics", userController.usersStatistics)
+
   .get("/user/logout/true", userController.logout)
 
   .patch("/reset-password", userController.resetPassword)

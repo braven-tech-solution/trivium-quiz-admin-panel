@@ -15,9 +15,15 @@ const getAllSchedule = async (payload) => {
   return getSchedule;
 };
 
+const getTotalScheduleQuiz = async (email, phone) => {
+  const totalUserCount = await Schedule.countDocuments({});
+  return totalUserCount;
+};
+
 const scheduleService = {
   addSchedule,
   getAllSchedule,
+  getTotalScheduleQuiz,
 };
 
 module.exports = scheduleService;

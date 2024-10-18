@@ -32,9 +32,26 @@ const getAllSchedule = catchAsync(async (req, res) => {
   }
 });
 
+const getTotalScheduleQuiz = catchAsync(async (req, res) => {
+  const schedule = await scheduleService.getTotalScheduleQuiz();
+
+  if (schedule) {
+    sendResponse(
+      res,
+      200,
+      true,
+      "Total Schedule Quiz  get successfully",
+      schedule
+    );
+  } else {
+    sendResponse(res, 400, false, "Failed to get Total Schedule Quiz", {});
+  }
+});
+
 const scheduleController = {
   addSchedule,
   getAllSchedule,
+  getTotalScheduleQuiz,
 };
 
 module.exports = scheduleController;

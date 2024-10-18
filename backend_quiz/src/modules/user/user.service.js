@@ -18,18 +18,12 @@ const addUser = async (userBody) => {
 };
 
 const getAllUsers = async (page, limit) => {
-  const cacheKey = `users_page_${page}_limit_${limit}`;
-
-  let users;
-  if (nodeCache.has(cacheKey)) {
-    users = JSON.parse(nodeCache.get(cacheKey));
-  } else {
-    users = await User.find({ isDelete: "no" })
-      .skip((page - 1) * limit)
-      .limit(limit);
-    // nodeCache.set(cacheKey, JSON.stringify(users));
-  }
-
+  let users = await User.find({
+    role: { $ne: "admin" },
+    isDelete: "no",
+  })
+    .select("-password")
+    .sort("-point");
   return users;
 };
 
@@ -124,6 +118,67 @@ const getSingleUserByEmailAndPhone = async (email, phone) => {
   return user;
 };
 
+const getUsersStatistics = async (query) => {
+  const { year } = query;
+  // console.log("query", query);
+
+  const startDate = new Date(year, 0, 1);
+  const endDate = new Date(year, 11, 31);
+
+  try {
+    // Aggregate to get users within the specified date range
+    const result = await User.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          userAdd: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id.month",
+          userAdd: 1,
+        },
+      },
+    ]);
+
+    // Initialize an array with all 12 months set to 0 users added
+    const months = moment.months();
+    const statistics = months.map((month, index) => ({
+      month: moment().month(index).format("MMM"),
+      user: 0,
+    }));
+
+    // Update the statistics array based on the aggregation results
+    result.forEach((item) => {
+      const monthIndex = item.month - 1; // Convert month number to zero-based index
+      statistics[monthIndex].user = item.userAdd;
+    });
+
+    return statistics;
+  } catch (error) {
+    console.error("Error retrieving users:", error);
+    throw error;
+  }
+};
+
+const getTotalUser = async (email, phone) => {
+  const totalUserCount = await User.countDocuments({});
+  return totalUserCount;
+};
+
 const updateUser = async (userId, userBody, levelId) => {
   const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
   if (!isValidObjectId) {
@@ -183,62 +238,6 @@ const deleteUser = async (userId) => {
   return user;
 };
 
-const getUsersStatistics = async (query) => {
-  const { year } = query;
-  // console.log("query", query);
-
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
-
-  try {
-    // Aggregate to get users within the specified date range
-    const result = await User.aggregate([
-      {
-        $match: {
-          createdAt: {
-            $gte: startDate,
-            $lte: endDate,
-          },
-        },
-      },
-      {
-        $group: {
-          _id: {
-            year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
-          },
-          userAdd: { $sum: 1 },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          month: "$_id.month",
-          userAdd: 1,
-        },
-      },
-    ]);
-
-    // Initialize an array with all 12 months set to 0 users added
-    const months = moment.months();
-    const statistics = months.map((month, index) => ({
-      day: moment().month(index).format("MMM"),
-      monthly: 0,
-    }));
-
-    // Update the statistics array based on the aggregation results
-    result.forEach((item) => {
-      const monthIndex = item.month - 1; // Convert month number to zero-based index
-      statistics[monthIndex].monthly = item.userAdd;
-    });
-
-    return statistics;
-  } catch (error) {
-    console.error("Error retrieving users:", error);
-    throw error;
-  }
-};
-
 const userService = {
   addUser,
   getAllUsers,
@@ -247,6 +246,7 @@ const userService = {
   getUserLeaderboard,
   getSingleUserLeaderboard,
   getSingleUserByEmailAndPhone,
+  getTotalUser,
   changePassword,
   updateUser,
   deleteUser,

@@ -14,6 +14,7 @@ scheduleRouter
     upload.fields([{ name: "image", maxCount: 1 }]),
     scheduleController.addSchedule
   )
-  .get("", scheduleController.getAllSchedule);
+  .get("", scheduleController.getAllSchedule)
+  .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz);
 
 module.exports = scheduleRouter;

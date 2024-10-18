@@ -238,6 +238,16 @@ const getSingleUserLeaderboard = catchAsync(async (req, res) => {
   }
 });
 
+const usersStatistics = catchAsync(async (req, res) => {
+  const result = await userService.getUsersStatistics(req.query);
+  sendResponse(res, 200, true, "Users Statistics find successfully", result);
+});
+
+const getTotalUser = catchAsync(async (req, res) => {
+  const result = await userService.getTotalUser();
+  sendResponse(res, 200, true, "Total user get successfully", result);
+});
+
 const updateUser = catchAsync(async (req, res) => {
   const { fullName, phone, address, photo, current_password } = { ...req.body };
   const { id: userID } = req.user;
@@ -427,11 +437,6 @@ const deleteUser = catchAsync(async (req, res) => {
   }
 });
 
-const usersStatistics = catchAsync(async (req, res) => {
-  const result = await userService.getUsersStatistics(req.query);
-  sendResponse(res, 200, true, "Users Statistics find successfully", result);
-});
-
 const userController = {
   addUser,
   login,
@@ -442,13 +447,14 @@ const userController = {
   getUserLeaderboard,
   getLoginUserLeaderboard,
   getSingleUserLeaderboard,
+  usersStatistics,
+  getTotalUser,
   updateUser,
   changePassword,
   forgetPassword,
   verifyForgetOtp,
   resetPassword,
   deleteUser,
-  usersStatistics,
 };
 
 module.exports = userController;

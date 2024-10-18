@@ -23,12 +23,21 @@ const getAllQuestionByLevelId = async (id) => {
   // nodeCache.flushAll();
   return getQuestion;
 };
+const totalQuestionCount = async () => {
+  const scheduleCount = await Question.countDocuments({
+    model_type: "Schedule",
+  });
+  const levelCount = await Question.countDocuments({ model_type: "Level" });
+  // nodeCache.flushAll();
+  return { scheduleCount, levelCount };
+};
 
 const questionService = {
   addQuestion,
   getAllQuestion,
   getLevelQuestion,
   getAllQuestionByLevelId,
+  totalQuestionCount,
 };
 
 module.exports = questionService;

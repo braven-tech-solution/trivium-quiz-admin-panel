@@ -29,6 +29,22 @@ const getAllCategory = catchAsync(async (req, res) => {
   }
 });
 
+const getTotalCategoryQuiz = catchAsync(async (req, res) => {
+  const schedule = await categoryService.getTotalCategoryQuiz();
+
+  if (schedule) {
+    sendResponse(
+      res,
+      200,
+      true,
+      "Total Schedule Quiz  get successfully",
+      schedule
+    );
+  } else {
+    sendResponse(res, 400, false, "Failed to get Total Schedule Quiz", {});
+  }
+});
+
 const updateCategory = catchAsync(async (req, res) => {
   const payload = { ...req.body };
 
@@ -52,6 +68,7 @@ const updateCategory = catchAsync(async (req, res) => {
 const categoryController = {
   addCategory,
   getAllCategory,
+  getTotalCategoryQuiz,
   updateCategory,
 };
 

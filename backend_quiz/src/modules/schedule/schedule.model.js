@@ -37,9 +37,9 @@ const scheduleSchema = new Schema(
       type: Number,
       default: 0,
     },
-    priority: {
+    requirePoint: {
       type: Number,
-      default: 1,
+      required: [true, "Require Point is required"],
     },
     status: {
       type: String,

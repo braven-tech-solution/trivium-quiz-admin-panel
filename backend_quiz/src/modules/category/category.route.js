@@ -15,6 +15,7 @@ categoryRouter
     categoryController.addCategory
   )
   .get("", categoryController.getAllCategory)
+  .get("/total-category-quiz", categoryController.getTotalCategoryQuiz)
   .patch(
     "/:categoryId",
     upload.fields([{ name: "image", maxCount: 1 }]),

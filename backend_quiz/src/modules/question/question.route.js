@@ -11,6 +11,7 @@ questionRouter
   )
   .get("/", questionController.getAllQuestion)
   .get("/level", questionController.getLevelQuestion)
+  .get("/count", questionController.totalQuestionCount)
   .get("/:id", questionController.getAllQuestionByLevelId);
 
 module.exports = questionRouter;
