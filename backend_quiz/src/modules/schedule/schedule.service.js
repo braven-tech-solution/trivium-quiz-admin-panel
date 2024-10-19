@@ -9,8 +9,14 @@ const addSchedule = async (payload) => {
   return savedSchedule;
 };
 
-const getAllSchedule = async (payload) => {
+const getAllSchedule = async () => {
   const getSchedule = await Schedule.find({});
+  // nodeCache.flushAll();
+  return getSchedule;
+};
+
+const getLiveQuizById = async (id) => {
+  const getSchedule = await Schedule.findById(id);
   // nodeCache.flushAll();
   return getSchedule;
 };
@@ -23,6 +29,7 @@ const getTotalScheduleQuiz = async (email, phone) => {
 const scheduleService = {
   addSchedule,
   getAllSchedule,
+  getLiveQuizById,
   getTotalScheduleQuiz,
 };
 

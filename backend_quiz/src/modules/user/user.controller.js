@@ -90,6 +90,12 @@ const login = catchAsync(async (req, res) => {
   console.log(email, password);
   const user = await User.findOne({ email });
 
+  console.log(user);
+
+  if (user?.isBlock) {
+    sendResponse(res, 401, false, "Account Block", {});
+  }
+
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
 

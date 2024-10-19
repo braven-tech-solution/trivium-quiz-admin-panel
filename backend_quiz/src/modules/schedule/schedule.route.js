@@ -11,8 +11,14 @@ scheduleRouter
   .post(
     "",
     // auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     upload.fields([{ name: "image", maxCount: 1 }]),
     scheduleController.addSchedule
+  )
+  .post(
+    "/submit/:id",
+    auth.verifyRole(USER_ROLE.USER),
+    scheduleController.submitQuiz
   )
   .get("", scheduleController.getAllSchedule)
   .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz);

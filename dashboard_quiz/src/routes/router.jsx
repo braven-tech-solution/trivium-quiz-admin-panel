@@ -47,11 +47,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/setting",
-        element: <h1>Working </h1>,
+        element: <h1>setting</h1>,
+        children:[
+          {
+            path: "/privacy-policy",
+            element: <h1>privacy-policy </h1>,
+          },
+        ]
+      },
+     
+      {
+        path: "/setting/terms-and-condition",
+        element: <h1>terms-and-condition </h1>,
       },
       {
-        path: "/manage-password",
-        element: <ManagePassword />,
+        path: "/about-us",
+        element: <h1>about-us </h1>,
+      },
+      {
+        path: "/change-password",
+        element: <h1>change-password </h1>,
       },
     ],
   },

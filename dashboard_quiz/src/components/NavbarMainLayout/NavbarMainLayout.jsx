@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import NavGaurd from "../NavGaurd/NavGaurd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { MdFeedback } from "react-icons/md";
 import { BiAddToQueue } from "react-icons/bi";
 import { TiEdit } from "react-icons/ti";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
+import { CiSettings } from "react-icons/ci";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
+import { SettingOutlined } from "@ant-design/icons";
+import { Menu } from "antd";
+
+const items = [
+  {
+    key: "sub4",
+    label: "Setting",
+    icon: <SettingOutlined />,
+    children: [
+      {
+        key: "9",
+        label: "Option 9",
+      },
+      {
+        key: "10",
+        label: "Option 10",
+      },
+      {
+        key: "11",
+        label: "Option 11",
+      },
+      {
+        key: "12",
+        label: "Option 12",
+      },
+    ],
+  },
+];
 
 const NavbarMainLayout = () => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
+  const path = useLocation();
+
+  const handleDropdownClick = (index) => {
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
   return (
     <ul className="pt-2 pb-4 space-y-1 text-sm">
       <NavGaurd accesslist={["admin", "accounts"]}>
@@ -90,19 +128,78 @@ const NavbarMainLayout = () => {
           <span> Users History</span>
         </NavLink>
       </NavGaurd>
-      <NavGaurd accesslist={["admin", "accounts"]}>
-        <NavLink
-          to="/setting"
-          className={({ isActive }) =>
-            isActive
-              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
-              : " flex items-center p-2 space-x-3 rounded-md"
-          }
+      <div className=" space-x-3 rounded-md">
+        <div
+          className="flex justify-between items-center  rounded-md p-2 hover:cursor-pointer my-1"
+          onClick={() => handleDropdownClick(1)}
         >
-          <BiAddToQueue className="text-2xl" />
-          <span> Setting</span>
-        </NavLink>
-      </NavGaurd>
+          <div className="flex items-center ">
+            <CiSettings className="text-2xl" />
+            <h1 className="   ml-3  ">Setting</h1>
+          </div>
+          {/* <Icon icon="ep:arrow-down-bold" /> */}
+          {activeDropdown === 1 ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        </div>
+        {activeDropdown === 1 && (
+          <div className="ml-6">
+            {/* <NavLink
+              to="/privacy-policy"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+                  : " flex items-center p-2 space-x-3 rounded-md"
+              }
+            >
+              <FaUsers className="text-2xl" />
+              <span> Create Admin</span>
+            </NavLink> */}
+            <NavLink
+              to="/privacy-policy"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+                  : " flex items-center p-2 space-x-3 rounded-md"
+              }
+            >
+              <FaUsers className="text-2xl" />
+              <span> Privacy Policy</span>
+            </NavLink>
+            <NavLink
+              to="/terms-and-condition"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+                  : " flex items-center p-2 space-x-3 rounded-md"
+              }
+            >
+              <FaUsers className="text-2xl" />
+              <span>Terms And Condition</span>
+            </NavLink>
+            <NavLink
+              to="/about-us"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+                  : " flex items-center p-2 space-x-3 rounded-md"
+              }
+            >
+              <FaUsers className="text-2xl" />
+              <span>About Us</span>
+            </NavLink>
+            <NavLink
+              to="/change-password"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+                  : " flex items-center p-2 space-x-3 rounded-md"
+              }
+            >
+              <FaUsers className="text-2xl" />
+              <span>Change Password</span>
+            </NavLink>
+          </div>
+        )}
+      </div>
       {/*
       <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
