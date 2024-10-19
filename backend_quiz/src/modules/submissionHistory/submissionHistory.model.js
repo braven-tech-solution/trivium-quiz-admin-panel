@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const scheduleSchema = new Schema(
+const submissionHistorySchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -13,13 +13,13 @@ const scheduleSchema = new Schema(
       ref: "Schedule",
     },
     correctAnswer: {
-      type: String,
+      type: Number,
       required: true,
     },
     answer: [
       {
-        objectId: {
-          type: mongoose.Schema.Types.ObjectId,
+        questionId: {
+          type: Schema.Types.ObjectId,
           required: true,
         },
         value: {
@@ -32,5 +32,5 @@ const scheduleSchema = new Schema(
   { timestamps: true }
 );
 
-const Schedule = model("Schedule", scheduleSchema);
-module.exports = Schedule;
+const SubmissionHistory = model("SubmissionHistory", submissionHistorySchema);
+module.exports = SubmissionHistory;

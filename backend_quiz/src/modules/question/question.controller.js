@@ -47,7 +47,14 @@ const getAllQuestionByLevelId = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   console.log(id);
+  const level = await levelService.getSingleLeveById(id);
+
+  if (!level) {
+    sendResponse(res, 400, false, "Failed to get question", {});
+  }
   const question = await questionService.getAllQuestionByLevelId(id);
+
+  console.log(question);
 
   if (question) {
     sendResponse(res, 200, true, "Question get successfully", question);
@@ -55,6 +62,7 @@ const getAllQuestionByLevelId = catchAsync(async (req, res) => {
     sendResponse(res, 400, false, "Failed to get question", {});
   }
 });
+
 const totalQuestionCount = catchAsync(async (req, res) => {
   const count = await questionService.totalQuestionCount();
 

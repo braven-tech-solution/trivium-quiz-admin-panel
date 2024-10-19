@@ -1,6 +1,8 @@
 const catchAsync = require("../../shared/catchAsync");
 const sendResponse = require("../../shared/sendResponse");
+const levelService = require("../level/level.service");
 const questionService = require("../question/question.service");
+const submissionHistoryService = require("../submissionHistory/submissionHistory.service");
 const userService = require("../user/user.service");
 const scheduleService = require("./schedule.service");
 const moment = require("moment");
@@ -30,6 +32,12 @@ const submitQuiz = catchAsync(async (req, res) => {
   const userAnswers = req.body;
   const { id } = req.params;
 
+  const level = await levelService.getSingleLeveById(id);
+
+  if (level) {
+    sendResponse(res, 400, false, "Failed to get question", {});
+  }
+
   console.log("aaaaaaaaaaa");
 
   // console.log(user);
@@ -47,18 +55,51 @@ const submitQuiz = catchAsync(async (req, res) => {
   const endTime = moment(liveQuiz.endTime);
 
   if (currentTime.isBefore(startTime)) {
+    const daysLeft = startTime.diff(currentTime, "days");
     const hoursLeft = startTime.diff(currentTime, "hours");
     const minutesLeft = startTime.diff(currentTime, "minutes") % 60; // Remainder for minutes
     return sendResponse(
       res,
       400,
       false,
-      `${hoursLeft} hours ${minutesLeft} minutes left until the quiz starts.`,
+      `${daysLeft} days ${hoursLeft} hours ${minutesLeft} minutes left until the quiz starts.`,
       {}
     );
   }
 
+  if (currentTime.isAfter(endTime)) {
+    return sendResponse(res, 400, false, "The quiz time has ended.", {});
+  }
+
+  const aaaa = await submissionHistoryService.getSubmissionHistoryByUserId(
+    user.id
+  );
+
+  if (aaaa) {
+    return sendResponse(res, 400, false, "Can not submit multiple time.", {});
+  }
+
+  const processedAnswers = Object.entries(userAnswers).map(
+    ([questionId, value]) => {
+      return {
+        questionId,
+        value,
+      };
+    }
+  );
+
+  const submissionHistoryData = {
+    userId: user.id,
+    scheduleId: id,
+    correctAnswer: 4,
+    answer: processedAnswers,
+  };
+
+  const submissionHistoryDataAdd =
+    await submissionHistoryService.addSubmissionHistory(submissionHistoryData);
+
   return sendResponse(res, 200, true, "quiz submit successfully", {
+    submissionHistoryDataAdd,
     questions,
     liveQuiz,
     userData,
@@ -173,6 +214,66 @@ const getAllSchedule = catchAsync(async (req, res) => {
   }
 });
 
+const getAllQuestionByLiveId = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const user = req.user;
+
+  const level = await levelService.getSingleLeveById(id);
+
+  if (level) {
+    sendResponse(res, 400, false, "Failed to get question", {});
+  }
+
+  const liveQuiz = await scheduleService.getLiveQuizById(id);
+  const userData = await userService.getSingleUser(user?.id);
+
+  if (!liveQuiz) {
+    return sendResponse(res, 400, false, "Live Quiz not found", {});
+  }
+
+  const currentTime = moment(); // Get the current time
+  const startTime = moment(liveQuiz.startTime);
+  const endTime = moment(liveQuiz.endTime);
+
+  if (currentTime.isBefore(startTime)) {
+    const daysLeft = startTime.diff(currentTime, "days");
+    const hoursLeft = startTime.diff(currentTime, "hours");
+    const minutesLeft = startTime.diff(currentTime, "minutes") % 60; // Remainder for minutes
+    return sendResponse(
+      res,
+      400,
+      false,
+      `${daysLeft} days ${hoursLeft} hours ${minutesLeft} minutes left until the quiz starts.`,
+      {}
+    );
+  }
+
+  if (currentTime.isAfter(endTime)) {
+    return sendResponse(res, 400, false, "The quiz time has ended.", {});
+  }
+
+  if (liveQuiz.requirePoint > userData.point) {
+    return sendResponse(
+      res,
+      400,
+      false,
+      `you have no enough point. Minimum required ${liveQuiz.requirePoint}`,
+      {}
+    );
+  }
+
+  console.log(id);
+  const questions = await questionService.getAllQuestionByLivelId(id);
+
+  console.log(questions);
+
+  if (questions) {
+    sendResponse(res, 200, true, "Question get successfully", questions);
+  } else {
+    sendResponse(res, 400, false, "Failed to get question", {});
+  }
+});
+
 const getTotalScheduleQuiz = catchAsync(async (req, res) => {
   const schedule = await scheduleService.getTotalScheduleQuiz();
 
@@ -193,6 +294,7 @@ const scheduleController = {
   addSchedule,
   submitQuiz,
   getAllSchedule,
+  getAllQuestionByLiveId,
   getTotalScheduleQuiz,
 };
 

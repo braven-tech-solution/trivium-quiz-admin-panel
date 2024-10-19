@@ -21,6 +21,11 @@ scheduleRouter
     scheduleController.submitQuiz
   )
   .get("", scheduleController.getAllSchedule)
-  .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz);
+  .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz)
+  .get(
+    "/live/:id",
+    auth.verifyRole(USER_ROLE.USER),
+    scheduleController.getAllQuestionByLiveId
+  );
 
 module.exports = scheduleRouter;

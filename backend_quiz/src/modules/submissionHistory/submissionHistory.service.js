@@ -1,23 +1,24 @@
+const SubmissionHistory = require("./submissionHistory.model");
 const Schedule = require("./submissionHistory.model");
 // const NodeCache = require("node-cache");
 
 // const nodeCache = new NodeCache();
 
-const addSchedule = async (payload) => {
-  const savedSchedule = await Schedule.create(payload);
+const addSubmissionHistory = async (payload) => {
+  const result = await SubmissionHistory.create(payload);
   // nodeCache.flushAll();
-  return savedSchedule;
+  return result;
 };
 
-const getAllSchedule = async (payload) => {
-  const getSchedule = await Schedule.find({});
+const getSubmissionHistoryByUserId = async (userId) => {
+  const getSchedule = await SubmissionHistory.findOne({ userId });
   // nodeCache.flushAll();
   return getSchedule;
 };
 
-const scheduleService = {
-  addSchedule,
-  getAllSchedule,
+const submissionHistoryService = {
+  addSubmissionHistory,
+  getSubmissionHistoryByUserId,
 };
 
-module.exports = scheduleService;
+module.exports = submissionHistoryService;

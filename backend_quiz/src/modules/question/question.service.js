@@ -19,7 +19,18 @@ const getLevelQuestion = async () => {
 };
 
 const getAllQuestionByLevelId = async (id) => {
-  const getQuestion = await Question.find({ model_id: id });
+  const getQuestion = await Question.find({
+    model_id: id,
+    model_type: { $ne: "Schedule" },
+  });
+  // nodeCache.flushAll();
+  return getQuestion;
+};
+const getAllQuestionByLivelId = async (id) => {
+  const getQuestion = await Question.find({
+    model_id: id,
+    model_type: { $ne: "Level" },
+  });
   // nodeCache.flushAll();
   return getQuestion;
 };
@@ -37,6 +48,7 @@ const questionService = {
   getAllQuestion,
   getLevelQuestion,
   getAllQuestionByLevelId,
+  getAllQuestionByLivelId,
   totalQuestionCount,
 };
 
