@@ -40,14 +40,31 @@ const submitQuiz = catchAsync(async (req, res) => {
 
   console.log("aaaaaaaaaaa");
 
+  const submissionHistoryByUser =
+    await submissionHistoryService.getSubmissionHistoryByUserId(user.id);
+
+  if (submissionHistoryByUser) {
+    return sendResponse(res, 400, false, "Can not submit multiple time.", {});
+  }
+
   // console.log(user);
 
-  const questions = await questionService.getAllQuestionByLevelId(id);
+  const questions = await questionService.getAllQuestionByLivelId(id);
   const liveQuiz = await scheduleService.getLiveQuizById(id);
   const userData = await userService.getSingleUser(user.id);
 
   if (!liveQuiz) {
     return sendResponse(res, 400, false, "Live Quiz not found", {});
+  }
+
+  if (Number(liveQuiz.requirePoint) > Number(userData.point)) {
+    return sendResponse(
+      res,
+      400,
+      false,
+      `you have no enough point. Minimum required ${liveQuiz.requirePoint}`,
+      {}
+    );
   }
 
   const currentTime = moment(); // Get the current time
@@ -71,54 +88,6 @@ const submitQuiz = catchAsync(async (req, res) => {
     return sendResponse(res, 400, false, "The quiz time has ended.", {});
   }
 
-  const aaaa = await submissionHistoryService.getSubmissionHistoryByUserId(
-    user.id
-  );
-
-  if (aaaa) {
-    return sendResponse(res, 400, false, "Can not submit multiple time.", {});
-  }
-
-  const processedAnswers = Object.entries(userAnswers).map(
-    ([questionId, value]) => {
-      return {
-        questionId,
-        value,
-      };
-    }
-  );
-
-  const submissionHistoryData = {
-    userId: user.id,
-    scheduleId: id,
-    correctAnswer: 4,
-    answer: processedAnswers,
-  };
-
-  const submissionHistoryDataAdd =
-    await submissionHistoryService.addSubmissionHistory(submissionHistoryData);
-
-  return sendResponse(res, 200, true, "quiz submit successfully", {
-    submissionHistoryDataAdd,
-    questions,
-    liveQuiz,
-    userData,
-  });
-
-  // console.log(userData.submitQuizLevelIds.includes(id));
-
-  if (userData?.submitQuizLevelIds?.includes(id)) {
-    sendResponse(
-      res,
-      400,
-      true,
-      "The user has already participated in this quiz.",
-      {}
-    );
-
-    return;
-  }
-
   let correctCount = 0;
   let answerWithQuestion = [];
 
@@ -126,26 +95,15 @@ const submitQuiz = catchAsync(async (req, res) => {
     const userAnswer = userAnswers[question._id];
     if (userAnswer === question.correctAnswer) {
       correctCount += 1;
-      answerWithQuestion.push({
-        ...question._doc,
-        userAnswer,
-        correctAnswer: question.correctAnswer,
-      });
-    } else {
-      answerWithQuestion.push({
-        ...question._doc,
-        userAnswer: "",
-        correctAnswer: question.correctAnswer,
-      });
     }
   });
 
   const totalQuestions = questions.length;
-  const newStrength = (correctCount / totalQuestions) * 100;
+  const newStrength = (correctCount / totalQuestions) * 100 || 0;
 
   // Update average correct percentage
-  const oldAverageStrength = level.averageStrength || 0;
-  const totalCompleteQuiz = level.totalCompleteQuiz || 0;
+  const oldAverageStrength = liveQuiz.averageStrength || 0;
+  const totalCompleteQuiz = liveQuiz.totalCompleteQuiz || 0;
 
   const newAverageStrength =
     (oldAverageStrength * totalCompleteQuiz + newStrength) /
@@ -156,32 +114,43 @@ const submitQuiz = catchAsync(async (req, res) => {
     totalCompleteQuiz: totalCompleteQuiz + 1,
   };
 
-  // update level data
-
-  // update level data asynchronously
   process.nextTick(async () => {
-    await levelService.updateLevelById(id, payload);
+    await scheduleService.updateLiveQuizById(id, payload);
   });
 
-  const userOldStrength = userData.strength || 0;
-  const userCompleteQuiz = userData.completeQuiz || 0;
-  const questionAnswer = userData.questionAnswer || 0;
-  const correctAnswer = userData.correctAnswer || 0;
-  const incorrectAnswer = userData.incorrectAnswer || 0;
-  const addPoint = (correctCount / totalQuestions) * Number(level.point);
-
-  const newUserAverageStrength =
-    (userOldStrength * userCompleteQuiz + newStrength) / (userCompleteQuiz + 1);
+  const liveQuizCompleted = userData.liveQuizCompleted || 0;
 
   const userPayload = {
-    point: Number((Number(userData.point) + addPoint).toFixed(2)),
-    strength: newUserAverageStrength.toFixed(2),
-    completeQuiz: userCompleteQuiz + 1,
-    questionAnswer: questionAnswer + Number(totalQuestions),
-    correctAnswer: correctAnswer + Number(correctCount),
-    incorrectAnswer:
-      Number(incorrectAnswer) + Number(totalQuestions) - Number(correctCount),
+    point: Number(
+      (Number(userData.point) - Number(liveQuiz.requirePoint)).toFixed(2)
+    ),
+    liveQuizCompleted: liveQuizCompleted + 1,
   };
+
+  const toatalSubmitPoint = correctCount * Number(liveQuiz.perQuestionMark);
+
+  const processedAnswers = Object.entries(userAnswers).map(
+    ([questionId, value]) => {
+      return {
+        questionId,
+        correctAnswer: value,
+      };
+    }
+  );
+
+  const submissionHistoryData = {
+    userId: user.id,
+    scheduleId: id,
+    totalCorrectAnswer: 4,
+    toatalSubmitPoint,
+    strength: newStrength,
+    answer: processedAnswers,
+  };
+
+  console.log(submissionHistoryData);
+
+  const submissionHistoryDataAdd =
+    await submissionHistoryService.addSubmissionHistory(submissionHistoryData);
 
   // update user profile data asynchronously
   process.nextTick(async () => {
@@ -189,15 +158,14 @@ const submitQuiz = catchAsync(async (req, res) => {
   });
 
   const responseData = {
-    point: Number(addPoint.toFixed(2)),
+    point: Number(toatalSubmitPoint.toFixed(2)),
     correctAnswer: correctCount,
+    toatalSubmitPoint,
     totalQuestions: questions.length,
     yourStrength: Number(newStrength.toFixed(2)),
-    averageStrengthOfLevel: Number(oldAverageStrength.toFixed(2)),
-    answerWithQuestion,
   };
 
-  if (responseData) {
+  if (submissionHistoryDataAdd) {
     sendResponse(res, 200, true, "quiz submit successfully", responseData);
   } else {
     sendResponse(res, 400, false, "Failed to add level", {});

@@ -224,6 +224,8 @@ const getUserLeaderboard = catchAsync(async (req, res) => {
 
 const getLoginUserLeaderboard = catchAsync(async (req, res) => {
   const { id } = req.user;
+
+  console.log({ id });
   const user = await userService.getSingleUserLeaderboard(id);
 
   if (user) {

@@ -26,11 +26,23 @@ const getTotalScheduleQuiz = async (email, phone) => {
   return totalUserCount;
 };
 
+const updateLiveQuizById = async (livelId, payload) => {
+  console.log({ livelId });
+  const res = await Schedule.findByIdAndUpdate(
+    livelId,
+    payload, // Increment by 1
+    { new: true } // Return the updated document
+  );
+
+  return res;
+};
+
 const scheduleService = {
   addSchedule,
   getAllSchedule,
   getLiveQuizById,
   getTotalScheduleQuiz,
+  updateLiveQuizById,
 };
 
 module.exports = scheduleService;

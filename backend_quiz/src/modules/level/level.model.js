@@ -23,10 +23,7 @@ const levelSchema = new Schema(
       type: Number,
       default: 0,
     },
-    point: {
-      type: Number,
-      default: 0,
-    },
+
     description: {
       type: String,
       default: "",

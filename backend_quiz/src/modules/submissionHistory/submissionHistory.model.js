@@ -12,7 +12,15 @@ const submissionHistorySchema = new Schema(
       required: true,
       ref: "Schedule",
     },
-    correctAnswer: {
+    totalCorrectAnswer: {
+      type: Number,
+      required: true,
+    },
+    toatalSubmitPoint: {
+      type: Number,
+      required: true,
+    },
+    strength: {
       type: Number,
       required: true,
     },
@@ -22,7 +30,7 @@ const submissionHistorySchema = new Schema(
           type: Schema.Types.ObjectId,
           required: true,
         },
-        value: {
+        correctAnswer: {
           type: String,
           required: true,
         },

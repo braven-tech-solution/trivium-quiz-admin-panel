@@ -99,8 +99,9 @@ const submitQuiz = catchAsync(async (req, res) => {
   const questionAnswer = userData.questionAnswer || 0;
   const correctAnswer = userData.correctAnswer || 0;
   const incorrectAnswer = userData.incorrectAnswer || 0;
-  const addPoint = (correctCount / totalQuestions) * Number(level.point);
+  const addPoint = correctCount * Number(level.perQuestionMark);
 
+  //todo  negative mark deducted
   const newUserAverageStrength =
     (userOldStrength * userCompleteQuiz + newStrength) / (userCompleteQuiz + 1);
 

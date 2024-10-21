@@ -51,6 +51,10 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    liveQuizCompleted: {
+      type: Number,
+      default: 0,
+    },
     strength: {
       type: Number,
       default: 0,
