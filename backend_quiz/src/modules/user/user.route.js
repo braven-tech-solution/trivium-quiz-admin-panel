@@ -28,6 +28,11 @@ userRouter
   .get("/leaderboard", userController.getUserLeaderboard)
   .get("/statistics", userController.usersStatistics)
   .get("/total-user", userController.getTotalUser)
+  .get(
+    "/my-profile",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    userController.getMyData
+  )
   .get("/:id", userController.getSingleUser)
   .get(
     "/leaderboard/login-user",
@@ -52,7 +57,7 @@ userRouter
     userController.updateUser
   )
   .delete(
-    "/:id",
+    "",
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     userController.deleteUser
   );

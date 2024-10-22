@@ -16,9 +16,21 @@ const getSubmissionHistoryByUserId = async (userId) => {
   return getSchedule;
 };
 
+const getSubmissionHistoryByScheduleId = async (userId, scheduleId) => {
+  const getSchedule = await SubmissionHistory.findOne({
+    userId,
+    scheduleId,
+  })
+    .populate("scheduleId")
+    .populate("answer.questionId");
+  // nodeCache.flushAll();
+  return getSchedule;
+};
+
 const submissionHistoryService = {
   addSubmissionHistory,
   getSubmissionHistoryByUserId,
+  getSubmissionHistoryByScheduleId,
 };
 
 module.exports = submissionHistoryService;

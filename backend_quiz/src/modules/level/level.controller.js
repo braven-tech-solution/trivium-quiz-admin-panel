@@ -3,6 +3,8 @@ const sendResponse = require("../../shared/sendResponse");
 const questionService = require("../question/question.service");
 const levelService = require("./level.service.js");
 const userService = require("../user/user.service");
+const levelQuizSubmissionHistory = require("../levelQuizSubmissionHistory /levelQuizSubmissionHistory.service");
+const levelQuizSubmissionHistoryService = require("../levelQuizSubmissionHistory /levelQuizSubmissionHistory.service");
 
 const addLevel = catchAsync(async (req, res) => {
   const payload = { ...req.body };
@@ -99,14 +101,14 @@ const submitQuiz = catchAsync(async (req, res) => {
   const questionAnswer = userData.questionAnswer || 0;
   const correctAnswer = userData.correctAnswer || 0;
   const incorrectAnswer = userData.incorrectAnswer || 0;
-  const addPoint = correctCount * Number(level.perQuestionMark);
+  const toatalSubmitPoint = correctCount * Number(level.perQuestionMark);
 
   //todo  negative mark deducted
   const newUserAverageStrength =
     (userOldStrength * userCompleteQuiz + newStrength) / (userCompleteQuiz + 1);
 
   const userPayload = {
-    point: Number((Number(userData.point) + addPoint).toFixed(2)),
+    point: Number((Number(userData.point) + toatalSubmitPoint).toFixed(2)),
     strength: newUserAverageStrength.toFixed(2),
     completeQuiz: userCompleteQuiz + 1,
     questionAnswer: questionAnswer + Number(totalQuestions),
@@ -115,19 +117,44 @@ const submitQuiz = catchAsync(async (req, res) => {
       Number(incorrectAnswer) + Number(totalQuestions) - Number(correctCount),
   };
 
-  // update user profile data asynchronously
-  process.nextTick(async () => {
-    await userService.updateUser(user.id, userPayload, id);
-  });
+  const processedAnswers = Object.entries(userAnswers).map(
+    ([questionId, value]) => {
+      return {
+        questionId,
+        userAnswer: value,
+      };
+    }
+  );
+
+  const submissionHistoryData = {
+    userId: user.id,
+    levelId: id,
+    totalCorrectAnswer: correctCount,
+    toatalSubmitPoint,
+    strength: newStrength,
+    answer: processedAnswers,
+  };
+
+  console.log(submissionHistoryData);
+
+  const submissionHistoryDataAdd =
+    await levelQuizSubmissionHistory.addSubmissionHistory(
+      submissionHistoryData
+    );
 
   const responseData = {
-    point: Number(addPoint.toFixed(2)),
+    point: Number(toatalSubmitPoint.toFixed(2)),
     correctAnswer: correctCount,
     totalQuestions: questions.length,
     yourStrength: Number(newStrength.toFixed(2)),
     averageStrengthOfLevel: Number(oldAverageStrength.toFixed(2)),
     answerWithQuestion,
   };
+
+  // update user profile data asynchronously
+  process.nextTick(async () => {
+    await userService.updateUser(user.id, userPayload, id);
+  });
 
   if (responseData) {
     sendResponse(res, 200, true, "quiz submit successfully", responseData);
@@ -149,6 +176,43 @@ const getAllLevelByCategoryId = catchAsync(async (req, res) => {
   }
 });
 
+const getResultViewByLevelId = catchAsync(async (req, res) => {
+  const { levelId } = req.params;
+
+  const { id: userId } = req.user;
+
+  // console.log({ categoryId });
+  const submissionHistory =
+    await levelQuizSubmissionHistoryService.getSubmissionHistoryBylevelId(
+      userId,
+      levelId
+    );
+
+  console.log(userId, submissionHistory?.userId);
+
+  if (!(userId === submissionHistory?.userId?.toString())) {
+    return sendResponse(
+      res,
+      400,
+      false,
+      "You are not participate this quiz yet",
+      {}
+    );
+  }
+
+  if (submissionHistory) {
+    sendResponse(
+      res,
+      200,
+      true,
+      "  get level quiz submission history successfully",
+      submissionHistory
+    );
+  } else {
+    sendResponse(res, 400, false, "Failed to get level history", {});
+  }
+});
+
 const getAllLevel = catchAsync(async (req, res) => {
   const level = await levelService.getAllLevel();
 
@@ -163,6 +227,7 @@ const levelController = {
   addLevel,
   submitQuiz,
   getAllLevelByCategoryId,
+  getResultViewByLevelId,
   getAllLevel,
 };
 

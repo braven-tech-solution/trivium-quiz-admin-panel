@@ -30,7 +30,7 @@ const getAllQuestionByLivelId = async (id) => {
   const getQuestion = await Question.find({
     model_id: id,
     model_type: { $ne: "Level" },
-  });
+  }).select("-correctAnswer");
   // nodeCache.flushAll();
   return getQuestion;
 };

@@ -22,6 +22,11 @@ levelRouter
   )
   .get("", levelController.getAllLevel)
   .get("/:categoryId", levelController.getAllLevelByCategoryId)
+  .get(
+    "/result/:levelId",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    levelController.getResultViewByLevelId
+  )
   .get("/app/:categoryId", levelController.getAllLevelByCategoryId);
 
 module.exports = levelRouter;

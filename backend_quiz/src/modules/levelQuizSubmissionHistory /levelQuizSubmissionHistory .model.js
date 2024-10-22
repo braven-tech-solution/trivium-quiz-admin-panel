@@ -1,16 +1,16 @@
 const { Schema, model } = require("mongoose");
 
-const submissionHistorySchema = new Schema(
+const levelQuizSubmissionHistorySchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
-    scheduleId: {
+    levelId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Schedule",
+      ref: "Level",
     },
     totalCorrectAnswer: {
       type: Number,
@@ -41,5 +41,8 @@ const submissionHistorySchema = new Schema(
   { timestamps: true }
 );
 
-const SubmissionHistory = model("SubmissionHistory", submissionHistorySchema);
-module.exports = SubmissionHistory;
+const LevelQuizSubmissionHistory = model(
+  "LevelQuizSubmissionHistory",
+  levelQuizSubmissionHistorySchema
+);
+module.exports = LevelQuizSubmissionHistory;

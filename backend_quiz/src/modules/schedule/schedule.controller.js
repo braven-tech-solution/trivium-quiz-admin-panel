@@ -133,7 +133,7 @@ const submitQuiz = catchAsync(async (req, res) => {
     ([questionId, value]) => {
       return {
         questionId,
-        correctAnswer: value,
+        userAnswer: value,
       };
     }
   );
@@ -220,7 +220,13 @@ const getAllQuestionByLiveId = catchAsync(async (req, res) => {
     return sendResponse(res, 400, false, "The quiz time has ended.", {});
   }
 
-  if (liveQuiz.requirePoint > userData.point) {
+  const submissionHistory =
+    await submissionHistoryService.getSubmissionHistoryByScheduleId(
+      user?.id,
+      id
+    );
+
+  if (!submissionHistory && liveQuiz.requirePoint > userData.point) {
     return sendResponse(
       res,
       400,
@@ -258,12 +264,50 @@ const getTotalScheduleQuiz = catchAsync(async (req, res) => {
   }
 });
 
+const getResultViewByScheduleId = catchAsync(async (req, res) => {
+  const { scheduleId } = req.params;
+
+  const { id: userId } = req.user;
+
+  // console.log({ categoryId });
+  const submissionHistory =
+    await submissionHistoryService.getSubmissionHistoryByScheduleId(
+      userId,
+      scheduleId
+    );
+
+  console.log(userId, submissionHistory?.userId);
+
+  if (!(userId === submissionHistory?.userId?.toString())) {
+    return sendResponse(
+      res,
+      400,
+      false,
+      "You are not participate this quiz yet",
+      {}
+    );
+  }
+
+  if (submissionHistory) {
+    sendResponse(
+      res,
+      200,
+      true,
+      "  get Live quiz submission history successfully",
+      submissionHistory
+    );
+  } else {
+    sendResponse(res, 400, false, "Failed to get Live quiz history", {});
+  }
+});
+
 const scheduleController = {
   addSchedule,
   submitQuiz,
   getAllSchedule,
   getAllQuestionByLiveId,
   getTotalScheduleQuiz,
+  getResultViewByScheduleId,
 };
 
 module.exports = scheduleController;

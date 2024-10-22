@@ -189,6 +189,18 @@ const getAllUsers = catchAsync(async (req, res) => {
   }
 });
 
+const getMyData = catchAsync(async (req, res) => {
+  const { id: userID } = req.user;
+  console.log({ userID });
+  const user = await userService.getSingleUser(userID);
+
+  if (user) {
+    sendResponse(res, 200, true, "User Found", user);
+  } else {
+    sendResponse(res, 404, false, "No user found", {});
+  }
+});
+
 const getSingleUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const user = await userService.getSingleUser(id);
@@ -424,21 +436,23 @@ const deleteUser = catchAsync(async (req, res) => {
   const { password } = req.body;
   const { id: userID } = req.user;
 
+  console.log({ password });
+
   const userData = await User.findById(userID);
 
   if (userData) {
     const matchPassword = await bcrypt.compare(password, userData.password);
 
     if (matchPassword) {
-      sendResponse(res, 406, false, "Incorrect Password", {});
-
-      const user = await userService.deleteUser(id);
+      const user = await userService.deleteUser(userID);
 
       if (user) {
         sendResponse(res, 200, true, "User deleted successfully", user);
       } else {
         sendResponse(res, 404, false, "Something went wrong", {});
       }
+    } else {
+      sendResponse(res, 406, false, "Incorrect Password", {});
     }
   } else {
     sendResponse(res, 404, false, "No user found", {});
@@ -450,6 +464,7 @@ const userController = {
   login,
   logout,
   getAllUsers,
+  getMyData,
   getSingleUser,
   getSubmittedQuizsId,
   getUserLeaderboard,
