@@ -196,6 +196,7 @@ const ScheduleQuizAddModal = () => {
                 defaultValue="1"
               />
             </Field>
+
             <Field
               error={errors.negativeAnswerMark}
               label={"Per Negative Answer Mark ( 1 - 5 )"}
@@ -214,6 +215,23 @@ const ScheduleQuizAddModal = () => {
                 defaultValue="1"
               />
             </Field>
+
+            <Field error={errors.negativeAnswerMark} label={"Required Point"}>
+              <input
+                {...register("negativeAnswerMark", {
+                  required: "Negative Answer Mark is Required",
+                  min: { value: 1, message: "Minimum value is 1" },
+                  max: { value: 5, message: "Maximum value is 5" },
+                })}
+                type="number"
+                name="negativeAnswerMark"
+                id="negativeAnswerMark"
+                placeholder="Enter Negative Answer Mark priority"
+                className="auth-input  "
+                defaultValue="1"
+              />
+            </Field>
+
             <Field error={errors?.status} label={"Category Status"}>
               <select
                 {...register("status", {

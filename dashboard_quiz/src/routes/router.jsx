@@ -48,14 +48,14 @@ const router = createBrowserRouter([
       {
         path: "/setting",
         element: <h1>setting</h1>,
-        children:[
+        children: [
           {
-            path: "/privacy-policy",
+            path: "/setting/privacy-policy",
             element: <h1>privacy-policy </h1>,
           },
-        ]
+        ],
       },
-     
+
       {
         path: "/setting/terms-and-condition",
         element: <h1>terms-and-condition </h1>,
