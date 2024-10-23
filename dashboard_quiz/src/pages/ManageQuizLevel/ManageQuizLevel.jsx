@@ -23,9 +23,9 @@ const tableHeader = [
 
 const ManageQuizLevel = () => {
   const [allLevelData, setAllLevelData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [filterData, setFilterData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [slectCategory, setSlectCategory] = useState("");
   // const [categoryId, setCategoryId] = useState("");

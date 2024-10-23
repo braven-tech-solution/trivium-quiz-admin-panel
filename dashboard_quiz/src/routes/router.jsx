@@ -10,6 +10,7 @@ import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageSchedu
 import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
 import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
 import UserHistory from "../pages/UserHistory/UserHistory";
+import ManageLiveQuizQuestion from "../pages/ManageLiveQuizQuestion/ManageLiveQuizQuestion";
 
 const router = createBrowserRouter([
   {
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/manage-schedule-question",
+        path: "/manage-live-quiz",
         element: <ManageScheduleQuestion />,
+      },
+      {
+        path: "/manage-live-quiz-question",
+        element: <ManageLiveQuizQuestion />,
       },
       {
         path: "/users-history",

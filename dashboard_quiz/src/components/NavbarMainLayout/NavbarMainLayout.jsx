@@ -104,7 +104,7 @@ const NavbarMainLayout = () => {
 
       <NavGaurd accesslist={["admin", "accounts"]}>
         <NavLink
-          to="/manage-schedule-question"
+          to="/manage-live-quiz"
           className={({ isActive }) =>
             isActive
               ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
@@ -112,7 +112,21 @@ const NavbarMainLayout = () => {
           }
         >
           <BiAddToQueue className="text-2xl" />
-          <span>Manage Schedule Quiz</span>
+          <span>Manage Live Quiz</span>
+        </NavLink>
+      </NavGaurd>
+
+      <NavGaurd accesslist={["admin", "accounts"]}>
+        <NavLink
+          to="/manage-live-quiz-question"
+          className={({ isActive }) =>
+            isActive
+              ? "text-green-400 flex items-center p-2 space-x-3 rounded-md"
+              : " flex items-center p-2 space-x-3 rounded-md"
+          }
+        >
+          <TiEdit className="text-2xl" />
+          <span>Manage Live Quiz Question</span>
         </NavLink>
       </NavGaurd>
       <NavGaurd accesslist={["admin", "accounts"]}>

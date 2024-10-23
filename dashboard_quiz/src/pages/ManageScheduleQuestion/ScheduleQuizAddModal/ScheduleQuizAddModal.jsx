@@ -11,8 +11,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import DatePicker from "react-datepicker";
+import { addLive } from "../../../services/liveQuiz/liveQuiz";
 
-const ScheduleQuizAddModal = () => {
+const ScheduleQuizAddModal = ({ setModal }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -38,6 +39,10 @@ const ScheduleQuizAddModal = () => {
     setValue,
     setError,
   } = useForm();
+
+  const addLiveMutation = useMutation({
+    mutationFn: addLive,
+  });
 
   const handleImageUpload = (event) => {
     event.preventDefault();
@@ -66,6 +71,38 @@ const ScheduleQuizAddModal = () => {
   };
 
   const submitForm = async (data) => {
+    if (!selectedFile) {
+      setError("root.random", {
+        type: "random",
+        message: `Image is Required`,
+      });
+      return;
+    }
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+
+    formData.append("image", selectedFile);
+
+    addLiveMutation.mutate(
+      {
+        formData,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries(["allLiveQuiz"]);
+          toast.success(" Live Quiz Added successfully");
+          setModal(false);
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
+
     console.log(data);
   };
 
@@ -127,7 +164,7 @@ const ScheduleQuizAddModal = () => {
               <Field error={errors.name} label={"Start Time"}>
                 <Controller
                   control={control}
-                  name="startDate"
+                  name="startTime"
                   defaultValue={startDate}
                   render={({ field: { onChange, value } }) => (
                     <DatePicker
@@ -154,7 +191,7 @@ const ScheduleQuizAddModal = () => {
               <Field error={errors.name} label={"End Time"}>
                 <Controller
                   control={control}
-                  name="endDate"
+                  name="endTime"
                   defaultValue={endDate}
                   render={({ field: { onChange, value } }) => (
                     <DatePicker
@@ -199,12 +236,12 @@ const ScheduleQuizAddModal = () => {
 
             <Field
               error={errors.negativeAnswerMark}
-              label={"Per Negative Answer Mark ( 1 - 5 )"}
+              label={"Per Negative Answer Mark ( 0 - 5 )"}
             >
               <input
                 {...register("negativeAnswerMark", {
                   required: "Negative Answer Mark is Required",
-                  min: { value: 1, message: "Minimum value is 1" },
+                  min: { value: 0, message: "Minimum value is 0" },
                   max: { value: 5, message: "Maximum value is 5" },
                 })}
                 type="number"
@@ -212,20 +249,18 @@ const ScheduleQuizAddModal = () => {
                 id="negativeAnswerMark"
                 placeholder="Enter Negative Answer Mark priority"
                 className="auth-input  "
-                defaultValue="1"
+                defaultValue="0"
               />
             </Field>
 
-            <Field error={errors.negativeAnswerMark} label={"Required Point"}>
+            <Field error={errors.requirePoint} label={"Required Point"}>
               <input
-                {...register("negativeAnswerMark", {
+                {...register("requirePoint", {
                   required: "Negative Answer Mark is Required",
-                  min: { value: 1, message: "Minimum value is 1" },
-                  max: { value: 5, message: "Maximum value is 5" },
                 })}
                 type="number"
-                name="negativeAnswerMark"
-                id="negativeAnswerMark"
+                name="requirePoint"
+                id="requirePoint"
                 placeholder="Enter Negative Answer Mark priority"
                 className="auth-input  "
                 defaultValue="1"

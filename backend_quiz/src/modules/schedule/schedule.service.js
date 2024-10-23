@@ -10,7 +10,7 @@ const addSchedule = async (payload) => {
 };
 
 const getAllSchedule = async () => {
-  const getSchedule = await Schedule.find({});
+  const getSchedule = await Schedule.find({}).sort("-createdAt");
   // nodeCache.flushAll();
   return getSchedule;
 };

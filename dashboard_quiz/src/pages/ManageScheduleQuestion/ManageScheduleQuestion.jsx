@@ -1,48 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "../../components/Table/Table";
 import Modal from "../../components/Modal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
 import FilterStatus from "./FilterStatus/FilterStatus";
 import ScheduleQuizAddModal from "./ScheduleQuizAddModal/ScheduleQuizAddModal";
 import EditScheduleQuizModal from "./EditScheduleQuizModal/EditScheduleQuizModal";
-
-const originalData = [
-  {
-    name: "JavaScript",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-    id: "1",
-    status: "deactive",
-    time: "August 11, 2024 1:30 PM",
-    perQuestionMark: 1,
-    negativeAnswerMark: 0.25,
-  },
-  {
-    name: "Java",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-
-    id: "2",
-    status: "active",
-    time: "August 13, 2024 1:30 PM",
-    perQuestionMark: 1,
-    negativeAnswerMark: 0.25,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAllLiveQuiz } from "../../services/liveQuiz/liveQuiz";
+import { baseURL, imageBaseURL } from "../../config";
+import { useLiveQuiz } from "../../hooks/useLiveQuiz";
 
 const tableHeader = [
+  { name: "Quiz_Name", key: "name" },
   { name: "Image", key: "image" },
-  { name: "Quiz  Name", key: "name" },
-  { name: "Time", key: "time" },
+  { name: "Time", key: "startTime" },
+  { name: "Total Questions", key: "numberOfQuestion" },
+  { name: "Per Q. Mark", key: "perQuestionMark" },
+  { name: "Negative Answer Mark", key: "negativeAnswerMark" },
+  { name: "Require Point", key: "requirePoint" },
+  { name: "Submited Quiz", key: "totalCompleteQuiz" },
+  { name: "Average Strength", key: "averageStrength" },
   { name: "Status", key: "status" },
 ];
 
 const ManageScheduleQuestion = () => {
+  const [allLevelData, setAllLevelData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [filterData, setFilterData] = useState(originalData);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
+
+  const { liveQuiz } = useLiveQuiz();
+
+  useEffect(() => {
+    // console.log({ bandata: data });
+    // console.log(imageBaseURL);
+    console.log(liveQuiz?.data);
+    if (liveQuiz?.data?.length > 0) {
+      console.log(liveQuiz?.data);
+      const tempData = liveQuiz?.data?.map((item, index) => {
+        return {
+          ...item,
+          image: `${imageBaseURL}${item?.image}`,
+          status: item?.status === "Deactive" ? "Deactive" : "Active",
+        };
+      });
+
+      console.log(tempData);
+      setAllLevelData(tempData);
+      setFilterData(tempData);
+    } else {
+      setAllLevelData([]);
+      setFilterData([]);
+    }
+  }, [liveQuiz?.data, selectedCategory]);
 
   const handleActionClick = async (type, id) => {
     let clickCategory = filterData?.find((food) => food.id == id);
@@ -69,13 +81,13 @@ const ManageScheduleQuestion = () => {
   return (
     <div className="w-[100%]">
       <FilterStatus
-        originalData={originalData}
+        originalData={allLevelData}
         setFilterData={setFilterData}
         setAddModal={setAddModal}
       />
 
       <Table
-        title={"All Quiz Schedule List"}
+        title={"All Live Quiz's List"}
         data={filterData ?? []}
         headers={tableHeader}
         actions={true}
@@ -89,7 +101,7 @@ const ManageScheduleQuestion = () => {
           width={"w-[900px]"}
           title={"Schedule Quiz Add"}
           setModal={setAddModal}
-          body={<ScheduleQuizAddModal />}
+          body={<ScheduleQuizAddModal setModal={setAddModal} />}
         />
       )}
 

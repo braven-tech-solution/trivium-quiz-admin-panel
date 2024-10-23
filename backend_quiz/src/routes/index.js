@@ -12,7 +12,7 @@ const moduleRoutes = [
   { path: "/category", router: categoryRouter },
   { path: "/level", router: levelRouter },
   { path: "/question", router: questionRouter },
-  { path: "/schedule", router: scheduleRouter },
+  { path: "/live", router: scheduleRouter },
 ];
 
 moduleRoutes.forEach((route) => {
