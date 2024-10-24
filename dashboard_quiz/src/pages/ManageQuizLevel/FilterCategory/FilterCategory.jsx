@@ -2,36 +2,15 @@
 import React, { useState } from "react";
 
 const FilterCategory = ({
-  allLevelData,
   setAddModal,
   allCategoryData,
   slectCategory,
   setSlectCategory,
-  setFilterData,
 }) => {
-  const [checkstatus, setCheckStatus] = useState("");
-
   const handleCategoryChange = (event) => {
     const clickCategory = event.target.value;
     console.log({ clickCategory });
     setSlectCategory(clickCategory);
-  };
-
-  const handleStatusChange = (event) => {
-    // const checkstatus = event.target.value;
-    // setCheckStatus(checkstatus);
-    // let categoryData = allLevelData.find(
-    //   (item) => item?.name === slectCategory
-    // );
-    // let options = categoryData?.questions?.filter(
-    //   (item) => item?.status === checkstatus
-    // );
-    // if (checkstatus === "all") {
-    //   options = categoryData?.questions;
-    // }
-    // // console.log(tempData);
-    // // console.log(filterType);
-    // setFilterData(options);
   };
 
   return (
@@ -42,7 +21,7 @@ const FilterCategory = ({
             htmlFor="foodType"
             className="block text-sm font-medium text-gray-700"
           >
-            Filter Quiz Status
+            Filter Quiz Category
           </label>
           <select
             id="foodType"

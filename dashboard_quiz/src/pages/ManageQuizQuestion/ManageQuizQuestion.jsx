@@ -9,6 +9,7 @@ import FilterQuestion from "./FilterQuestion/FilterQuestion";
 import { getAllLevel } from "../../services/level/level";
 import { useQuery } from "@tanstack/react-query";
 import { getAllQuestion } from "../../services/question/question";
+import { useAllQuestion } from "../../hooks/useAllQuestion";
 
 const tableHeader = [
   { name: "Title", key: "title" },
@@ -35,12 +36,7 @@ const ManageQuizQuestion = () => {
       queryFn: getAllLevel,
     });
 
-  const {
-    data: { data: { data: allQuestionData } } = { data: { data: null } },
-  } = useQuery({
-    queryKey: ["allQuestionData"],
-    queryFn: getAllQuestion,
-  });
+  const { allQuestionData } = useAllQuestion();
 
   useEffect(() => {
     if (allQuestionData?.length > 0) {
