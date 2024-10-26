@@ -4,10 +4,10 @@ const settingsService = require("./setting.service");
 
 const addSetting = catchAsync(async (req, res) => {
   const settingData = {
-    privacyPolicy: "",
-    aboutUs: "",
-    support: "",
-    termsOfService: "",
+    privacyPolicy: " <p>Quiz Website. Privacy Policy</p>",
+    aboutUs: "<p>Quiz Website. About Us</p>",
+    support: "<p>Quiz Website. support</p>",
+    termsOfService: "<p>Quiz Website. Terms Of Service</p>",
   };
 
   const setting = await settingsService.addSettings(settingData);

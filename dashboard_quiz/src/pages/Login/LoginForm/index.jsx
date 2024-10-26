@@ -77,10 +77,10 @@ const LoginForm = () => {
         <input
           {...register("password", {
             required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Your password must be at least 8 characters",
-            },
+            // minLength: {
+            //   value: 8,
+            //   message: "Your password must be at least 8 characters",
+            // },
           })}
           className={`auth-input ${
             !!errors.password ? "border-red-500" : "border-white/20"

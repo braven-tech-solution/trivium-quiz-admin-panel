@@ -1,20 +1,33 @@
 import { LeftOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useSetting from "../../../hooks/useSetting";
 
-const AboutUs = () => {
-  const aboutUsText = `
-    <p>Quiz  Website. About Us</p> 
+const aboutUsText = `
+    <p>  About Us</p> 
     `;
 
+const AboutUs = () => {
   const editor = useRef(null);
   const [content, setContent] = useState(aboutUsText);
   const navigate = useNavigate();
 
+  const { aboutUs, settingUpdate } = useSetting();
+
+  console.log(aboutUs);
+
+  useEffect(() => {
+    if (aboutUs) [setContent(aboutUs)];
+  }, [aboutUs]);
+
   const handleOnSave = () => {
     console.log(content);
+
+    settingUpdate({
+      aboutUs: content,
+    });
   };
 
   return (

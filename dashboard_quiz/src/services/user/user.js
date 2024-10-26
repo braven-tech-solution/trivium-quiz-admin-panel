@@ -51,3 +51,20 @@ export const getTotalUser = async () => {
     throw new Error(error);
   }
 };
+
+export const changePassword = async ({ payload }) => {
+  try {
+    const response = await axiosInstance
+      .patch(`/users/change-password`, payload)
+      .catch((error) => {
+        console.log(error);
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

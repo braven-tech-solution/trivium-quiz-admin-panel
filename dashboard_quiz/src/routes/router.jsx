@@ -14,6 +14,7 @@ import ManageSchedule from "../pages/ManageSchedule/ManageSchedule";
 import AboutUs from "../pages/Setting/AboutUs/AboutUs";
 import TermsAndCondition from "../pages/Setting/TermsAndCondition/TermsAndCondition";
 import PrivacyPolicy from "../pages/Setting/PrivacyPolicy/PrivacyPolicy";
+import ChangePassword from "../pages/Setting/ChangePassword/ChangePassword";
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/change-password",
-        element: <h1>change-password </h1>,
+        element: <ChangePassword />,
       },
     ],
   },

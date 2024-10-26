@@ -1,20 +1,33 @@
 import { LeftOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useSetting from "../../../hooks/useSetting";
+
+const privacyPolicyText = `
+<p>  Privacy Policy</p> 
+`;
 
 const PrivacyPolicy = () => {
-  const aboutUsText = `
-    <p>Quiz  Website. Privacy Policy</p> 
-    `;
-
   const editor = useRef(null);
-  const [content, setContent] = useState(aboutUsText);
+  const [content, setContent] = useState(privacyPolicyText);
   const navigate = useNavigate();
+
+  const { privacyPolicy, settingUpdate } = useSetting();
+
+  console.log(privacyPolicy);
+
+  useEffect(() => {
+    if (privacyPolicy) [setContent(privacyPolicy)];
+  }, [privacyPolicy]);
 
   const handleOnSave = () => {
     console.log(content);
+
+    settingUpdate({
+      privacyPolicy: content,
+    });
   };
 
   return (

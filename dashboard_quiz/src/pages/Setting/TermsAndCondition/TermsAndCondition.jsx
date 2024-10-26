@@ -1,8 +1,9 @@
 import { LeftOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useSetting from "../../../hooks/useSetting";
 
 const TermsAndCondition = () => {
   const termsAndConditonText = `
@@ -13,8 +14,20 @@ const TermsAndCondition = () => {
   const [content, setContent] = useState(termsAndConditonText);
   const navigate = useNavigate();
 
+  const { termsOfService, settingUpdate } = useSetting();
+
+  console.log(termsOfService);
+
+  useEffect(() => {
+    if (termsOfService) [setContent(termsOfService)];
+  }, [termsOfService]);
+
   const handleOnSave = () => {
-    console.log(content);
+    // console.log(content);
+
+    settingUpdate({
+      termsOfService: content,
+    });
   };
 
   return (
