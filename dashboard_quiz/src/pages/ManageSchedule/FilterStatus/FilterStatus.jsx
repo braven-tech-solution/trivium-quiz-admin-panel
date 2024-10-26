@@ -49,7 +49,7 @@ const FilterStatus = ({ originalData, setFilterData, setAddModal }) => {
         onClick={() => setAddModal(true)}
         className="bg-green-700 p-2 text-xl font-semibold rounded-md"
       >
-        Add New Schedule Quiz
+        Add New Live Quiz
       </button>
     </div>
   );

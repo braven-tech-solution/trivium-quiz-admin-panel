@@ -6,11 +6,14 @@ import NotFound from "../pages/NotFound";
 import DashBoard from "../pages/DashBoard/DashBoard";
 import ManagePassword from "../pages/ManagePassword/ManagePassword";
 import ManageQuizQuestion from "../pages/ManageQuizQuestion/ManageQuizQuestion";
-import ManageScheduleQuestion from "../pages/ManageScheduleQuestion/ManageScheduleQuestion";
 import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
 import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
 import UserHistory from "../pages/UserHistory/UserHistory";
 import ManageLiveQuizQuestion from "../pages/ManageLiveQuizQuestion/ManageLiveQuizQuestion";
+import ManageSchedule from "../pages/ManageSchedule/ManageSchedule";
+import AboutUs from "../pages/Setting/AboutUs/AboutUs";
+import TermsAndCondition from "../pages/Setting/TermsAndCondition/TermsAndCondition";
+import PrivacyPolicy from "../pages/Setting/PrivacyPolicy/PrivacyPolicy";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +43,7 @@ const router = createBrowserRouter([
 
       {
         path: "/manage-live-quiz",
-        element: <ManageScheduleQuestion />,
+        element: <ManageSchedule />,
       },
       {
         path: "/manage-live-quiz-question",
@@ -51,23 +54,16 @@ const router = createBrowserRouter([
         element: <UserHistory />,
       },
       {
-        path: "/setting",
-        element: <h1>setting</h1>,
-        children: [
-          {
-            path: "/setting/privacy-policy",
-            element: <h1>privacy-policy </h1>,
-          },
-        ],
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
       },
-
       {
-        path: "/setting/terms-and-condition",
-        element: <h1>terms-and-condition </h1>,
+        path: "/terms-and-condition",
+        element: <TermsAndCondition />,
       },
       {
         path: "/about-us",
-        element: <h1>about-us </h1>,
+        element: <AboutUs />,
       },
       {
         path: "/change-password",

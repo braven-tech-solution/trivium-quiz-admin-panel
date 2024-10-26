@@ -8,6 +8,10 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { MdOutlinePrivacyTip } from "react-icons/md";
+import { FcAbout } from "react-icons/fc";
+import { IoDocumentLockSharp } from "react-icons/io5";
+import { MdOutlinePassword } from "react-icons/md";
 
 import { SettingOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
@@ -175,7 +179,7 @@ const NavbarMainLayout = () => {
                   : " flex items-center p-2 space-x-3 rounded-md"
               }
             >
-              <FaUsers className="text-2xl" />
+              <MdOutlinePrivacyTip className="text-2xl" />
               <span> Privacy Policy</span>
             </NavLink>
             <NavLink
@@ -186,7 +190,7 @@ const NavbarMainLayout = () => {
                   : " flex items-center p-2 space-x-3 rounded-md"
               }
             >
-              <FaUsers className="text-2xl" />
+              <IoDocumentLockSharp className="text-2xl" />
               <span>Terms And Condition</span>
             </NavLink>
             <NavLink
@@ -197,7 +201,7 @@ const NavbarMainLayout = () => {
                   : " flex items-center p-2 space-x-3 rounded-md"
               }
             >
-              <FaUsers className="text-2xl" />
+              <FcAbout className="text-2xl" />
               <span>About Us</span>
             </NavLink>
             <NavLink
@@ -208,7 +212,7 @@ const NavbarMainLayout = () => {
                   : " flex items-center p-2 space-x-3 rounded-md"
               }
             >
-              <FaUsers className="text-2xl" />
+              <MdOutlinePassword className="text-2xl" />
               <span>Change Password</span>
             </NavLink>
           </div>

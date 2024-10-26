@@ -3,12 +3,12 @@ import Table from "../../components/Table/Table";
 import Modal from "../../components/Modal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
 import FilterStatus from "./FilterStatus/FilterStatus";
-import ScheduleQuizAddModal from "./ScheduleQuizAddModal/ScheduleQuizAddModal";
 import EditScheduleQuizModal from "./EditScheduleQuizModal/EditScheduleQuizModal";
 import { useQuery } from "@tanstack/react-query";
 import { getAllLiveQuiz } from "../../services/liveQuiz/liveQuiz";
 import { baseURL, imageBaseURL } from "../../config";
 import { useLiveQuiz } from "../../hooks/useLiveQuiz";
+import LiveQuizAddModal from "./LiveQuizAddModal/LiveQuizAddModal";
 
 const tableHeader = [
   { name: "Quiz_Name", key: "name" },
@@ -23,7 +23,7 @@ const tableHeader = [
   { name: "Status", key: "status" },
 ];
 
-const ManageScheduleQuestion = () => {
+const ManageSchedule = () => {
   const [allLevelData, setAllLevelData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
@@ -78,6 +78,8 @@ const ManageScheduleQuestion = () => {
     setShowDeleteModal(false);
   };
 
+  console.log(filterData);
+
   return (
     <div className="w-[100%]">
       <FilterStatus
@@ -99,9 +101,9 @@ const ManageScheduleQuestion = () => {
       {showAddModal && (
         <Modal
           width={"w-[900px]"}
-          title={"Schedule Quiz Add"}
+          title={"New Live Quiz Add"}
           setModal={setAddModal}
-          body={<ScheduleQuizAddModal setModal={setAddModal} />}
+          body={<LiveQuizAddModal setModal={setAddModal} />}
         />
       )}
 
@@ -131,4 +133,4 @@ const ManageScheduleQuestion = () => {
   );
 };
 
-export default ManageScheduleQuestion;
+export default ManageSchedule;

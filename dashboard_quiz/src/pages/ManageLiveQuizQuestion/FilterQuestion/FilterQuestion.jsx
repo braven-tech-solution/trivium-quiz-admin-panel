@@ -9,11 +9,11 @@ const FilterQuestion = ({
   slectCategory,
   setSlectCategory,
 }) => {
-  console.log({ slectCategory });
-  console.log(allLiveQuiz);
+  // console.log({ slectCategory });
+  // console.log(allLiveQuiz);
   const handleCategoryChange = (event) => {
     const clickCategory = event.target.value;
-    console.log({ clickCategory });
+    // console.log({ clickCategory });
     setSlectCategory(clickCategory);
   };
 
@@ -34,7 +34,7 @@ const FilterQuestion = ({
           className="mt-1   w-60 text-slate-600 pl-3  p-2 bg-white  border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500   rounded-md"
         >
           {allLiveQuiz?.map((option) => (
-            <option key={option.name} value={option.id} className="py-2">
+            <option key={option.name} value={option._id} className="py-2">
               {option.name}
             </option>
           ))}

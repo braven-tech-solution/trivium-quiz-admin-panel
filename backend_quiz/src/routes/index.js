@@ -4,6 +4,7 @@ const categoryRouter = require("../modules/category/category.route");
 const levelRouter = require("../modules/level/level.route");
 const questionRouter = require("../modules/question/question.route");
 const scheduleRouter = require("../modules/schedule/schedule.route");
+const settingsRouter = require("../modules/setting/setting.route");
 
 const rootRouter = express.Router();
 
@@ -13,6 +14,7 @@ const moduleRoutes = [
   { path: "/level", router: levelRouter },
   { path: "/question", router: questionRouter },
   { path: "/live", router: scheduleRouter },
+  { path: "/setting", router: settingsRouter },
 ];
 
 moduleRoutes.forEach((route) => {

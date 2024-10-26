@@ -21,7 +21,7 @@ export const addLive = async ({ formData }) => {
 
 export const getAllLiveQuiz = async () => {
   try {
-    const response = await axios.get(`${baseURL}/live`).catch((error) => {
+    const response = await axiosInstance.get(`/live`).catch((error) => {
       const errorResponse = error?.response?.data || {};
 
       throw new Error(JSON.stringify(errorResponse));
@@ -36,12 +36,14 @@ export const getAllLiveQuiz = async () => {
 export const totalLiveQuiz = async () => {
   try {
     const response = await axios
-      .get(`${baseURL}/schedule/total-schedule-quiz`)
+      .get(`${baseURL}/live/total-schedule-quiz`)
       .catch((error) => {
         const errorResponse = error?.response?.data || {};
 
         throw new Error(JSON.stringify(errorResponse));
       });
+
+    console.log(response);
 
     return response.data;
   } catch (error) {

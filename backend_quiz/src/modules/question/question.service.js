@@ -13,6 +13,12 @@ const getAllQuestion = async () => {
   const allquestion = await Question.find({});
   return allquestion;
 };
+
+const getLiveQuestion = async () => {
+  const levelQuestion = await Question.find({ model_type: "Schedule" });
+  return levelQuestion;
+};
+
 const getLevelQuestion = async () => {
   const levelQuestion = await Question.find({ model_type: "Level" });
   return levelQuestion;
@@ -47,6 +53,7 @@ const questionService = {
   addQuestion,
   getAllQuestion,
   getLevelQuestion,
+  getLiveQuestion,
   getAllQuestionByLevelId,
   getAllQuestionByLivelId,
   totalQuestionCount,

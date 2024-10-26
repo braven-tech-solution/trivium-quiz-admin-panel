@@ -13,7 +13,7 @@ import setMinutes from "date-fns/setMinutes";
 import DatePicker from "react-datepicker";
 import { addLive } from "../../../services/liveQuiz/liveQuiz";
 
-const ScheduleQuizAddModal = ({ setModal }) => {
+const LiveQuizAddModal = ({ setModal }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -284,7 +284,7 @@ const ScheduleQuizAddModal = ({ setModal }) => {
             </Field>
             <Field>
               <button className="bg-green-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-[#2f727c] transition-all duration-200">
-                Create New Schedule Quiz
+                Create New Live Quiz
               </button>
             </Field>
           </form>
@@ -294,4 +294,4 @@ const ScheduleQuizAddModal = ({ setModal }) => {
   );
 };
 
-export default ScheduleQuizAddModal;
+export default LiveQuizAddModal;

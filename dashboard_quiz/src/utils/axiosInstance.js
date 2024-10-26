@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(async (req) => {
       ? cookies.get("quiz_accessToken")
       : null;
 
-    console.log({ quiz_accessToken });
+    // console.log({ quiz_accessToken });
     req.headers.Authorization = `${quiz_accessToken}`;
 
     const accessToken = jwtDecode(quiz_accessToken);

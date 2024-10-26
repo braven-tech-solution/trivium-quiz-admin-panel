@@ -4,7 +4,7 @@ export function ensureHttps(url) {
   }
 
   // Use replace to change http to https only if it starts with http
-  const secureUrl = url.replace(/^http:/, "http:"); //todo https
-  console.log(secureUrl);
+  const secureUrl = url.replace(/^http:/, "https:");
+  // console.log(secureUrl);
   return secureUrl;
 }

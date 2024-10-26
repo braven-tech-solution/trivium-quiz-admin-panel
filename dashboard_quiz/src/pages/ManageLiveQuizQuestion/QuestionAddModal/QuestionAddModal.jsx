@@ -12,17 +12,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdDelete } from "react-icons/md";
 import { addQuestion } from "../../../services/question/question";
 
-const QuestionAddModal = ({
-  allCategoryData,
-  allLevelData,
-  slectCategory,
-  setSlectCategory,
-  setModal,
-}) => {
+const QuestionAddModal = ({ liveQuiz, setSlectCategory, setModal }) => {
   const [option, setOption] = useState("");
   const [selectLevelId, setSelectLevelId] = useState("");
 
   const [levelOption, setLevelOption] = useState([]);
+  console.log(liveQuiz);
 
   const [options, setOptions] = useState({
     option1: "",
@@ -46,35 +41,14 @@ const QuestionAddModal = ({
   });
 
   useEffect(() => {
-    if (allCategoryData?.length > 0) {
-      // console.log(allCategoryData);
-      let level = allLevelData?.filter(
-        (item) => item?.category === allCategoryData?.[0]?.id
-      );
-
-      // console.log(allCategoryData?.[0]?.id);
-      // console.log(allLevelData);
-      // console.log(level);
-      setLevelOption(level);
-      setSelectLevelId(level[0]._id);
-      setValue("category", allCategoryData?.[0]?.id);
-      setValue("level", level?.[0]?._id);
+    if (liveQuiz?.length > 0) {
+      setValue("category", liveQuiz?.[0]?.id);
     }
-  }, [allCategoryData, allLevelData]);
+  }, [liveQuiz]);
 
   const handleCategoryChange = (event) => {
     const clickCategory = event.target.value;
-    // console.log({ clickCategory });
     setSlectCategory(clickCategory);
-
-    let level = allLevelData?.filter(
-      (item) => item?.category === clickCategory
-    );
-
-    // console.log(level);
-    setLevelOption(level);
-
-    // console.log("gh");
   };
 
   const handleInputChange = (e) => {
@@ -86,13 +60,14 @@ const QuestionAddModal = ({
   };
 
   const submitForm = async (data) => {
-    const { category, level, ...rest } = data;
+    const { category, ...rest } = data;
+    console.log(data);
     const modifyData = {
       ...rest,
-      model_type: "Level",
-      model_id: level,
+      model_type: "Schedule",
+      model_id: category,
     };
-    console.log(modifyData);
+    // console.log(modifyData);
 
     addQuestionMutation.mutate(
       {
@@ -100,8 +75,8 @@ const QuestionAddModal = ({
       },
       {
         onSuccess: (data) => {
-          queryClient.invalidateQueries(["allQuestionData"]);
-          toast.success("Level Create successfully");
+          queryClient.invalidateQueries(["allLiveQuestionData"]);
+          toast.success("Live quiz question added successfully");
           setModal(false);
         },
         onError: (err) => {
@@ -130,29 +105,14 @@ const QuestionAddModal = ({
                 id="category"
                 className="bg-slate-200 auth-input py-3"
               >
-                {allCategoryData?.map((option) => (
-                  <option key={option.id} value={option.id} className="py-2">
-                    {option.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field error={errors?.level} label={"Select Level Type"}>
-              <select
-                {...register("level", {
-                  required: "Level Type is Required",
-                })}
-                name="level"
-                id="level"
-                className="bg-slate-200  auth-input py-3"
-              >
-                {levelOption?.map((option) => (
+                {liveQuiz?.map((option) => (
                   <option key={option._id} value={option._id} className="py-2">
                     {option.name}
                   </option>
                 ))}
               </select>
             </Field>
+
             <Field error={errors.title} label={"Question Title"}>
               <input
                 {...register("title", {

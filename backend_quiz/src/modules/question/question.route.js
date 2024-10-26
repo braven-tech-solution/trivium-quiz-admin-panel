@@ -17,6 +17,11 @@ questionRouter
     auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     questionController.getAllQuestion
   )
+  .get(
+    "/live",
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    questionController.getLiveQuestion
+  )
   .get("/level", questionController.getLevelQuestion)
   .get("/count", questionController.totalQuestionCount)
   .get("/level/:id", questionController.getAllQuestionByLevelId);

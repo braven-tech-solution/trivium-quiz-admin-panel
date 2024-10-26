@@ -45,7 +45,7 @@ const LoginForm = () => {
           toast.error(errorResponse?.errorMessage);
           setError("root.random", {
             type: "random",
-            message: errorResponse?.errorMessage,
+            message: "Email / Password not match",
           });
         },
       });

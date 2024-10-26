@@ -3,7 +3,7 @@ import { getAllLiveQuiz } from "../services/liveQuiz/liveQuiz";
 
 export const useLiveQuiz = () => {
   const { data: liveQuiz } = useQuery({
-    queryKey: "allLiveQuiz",
+    queryKey: ["allLiveQuiz"],
     queryFn: getAllLiveQuiz,
   });
 

@@ -38,9 +38,11 @@ const ManageQuizQuestion = () => {
 
   const { allQuestionData } = useAllQuestion();
 
+  console.log(allQuestionData);
+
   useEffect(() => {
     if (allQuestionData?.length > 0) {
-      // console.log(allCategoryData[0]?.id);
+      // // console.log(allCategoryData[0]?.id);
       let level =
         allLevelData?.filter(
           (item) => item?.category === allCategoryData?.[0]?.id
@@ -49,8 +51,7 @@ const ManageQuizQuestion = () => {
       let question =
         allQuestionData?.filter((item) => item?.model_id === level?.[0]?._id) ||
         [];
-      // console.log(level[0]._id);
-      // console.log(question);
+
       setOriginalData(allQuestionData);
       setSlectCategory(allCategoryData?.[0]?.id);
       setFilterData(question);
@@ -68,26 +69,23 @@ const ManageQuizQuestion = () => {
         (item) => item?.model_id === selectLevelId
       );
 
-      // console.log(question);
+      // // console.log(question);
 
-      // console.log("question");
+      // // console.log("question");
       if (question) {
         setFilterData(question);
       } else {
         setFilterData([]);
       }
-    } else {
-      // setFilterData([]);
-      // console.log("object");
     }
   }, [slectCategory, selectLevelId]);
 
-  console.log({ slectCategory });
-  console.log({ selectLevelId });
+  // console.log({ slectCategory });
+  // console.log({ selectLevelId });
 
   const handleActionClick = async (type, id) => {
     let clickQuestion = filterData?.find((item) => item.id == id);
-    // console.log({ clickQuestion });
+    // // console.log({ clickQuestion });
 
     setSelectedQuestion(clickQuestion);
 
@@ -111,7 +109,7 @@ const ManageQuizQuestion = () => {
     (level) => level._id === selectLevelId
   );
 
-  console.log(selectLeveldata);
+  // console.log(selectLeveldata);
 
   return (
     <div className="w-[100%]">

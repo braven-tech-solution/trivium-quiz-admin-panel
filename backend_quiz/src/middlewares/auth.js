@@ -62,6 +62,8 @@ const verifyRole = (...roles) => {
       }
       const verifiedUser = jwt.verify(token, config.access_secret);
 
+      console.log(verifiedUser);
+
       req.user = verifiedUser;
 
       if (roles.length && !roles.includes(verifiedUser.role)) {

@@ -22,7 +22,7 @@ scheduleRouter
   .get("", scheduleController.getAllSchedule)
   .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz)
   .get(
-    "/live/:id",
+    "/:id",
     auth.verifyRole(USER_ROLE.USER),
     scheduleController.getAllQuestionByLiveId
   )

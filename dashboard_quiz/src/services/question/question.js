@@ -36,6 +36,25 @@ export const getAllQuestion = async () => {
     throw new Error(error);
   }
 };
+
+export const getAllLiveQuestion = async () => {
+  try {
+    const response = await axiosInstance
+      .get(`/question/live`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+    // console.log("resonse");
+    // console.log(response);
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const questionCount = async () => {
   try {
     const response = await axios
