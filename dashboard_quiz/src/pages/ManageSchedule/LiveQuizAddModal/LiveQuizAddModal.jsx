@@ -267,19 +267,19 @@ const LiveQuizAddModal = ({ setModal }) => {
               />
             </Field>
 
-            <Field error={errors?.status} label={"Category Status"}>
+            <Field error={errors?.status} label={"Status"}>
               <select
                 {...register("status", {
-                  required: "Category Status is Required",
+                  required: "Status is Required",
                 })}
                 name="status"
                 id="status"
-                className="auth-input   py-3"
+                className="auth-input py-3"
               >
+                <option value="deactive">Deactive</option>
                 <option value="active" className="py-2">
                   Active
                 </option>
-                <option value="deactive">Deactive</option>
               </select>
             </Field>
             <Field>

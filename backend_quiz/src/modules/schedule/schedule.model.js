@@ -44,7 +44,7 @@ const scheduleSchema = new Schema(
     status: {
       type: String,
       enum: ["active", "deactive", "deleted"],
-      default: "active",
+      default: "deactive",
     },
     averageStrength: {
       type: Number,

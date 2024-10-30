@@ -10,19 +10,20 @@ const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ _id: "äsd", role: "admin" });
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const _id = cookies.get("cpd_userId");
+  useEffect(() => {
+    const _id = cookies.get("quiz_userId");
+    setLoading(true);
 
-  //   if (_id) {
-  //     const email = cookies.get("cpd_userEmail");
-  //     const role = cookies.get("cpd_userRole");
-  //     const userName = cookies.get("cpd_userName");
-  //     setAuth({ _id, email, role, userName });
-  //   } else {
-  //     setAuth({});
-  //   }
-  //   setLoading(false);
-  // }, []);
+    if (_id) {
+      const email = cookies.get("quiz_userEmail");
+      const role = cookies.get("quiz_userRole");
+      const userName = cookies.get("quiz_userName");
+      setAuth({ _id, email, role, userName });
+    } else {
+      setAuth({});
+    }
+    setLoading(false);
+  }, []);
 
   const authInfo = {
     auth,

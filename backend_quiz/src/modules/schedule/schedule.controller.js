@@ -301,6 +301,41 @@ const getResultViewByScheduleId = catchAsync(async (req, res) => {
   }
 });
 
+const updateLiveQuiz = catchAsync(async (req, res) => {
+  const payload = { ...req.body };
+
+  const { scheduleId } = req.params;
+  if (req.files) {
+    if (req.files.image) {
+      const image = req.files.image[0].filename;
+      payload.image = `/uploads/schedule/${image}`;
+    }
+  }
+
+  const schedule = await scheduleService.updateLiveQuizById(
+    scheduleId,
+    payload
+  );
+
+  if (schedule) {
+    sendResponse(res, 201, true, "schedule update successfully", schedule);
+  } else {
+    sendResponse(res, 400, false, "Failed to update schedule", {});
+  }
+});
+
+const deleteiveQuizById = catchAsync(async (req, res) => {
+  const { scheduleId } = req.params;
+
+  const schedule = await scheduleService.deleteiveQuizById(scheduleId);
+
+  if (schedule) {
+    sendResponse(res, 201, true, "schedule delete successfully", schedule);
+  } else {
+    sendResponse(res, 400, false, "Failed to delete schedule", {});
+  }
+});
+
 const scheduleController = {
   addSchedule,
   submitQuiz,
@@ -308,6 +343,8 @@ const scheduleController = {
   getAllQuestionByLiveId,
   getTotalScheduleQuiz,
   getResultViewByScheduleId,
+  updateLiveQuiz,
+  deleteiveQuizById,
 };
 
 module.exports = scheduleController;

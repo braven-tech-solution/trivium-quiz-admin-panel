@@ -12,11 +12,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import DatePicker from "react-datepicker";
+import { updateLiveQuiz } from "../../../services/liveQuiz/liveQuiz";
 
-const EditScheduleQuizModal = ({ scheduleQuiz }) => {
+const EditScheduleQuizModal = ({ scheduleQuiz ,setModal}) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [startDate, setStartDate] = useState(
+    setHours(setMinutes(new Date(), 0), 9)
+  );
+  const [endDate, setEndDate] = useState(
     setHours(setMinutes(new Date(), 0), 9)
   );
 
@@ -28,8 +32,6 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
 
   const queryClient = useQueryClient();
 
-  console.log(scheduleQuiz);
-
   const {
     register,
     handleSubmit,
@@ -39,16 +41,26 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
     setError,
   } = useForm();
 
+  const updateLiveQuizMutation = useMutation({
+    mutationFn: updateLiveQuiz,
+  });
+
   useEffect(() => {
-    if (scheduleQuiz?.id) {
+    if (scheduleQuiz?._id) {
+      console.log(scheduleQuiz);
       setValue("name", scheduleQuiz?.name);
+      setValue("startTime", scheduleQuiz?.startTime);
+      setValue("endTime", scheduleQuiz?.endTime);
+      setValue("perQuestionMark", scheduleQuiz?.perQuestionMark);
+      setValue("negativeAnswerMark", scheduleQuiz?.negativeAnswerMark);
+      setValue("requirePoint", scheduleQuiz?.requirePoint);
       setValue(
         "status",
         scheduleQuiz?.status === "deactive" ? "deactive" : "active"
       );
       setPreviewImage(scheduleQuiz?.image);
     }
-  }, [scheduleQuiz?.id]);
+  }, [scheduleQuiz?._id]);
 
   const handleImageUpload = (event) => {
     event.preventDefault();
@@ -78,10 +90,33 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
 
   const submitForm = async (data) => {
     console.log(data);
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+
+    updateLiveQuizMutation.mutate(
+      {
+        id: scheduleQuiz?._id,
+        formData,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries(["allLiveQuiz"]);
+          toast.success("Live Quiz update successfully");
+          setModal(false);
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
   };
 
   return (
-    <main className=" pt-4">
+    <main className="  pt-4 ">
       <section>
         <div className="container">
           <div
@@ -132,26 +167,63 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
                 className="auth-input  "
               />
             </Field>
-            <Field error={errors.name} label={"Schedule Quiz Time"}>
-              <Controller
-                control={control}
-                name="startDate"
-                defaultValue={startDate}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    selected={value}
-                    onChange={(date) => {
-                      setStartDate(date);
-                      onChange(date);
-                    }}
-                    className="auth-input  "
-                    showTimeSelect
-                    filterTime={filterPassedTime}
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                )}
-              />
-            </Field>
+
+            <div className="grid grid-cols-2 gap-5">
+              {/* Start Time */}
+              <Field error={errors.name} label={"Start Time"}>
+                <Controller
+                  control={control}
+                  name="startTime"
+                  defaultValue={startDate}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={(date) => {
+                        setStartDate(date);
+                        onChange(date);
+                        // If the endDate is less than startDate, reset the endDate
+                        if (endDate && date >= endDate) {
+                          setEndDate(null);
+                        }
+                      }}
+                      className="auth-input"
+                      showTimeSelect
+                      timeIntervals={5}
+                      filterTime={filterPassedTime}
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                    />
+                  )}
+                />
+              </Field>
+
+              {/* End Time */}
+              <Field error={errors.name} label={"End Time"}>
+                <Controller
+                  control={control}
+                  name="endTime"
+                  defaultValue={endDate}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={(date) => {
+                        setEndDate(date);
+                        onChange(date);
+                      }}
+                      className="auth-input"
+                      showTimeSelect
+                      timeIntervals={5}
+                      filterTime={(time) => {
+                        // Only allow times after the selected start date and time
+                        return startDate ? time > startDate : true;
+                      }}
+                      minDate={startDate} // Disable dates before the selected start date
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                    />
+                  )}
+                />
+              </Field>
+            </div>
+
             <Field
               error={errors.perCorrectAnswerMark}
               label={"Per Correct Answer Mark ( 1 - 5 )"}
@@ -170,14 +242,15 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
                 defaultValue="1"
               />
             </Field>
+
             <Field
               error={errors.negativeAnswerMark}
-              label={"Per Negative Answer Mark ( 1 - 5 )"}
+              label={"Per Negative Answer Mark ( 0 - 5 )"}
             >
               <input
                 {...register("negativeAnswerMark", {
                   required: "Negative Answer Mark is Required",
-                  min: { value: 1, message: "Minimum value is 1" },
+                  min: { value: 0, message: "Minimum value is 0" },
                   max: { value: 5, message: "Maximum value is 5" },
                 })}
                 type="number"
@@ -185,28 +258,42 @@ const EditScheduleQuizModal = ({ scheduleQuiz }) => {
                 id="negativeAnswerMark"
                 placeholder="Enter Negative Answer Mark priority"
                 className="auth-input  "
+                defaultValue="0"
+              />
+            </Field>
+
+            <Field error={errors.requirePoint} label={"Required Point"}>
+              <input
+                {...register("requirePoint", {
+                  required: "Negative Answer Mark is Required",
+                })}
+                type="number"
+                name="requirePoint"
+                id="requirePoint"
+                placeholder="Enter Negative Answer Mark priority"
+                className="auth-input  "
                 defaultValue="1"
               />
             </Field>
-            <Field error={errors?.status} label={"Schedule Quiz Status"}>
+
+            <Field error={errors?.status} label={"Status"}>
               <select
                 {...register("status", {
-                  required: "Schedule Quiz Status is Required",
+                  required: "Status is Required",
                 })}
                 name="status"
                 id="status"
-                className="auth-input   py-3"
+                className="auth-input py-3"
               >
+                <option value="deactive">Deactive</option>
                 <option value="active" className="py-2">
                   Active
                 </option>
-                <option value="deactive">Deactive</option>
               </select>
             </Field>
-
             <Field>
               <button className="bg-green-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-[#2f727c] transition-all duration-200">
-                Update Schedule Quiz
+                Update Live Quiz
               </button>
             </Field>
           </form>

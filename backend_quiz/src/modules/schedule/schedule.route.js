@@ -30,6 +30,16 @@ scheduleRouter
     "/result/:scheduleId",
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     scheduleController.getResultViewByScheduleId
+  )
+  .patch(
+    "/:scheduleId",
+    upload.fields([{ name: "image", maxCount: 1 }]),
+    scheduleController.updateLiveQuiz
+  )
+  .delete(
+    "/:scheduleId",
+    auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    scheduleController.deleteiveQuizById
   );
 
 module.exports = scheduleRouter;

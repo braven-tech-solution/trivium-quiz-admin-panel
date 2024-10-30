@@ -36,7 +36,7 @@ const TermsAndCondition = () => {
         <p className="cursor-pointer" onClick={() => navigate(-1)}>
           <LeftOutlined />
         </p>
-        <p>About Us</p>
+        <p>Terms And Condition</p>
       </div>
       <div className="mt-5 text-black">
         <JoditEditor

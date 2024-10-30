@@ -59,7 +59,7 @@ const updateCategory = catchAsync(async (req, res) => {
   const category = await categoryService.updateCategory(categoryId, payload);
 
   if (category) {
-    sendResponse(res, 201, true, "Category added successfully", category);
+    sendResponse(res, 201, true, "Category update successfully", category);
   } else {
     sendResponse(res, 400, false, "Failed to add category", {});
   }

@@ -32,6 +32,8 @@ export default function Table({
       item = tempItem;
     });
 
+    // console.log(headerItem?.key);
+
     let isNew = item ? "Yes" : "No";
     let res = item;
     if (headerItem?.key === "image") {
@@ -56,6 +58,15 @@ export default function Table({
           <li>4. {rowItem.option4}</li>
         </ul>
       );
+    } else if (
+      headerItem?.key === "startTime" ||
+      headerItem?.key === "endTime"
+    ) {
+      // console.log("rowItem");
+      // console.log(headerItem?.key);
+      // console.log(rowItem[headerItem?.key]);
+      // // console.log(headerItem);
+      res = <p className="  min-w-40">{rowItem[headerItem?.key]}</p>;
     }
 
     return res;

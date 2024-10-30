@@ -12,6 +12,7 @@ const ChangePassword = () => {
     formState: { errors },
     setValue,
     setError,
+    reset,
   } = useForm();
 
   const settingChangeMutation = useMutation({
@@ -36,6 +37,7 @@ const ChangePassword = () => {
       {
         onSuccess: (data) => {
           toast.success("Password change successfully");
+          reset();
         },
         onError: (err) => {
           console.log(err);

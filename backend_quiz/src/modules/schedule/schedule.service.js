@@ -28,11 +28,29 @@ const getTotalScheduleQuiz = async (email, phone) => {
 
 const updateLiveQuizById = async (livelId, payload) => {
   console.log({ livelId });
+  console.log(payload);
   const res = await Schedule.findByIdAndUpdate(
     livelId,
-    payload, // Increment by 1
+    payload,
     { new: true } // Return the updated document
   );
+
+  return res;
+};
+
+const updateNumberOfQuestionsOfSchedule = async (scheduleId) => {
+  console.log({ scheduleId });
+  const res = await Schedule.findByIdAndUpdate(
+    scheduleId,
+    { $inc: { numberOfQuestion: 1 } }, // Increment by 1
+    { new: true } // Return the updated document
+  );
+
+  return res;
+};
+const deleteiveQuizById = async (scheduleId) => {
+  // console.log({ scheduleId });
+  const res = await Schedule.findByIdAndDelete(scheduleId);
 
   return res;
 };
@@ -43,6 +61,8 @@ const scheduleService = {
   getLiveQuizById,
   getTotalScheduleQuiz,
   updateLiveQuizById,
+  updateNumberOfQuestionsOfSchedule,
+  deleteiveQuizById,
 };
 
 module.exports = scheduleService;

@@ -50,3 +50,40 @@ export const totalLiveQuiz = async () => {
     throw new Error(error);
   }
 };
+
+export const updateLiveQuiz = async ({ id, formData }) => {
+  try {
+    const response = await axios
+      .patch(`${baseURL}/live/${id}`, formData)
+      .catch((error) => {
+        console.log(error);
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const deleteLiveQuiz = async ({ id }) => {
+  try {
+    console.log(id);
+
+    const response = await axiosInstance
+      .delete(`/live/${id}`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    console.log({ response });
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

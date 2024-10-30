@@ -54,7 +54,7 @@ const noCheck = async (req, res, next) => {
 
 const verifyRole = (...roles) => {
   return async (req, res, next) => {
-    console.log(roles);
+    // console.log(roles);
     try {
       const token = req.headers.authorization;
       if (!token) {
@@ -62,7 +62,7 @@ const verifyRole = (...roles) => {
       }
       const verifiedUser = jwt.verify(token, config.access_secret);
 
-      console.log(verifiedUser);
+      // console.log(verifiedUser);
 
       req.user = verifiedUser;
 

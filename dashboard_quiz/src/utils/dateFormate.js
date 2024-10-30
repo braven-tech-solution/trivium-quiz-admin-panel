@@ -1,5 +1,5 @@
 function getFormattedDate(value, type) {
-  if (!type) return value;
+  // if (!type) return value;
 
   const date = new Date(value);
   let options;
@@ -15,6 +15,15 @@ function getFormattedDate(value, type) {
     options = {
       hour: "numeric",
       minute: "numeric",
+    };
+  } else {
+    options = {
+      hour: "numeric",
+      minute: "numeric",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
   }
 
