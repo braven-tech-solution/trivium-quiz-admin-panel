@@ -48,6 +48,7 @@ const updateNumberOfQuestionsOfSchedule = async (scheduleId) => {
 
   return res;
 };
+
 const deleteiveQuizById = async (scheduleId) => {
   // console.log({ scheduleId });
   const res = await Schedule.findByIdAndDelete(scheduleId);

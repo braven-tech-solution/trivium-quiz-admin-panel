@@ -10,11 +10,12 @@ import ManageQuizLevel from "../pages/ManageQuizLevel/ManageQuizLevel";
 import ManageQuizCategory from "../pages/ManageQuizCategory/ManageQuizCategory";
 import UserHistory from "../pages/UserHistory/UserHistory";
 import ManageLiveQuizQuestion from "../pages/ManageLiveQuizQuestion/ManageLiveQuizQuestion";
-import ManageSchedule from "../pages/ManageSchedule/ManageSchedule";
+
 import AboutUs from "../pages/Setting/AboutUs/AboutUs";
 import TermsAndCondition from "../pages/Setting/TermsAndCondition/TermsAndCondition";
 import PrivacyPolicy from "../pages/Setting/PrivacyPolicy/PrivacyPolicy";
 import ChangePassword from "../pages/Setting/ChangePassword/ChangePassword";
+import ManageLiveQuiz from "../pages/ManageLiveQuiz/ManageLiveQuiz";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
 
       {
         path: "/manage-live-quiz",
-        element: <ManageSchedule />,
+        element: <ManageLiveQuiz />,
       },
       {
         path: "/manage-live-quiz-question",

@@ -3,7 +3,7 @@ import Table from "../../components/Table/Table";
 import Modal from "../../components/Modal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
 import FilterStatus from "./FilterStatus/FilterStatus";
-import EditScheduleQuizModal from "./EditScheduleQuizModal/EditScheduleQuizModal";
+import EditLiveQuizModal from "./EditLiveQuizModal/EditLiveQuizModal";
 import { useQuery } from "@tanstack/react-query";
 import { getAllLiveQuiz } from "../../services/liveQuiz/liveQuiz";
 import { baseURL, imageBaseURL } from "../../config";
@@ -12,20 +12,20 @@ import LiveQuizAddModal from "./LiveQuizAddModal/LiveQuizAddModal";
 import { getFormattedDate } from "../../utils/dateFormate";
 
 const tableHeader = [
-  { name: "Quiz_Name", key: "name" },
+  { name: "Quiz Name", key: "name" },
   { name: "Image", key: "image" },
-  { name: "Time", key: "startTime" },
-  { name: "Time", key: "endTime" },
-  { name: "Total Questions", key: "numberOfQuestion" },
+  { name: "Time", key: "sTime" },
+  { name: "Time", key: "eTime" },
+  { name: "Total Q.", key: "numberOfQuestion" },
   { name: "Per Q. Mark", key: "perQuestionMark" },
-  { name: "Negative Answer Mark", key: "negativeAnswerMark" },
+  { name: "Neg A. M.", key: "negativeAnswerMark" },
   { name: "Require Point", key: "requirePoint" },
-  { name: "Submited Quiz", key: "totalCompleteQuiz" },
-  { name: "Average Strength", key: "averageStrength" },
+  { name: "Total Submit ", key: "totalCompleteQuiz" },
+  { name: "Avg Strength", key: "averageStrength" },
   { name: "Status", key: "status" },
 ];
 
-const ManageSchedule = () => {
+const ManageLiveQuiz = () => {
   const [allLevelData, setAllLevelData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
@@ -45,8 +45,8 @@ const ManageSchedule = () => {
         return {
           ...item,
           id: item._id,
-          startTime: getFormattedDate(item.startTime),
-          endTime: getFormattedDate(item.endTime),
+          sTime: getFormattedDate(item.startTime),
+          eTime: getFormattedDate(item.endTime),
           image: `${imageBaseURL}${item?.image}`,
           status: item?.status === "deactive" ? "Deactive" : "Active",
         };
@@ -80,7 +80,7 @@ const ManageSchedule = () => {
     }
   };
 
-  const deleteFoodUpdate = (selectedLiveQuiz) => {
+  const deleteQuiz = (selectedLiveQuiz) => {
     setShowDeleteModal(false);
     liveQuizDelete(selectedLiveQuiz);
   };
@@ -120,7 +120,7 @@ const ManageSchedule = () => {
           title={selectedCategory.name}
           setModal={setShowEditModal}
           body={
-            <EditScheduleQuizModal
+            <EditLiveQuizModal
               scheduleQuiz={selectedCategory}
               setModal={setShowEditModal}
             />
@@ -136,7 +136,7 @@ const ManageSchedule = () => {
           body={
             <DeleteConfirmModalBody
               title={`Delete   ${selectedCategory.name}`}
-              onDeleteItem={() => deleteFoodUpdate(selectedCategory)}
+              onDeleteItem={() => deleteQuiz(selectedCategory)}
             />
           }
         />
@@ -145,4 +145,4 @@ const ManageSchedule = () => {
   );
 };
 
-export default ManageSchedule;
+export default ManageLiveQuiz;

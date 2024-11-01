@@ -49,6 +49,20 @@ const totalQuestionCount = async () => {
   return { scheduleCount, levelCount };
 };
 
+const updateQuestionById = async (questionId) => {
+  // console.log({ questionId });
+  const res = await Question.findByIdAndDelete(questionId);
+
+  return res;
+};
+
+const deleteQuestionById = async (questionId) => {
+  // console.log({ questionId });
+  const res = await Question.findByIdAndDelete(questionId);
+
+  return res;
+};
+
 const questionService = {
   addQuestion,
   getAllQuestion,
@@ -57,6 +71,8 @@ const questionService = {
   getAllQuestionByLevelId,
   getAllQuestionByLivelId,
   totalQuestionCount,
+  updateQuestionById,
+  deleteQuestionById,
 };
 
 module.exports = questionService;

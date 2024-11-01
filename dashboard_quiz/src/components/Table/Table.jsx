@@ -107,7 +107,7 @@ export default function Table({
                     </th>
                   ))}
                   {actionName && (
-                    <th className="border-2 border-white bg-customBase px-1 table-header-font">
+                    <th className="border-2  border-white bg-customBase px-1 table-header-font">
                       {actionName}
                     </th>
                   )}
@@ -133,28 +133,34 @@ export default function Table({
                       </td>
                     ))}
                     {actions && (
-                      <td className="border-2 border-white table-data-font">
-                        <div className="flex gap-2 p-1 justify-center">
+                      <td className="border-2 border-white table-data-font  ">
+                        <div className="flex gap-2 p-1 justify-center   ">
                           {actionValue?.edit && (
-                            <button
-                              className=" py-1 bg-[#2d6eac] px-2 rounded cursor-pointer text-white font-bold tooltip"
-                              onClick={() => handleActionClick("edit", item.id)}
-                              data-tip="Edit"
-                            >
-                              <img src={editSvg} alt="" width={25} />
-                            </button>
+                            <div className="w-8">
+                              <button
+                                className=" py-1 bg-[#2d6eac] px-2 rounded cursor-pointer text-white font-bold tooltip"
+                                onClick={() =>
+                                  handleActionClick("edit", item.id)
+                                }
+                                data-tip="Edit"
+                              >
+                                <img src={editSvg} alt="" width={20} />
+                              </button>
+                            </div>
                           )}
 
                           {actionValue?.delete && (
-                            <button
-                              className=" py-1 bg-[#e0445e] px-2 rounded cursor-pointer text-white font-bold tooltip"
-                              onClick={() =>
-                                handleActionClick("delete", item.id)
-                              }
-                              data-tip="Delete"
-                            >
-                              <img src={deleteSvg} alt="" width={25} />
-                            </button>
+                            <div className="w-8">
+                              <button
+                                className=" py-1 bg-[#e0445e] px-2 rounded cursor-pointer text-white font-bold tooltip"
+                                onClick={() =>
+                                  handleActionClick("delete", item.id)
+                                }
+                                data-tip="Delete"
+                              >
+                                <img src={deleteSvg} alt="" width={20} />
+                              </button>
+                            </div>
                           )}
                         </div>
                       </td>

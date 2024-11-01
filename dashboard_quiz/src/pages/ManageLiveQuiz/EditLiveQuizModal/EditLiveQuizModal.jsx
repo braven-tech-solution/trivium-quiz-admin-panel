@@ -14,7 +14,7 @@ import setMinutes from "date-fns/setMinutes";
 import DatePicker from "react-datepicker";
 import { updateLiveQuiz } from "../../../services/liveQuiz/liveQuiz";
 
-const EditScheduleQuizModal = ({ scheduleQuiz ,setModal}) => {
+const EditLiveQuizModal = ({ scheduleQuiz, setModal }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -303,4 +303,4 @@ const EditScheduleQuizModal = ({ scheduleQuiz ,setModal}) => {
   );
 };
 
-export default EditScheduleQuizModal;
+export default EditLiveQuizModal;

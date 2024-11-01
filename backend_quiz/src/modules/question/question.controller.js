@@ -95,6 +95,41 @@ const totalQuestionCount = catchAsync(async (req, res) => {
   }
 });
 
+const updateQuestionById = catchAsync(async (req, res) => {
+  const payload = { ...req.body };
+
+  const { scheduleId } = req.params;
+  if (req.files) {
+    if (req.files.image) {
+      const image = req.files.image[0].filename;
+      payload.image = `/uploads/schedule/${image}`;
+    }
+  }
+
+  const schedule = await questionService.updateQuestionById(
+    scheduleId,
+    payload
+  );
+
+  if (schedule) {
+    sendResponse(res, 201, true, "schedule update successfully", schedule);
+  } else {
+    sendResponse(res, 400, false, "Failed to update schedule", {});
+  }
+});
+
+const deleteQuestionById = catchAsync(async (req, res) => {
+  const { questionId } = req.params;
+
+  const question = await questionService.deleteQuestionById(questionId);
+
+  if (question) {
+    sendResponse(res, 201, true, "question delete successfully", question);
+  } else {
+    sendResponse(res, 400, false, "Failed to delete question", {});
+  }
+});
+
 const questionController = {
   addQuestion,
   getAllQuestion,
@@ -102,6 +137,8 @@ const questionController = {
   getLiveQuestion,
   getAllQuestionByLevelId,
   totalQuestionCount,
+  updateQuestionById,
+  deleteQuestionById,
 };
 
 module.exports = questionController;

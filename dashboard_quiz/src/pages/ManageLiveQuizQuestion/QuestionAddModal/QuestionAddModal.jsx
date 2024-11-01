@@ -42,7 +42,7 @@ const QuestionAddModal = ({ liveQuiz, setSlectCategory, setModal }) => {
 
   useEffect(() => {
     if (liveQuiz?.length > 0) {
-      setValue("category", liveQuiz?.[0]?.id);
+      setValue("category", liveQuiz?.[0]?._id);
     }
   }, [liveQuiz]);
 
@@ -86,6 +86,8 @@ const QuestionAddModal = ({ liveQuiz, setSlectCategory, setModal }) => {
     );
   };
 
+  console.log(liveQuiz);
+
   return (
     <main className=" pt-4">
       <section>
@@ -104,6 +106,7 @@ const QuestionAddModal = ({ liveQuiz, setSlectCategory, setModal }) => {
                 name="category"
                 id="category"
                 className="bg-slate-200 auth-input py-3"
+                defaultValue={liveQuiz?.[0]?._id}
               >
                 {liveQuiz?.map((option) => (
                   <option key={option._id} value={option._id} className="py-2">

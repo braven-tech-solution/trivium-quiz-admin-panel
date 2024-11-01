@@ -12,9 +12,14 @@ import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdDelete } from "react-icons/md";
 
-const EditQuestionModal = ({ question, allCategoryData, slectCategory }) => {
+const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
   const [option, setOption] = useState("");
-  const [questionOptions, setQuestionOptions] = useState([]);
+  const [options, setOptions] = useState({
+    option1: "",
+    option2: "",
+    option3: "",
+    option4: "",
+  });
 
   const {
     register,
@@ -25,41 +30,51 @@ const EditQuestionModal = ({ question, allCategoryData, slectCategory }) => {
   } = useForm();
 
   useEffect(() => {
-    if (question?.id) {
-      setValue("categoryType", slectCategory);
+    if (question?._id) {
+      console.log("  question.categoryType", question.categoryType);
+      setValue("categoryType", question.categoryType);
       setValue("title", question?.title);
-      setValue("correct", question?.correct);
+      setValue("option1", question?.option1);
+      setValue("option2", question?.option2);
+      setValue("option3", question?.option3);
+      setValue("option4", question?.option4);
+      setValue("correctAnswer", question?.correctAnswer); // Set initial value for correctAnswer
       setValue(
         "status",
         question?.status === "deactive" ? "deactive" : "active"
       );
-      setQuestionOptions(question.option);
+
+      setOptions({
+        option1: question?.option1,
+        option2: question?.option2,
+        option3: question?.option3,
+        option4: question?.option4,
+      });
+
+      const cTyepe = allLiveQuiz?.find(
+        (option) => option._id === question.model_id
+      );
+
+      setValue("categoryType", cTyepe.name);
+
+      console.log({ cTyepe });
     }
-  }, [question?.id]);
+  }, [question?._id]);
 
   const submitForm = async (data) => {
     console.log(data);
   };
 
-  const handleOptionChangees = (e) => {
-    const optionValue = e.target.value; // Get the name and value from the event
-    setOption(optionValue);
-  };
-
-  const handleAddOption = () => {
-    setQuestionOptions((prev) => [...prev, option]);
-    setOption("");
-  };
-
-  const handleDeleteOption = (value) => {
-    const remainValue = questionOptions?.filter(
-      (item, index) => index != value
-    );
-
-    setQuestionOptions([...remainValue]);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      [name]: value,
+    }));
   };
 
   console.log(question);
+  // console.log("slectCategory", slectCategory);
 
   return (
     <main className=" pt-4">
@@ -79,7 +94,7 @@ const EditQuestionModal = ({ question, allCategoryData, slectCategory }) => {
                 id="categoryType"
                 className="auth-input py-3"
               >
-                {allCategoryData?.map((option) => (
+                {allLiveQuiz?.map((option) => (
                   <option key={option.id} value={option.id} className="py-2">
                     {option.name}
                   </option>
@@ -100,56 +115,77 @@ const EditQuestionModal = ({ question, allCategoryData, slectCategory }) => {
               />
             </Field>
 
-            <Field error={errors?.status} label={"Question Option Add"}>
-              <div>
-                <div className="flex gap-2 items-center border-2  p-2 mb-3">
-                  <input
-                    value={option}
-                    onChange={handleOptionChangees}
-                    className={`auth-input  `}
-                    type="text"
-                    name="option"
-                    id="option"
-                  />
-
-                  <button
-                    type="button"
-                    className="w-32 bg-green-400 p-2 font-medium"
-                    onClick={handleAddOption}
-                  >
-                    Add Option
-                  </button>
-                </div>
-                {questionOptions?.map((option, index) => (
-                  <div
-                    key={option}
-                    className="flex justify-start items-center gap-2  "
-                  >
-                    <div
-                      onClick={() => handleDeleteOption(index)}
-                      className="  flex justify-center  cursor-pointer "
-                    >
-                      <MdDelete className="text-xl text-red-600 cursor-pointer" />
-                    </div>
-                    <p>
-                      {index + 1}. {option}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </Field>
-
-            <Field error={errors.title} label={"Correct Answer"}>
+            <Field error={errors.option1} label={"Option 1"}>
               <input
-                {...register("correct", {
-                  required: "Correct Answer is Required",
+                {...register("option1", {
+                  required: "Option 1 is Required",
                 })}
                 type="text"
-                name="correct"
-                id="correct"
-                placeholder="Enter Correct Answer"
-                className="auth-input  "
+                name="option1"
+                id="option1"
+                placeholder="Enter Option 1"
+                className="bg-slate-200  auth-input  "
+                value={options.option1}
+                onChange={handleInputChange}
               />
+            </Field>
+            <Field error={errors.option2} label={"Option 2"}>
+              <input
+                {...register("option2", {
+                  required: "Option 2 is Required",
+                })}
+                type="text"
+                name="option2"
+                id="option2"
+                placeholder="Enter Option 2"
+                className="bg-slate-200 auth-input  "
+                value={options.option2}
+                onChange={handleInputChange}
+              />
+            </Field>
+            <Field error={errors.option3} label={"Option 3"}>
+              <input
+                {...register("option3", {
+                  required: "Option 3 is Required",
+                })}
+                type="text"
+                name="option3"
+                id="option3"
+                placeholder="Enter Option 1"
+                className="bg-slate-200 auth-input  "
+                value={options.option3}
+                onChange={handleInputChange}
+              />
+            </Field>
+            <Field error={errors.option4} label={"Option 4"}>
+              <input
+                {...register("option4", {
+                  required: "Option 1 is Required",
+                })}
+                type="text"
+                name="option4"
+                id="option4"
+                placeholder="Enter Option 4"
+                className="bg-slate-200 auth-input  "
+                value={options.option4}
+                onChange={handleInputChange}
+              />
+            </Field>
+
+            <Field error={errors.correctAnswer} label={"Correct Answer"}>
+              <select
+                {...register("correctAnswer", {
+                  required: "Correct Answer is Required",
+                })}
+                name="correctAnswer"
+                id="correctAnswer"
+                className="bg-slate-200 auth-input py-3"
+              >
+                <option value="option1">{options.option1}</option>
+                <option value="option2">{options.option2}</option>
+                <option value="option3">{options.option3}</option>
+                <option value="option4">{options.option4}</option>
+              </select>
             </Field>
 
             <Field error={errors?.status} label={"Category Status"}>

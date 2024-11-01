@@ -72,3 +72,23 @@ export const questionCount = async () => {
     throw new Error(error);
   }
 };
+
+export const deleteQuestion = async ({ id }) => {
+  try {
+    console.log({ id });
+
+    const response = await axiosInstance
+      .delete(`/question/${id}`)
+      .catch((error) => {
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    console.log({ response });
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -5,6 +5,8 @@ import Table from "../../components/Table/Table";
 import { useAllLiveQuestion } from "../../hooks/useAllLiveQuestion";
 import Modal from "../../components/Modal";
 import QuestionAddModal from "./QuestionAddModal/QuestionAddModal";
+import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
+import EditQuestionModal from "./EditQuestionModal/EditQuestionModal";
 
 const tableHeader = [
   { name: "Title", key: "title" },
@@ -17,10 +19,14 @@ const ManageLiveQuizQuestion = () => {
   const [filterData, setFilterData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [slectCategory, setSlectCategory] = useState("");
+  const [selectQuestion, setSelectQuestion] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const { liveQuiz } = useLiveQuiz();
 
-  const { allLiveQuestionData } = useAllLiveQuestion();
+  const { allLiveQuestionData, questionDelete } = useAllLiveQuestion();
 
   useEffect(() => {
     if (allLiveQuestionData?.length > 0 && liveQuiz?.data?.length > 0) {
@@ -39,7 +45,7 @@ const ManageLiveQuizQuestion = () => {
   }, [allLiveQuestionData, liveQuiz?.data]);
 
   useEffect(() => {
-    // console.log(slectCategory);
+    console.log({ slectCategory });
     if (allLiveQuestionData?.length > 0 && liveQuiz?.data?.length > 0) {
       // console.log({ slectCategory });
       // console.log(allLiveQuestionData);
@@ -54,21 +60,29 @@ const ManageLiveQuizQuestion = () => {
   }, [slectCategory]);
 
   const handleActionClick = async (type, id) => {
-    let clickCategory = filterData?.find((food) => food.id == id);
-    console.log({ clickCategory });
+    console.log(filterData);
 
-    // setSelectedCategory(clickCategory);
+    let clickQuestion = filterData?.find((question) => question.id == id);
+    console.log({ clickQuestion });
+
+    setSelectQuestion(clickQuestion);
 
     switch (type) {
       case "edit":
-        // setShowEditModal(true);
+        setShowEditModal(true);
         break;
       case "delete":
-        // setShowDeleteModal(true);
+        setShowDeleteModal(true);
         break;
       default:
         break;
     }
+  };
+
+  const deleteQuestion = (selectedQuestion) => {
+    setShowDeleteModal(false);
+    console.log(selectedQuestion);
+    questionDelete(selectedQuestion);
   };
 
   return (
@@ -85,10 +99,10 @@ const ManageLiveQuizQuestion = () => {
         title={"All Live Quiz Category List"}
         data={filterData ?? []}
         headers={tableHeader}
-        // actions={true}
-        // actionName={"Actions"}
         handleActionClick={handleActionClick}
-        // actionValue={{ edit: true, delete: true }}
+        actions={true}
+        actionName={"Actions"}
+        actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (
@@ -102,6 +116,36 @@ const ManageLiveQuizQuestion = () => {
               slectCategory={slectCategory}
               setSlectCategory={setSlectCategory}
               setModal={setAddModal}
+            />
+          }
+        />
+      )}
+
+      {showEditModal && (
+        <Modal
+          width={"w-[900px]"}
+          title={selectQuestion.name}
+          setModal={setShowEditModal}
+          body={
+            <EditQuestionModal
+              question={selectQuestion}
+              allLiveQuiz={liveQuiz?.data}
+              slectCategory={slectCategory}
+              setModal={setShowEditModal}
+            />
+          }
+        />
+      )}
+
+      {showDeleteModal && (
+        <Modal
+          width={"w-[500px]"}
+          title={selectQuestion.title}
+          setModal={setShowDeleteModal}
+          body={
+            <DeleteConfirmModalBody
+              title={`Delete   ${selectQuestion.title}  question`}
+              onDeleteItem={() => deleteQuestion(selectQuestion)}
             />
           }
         />
