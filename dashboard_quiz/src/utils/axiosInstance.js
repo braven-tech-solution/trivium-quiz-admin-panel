@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(async (req) => {
     //   refreshToken: cookies.get("cpd_refreshToken"),
     // });
 
-    // let { token } = response.data.data;
+    // let { token } = response.data?.data;
 
     // cookies.set("quiz_accessToken", token?.accessToken, { path: "/" });
     // cookies.set("cpd_refreshToken", token?.refreshToken, { path: "/" });

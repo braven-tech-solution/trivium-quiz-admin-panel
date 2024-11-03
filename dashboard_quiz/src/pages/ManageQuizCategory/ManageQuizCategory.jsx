@@ -5,29 +5,7 @@ import Modal from "../../components/Modal";
 import CategoryAddModal from "./CategoryAddModal/CategoryAddModal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
 import EditCategoryModal from "./EditCategoryModal/EditCategoryModal";
-import { getAllCategory } from "../../services/category/category";
-import { useQuery } from "@tanstack/react-query";
-import { baseURL, imageBaseURL } from "../../config";
-
-const originalData = [
-  {
-    name: "Flutter",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-    id: "1",
-    priority: 1,
-    status: "deactive",
-  },
-  {
-    name: "React",
-    image:
-      "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/google-quiz.jpg?width=595&height=400&name=google-quiz.jpg",
-
-    id: "2",
-    priority: 2,
-    status: "active",
-  },
-];
+import useCategory from "../../hooks/useCategory";
 
 const tableHeader = [
   { name: "Image", key: "image" },
@@ -37,40 +15,22 @@ const tableHeader = [
 ];
 
 const ManageQuizCategory = () => {
-  const [allCategoryData, setAllCategoryData] = useState([]);
   const [showAddModal, setAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [filterData, setFilterData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
 
-  const { data: { data: { data } } = { data: { data: null } } } = useQuery({
-    queryKey: ["allCategory"],
-    queryFn: getAllCategory,
-  });
+  const { allCategoryData } = useCategory();
 
   useEffect(() => {
-    console.log({ bandata: data });
-    console.log(imageBaseURL);
-    if (data?.length > 0) {
-      const tempData = data?.map((item, index) => {
-        return {
-          id: item._id,
-          image: `${imageBaseURL}${item?.image}`,
-          priority: item?.priority,
-          name: item?.name,
-          perQuestionMark: item?.perQuestionMark,
-          negativeAnswerMark: item?.negativeAnswerMark,
-          status: item?.status === "Deactive" ? "Deactive" : "Active",
-        };
-      });
-      setAllCategoryData(tempData);
-      setFilterData(tempData);
+    if (allCategoryData?.length > 0) {
+      // setAllCategoryData(tempData);
+      setFilterData(allCategoryData);
     } else {
-      setAllCategoryData([]);
       setFilterData([]);
     }
-  }, [data]);
+  }, [allCategoryData]);
 
   const handleActionClick = async (type, id) => {
     let clickCategory = filterData?.find((food) => food.id == id);
@@ -90,16 +50,15 @@ const ManageQuizCategory = () => {
     }
   };
 
-  const deleteFoodUpdate = (food) => {
+  const deleteCategory = (category) => {
+    console.log(category);
     setShowDeleteModal(false);
   };
-
-  // console.log(data);
 
   return (
     <div className="w-[100%]">
       <FilterCategory
-        originalData={originalData}
+        originalData={allCategoryData}
         setFilterData={setFilterData}
         setAddModal={setAddModal}
       />
@@ -107,10 +66,10 @@ const ManageQuizCategory = () => {
         title={"All Quiz Category List"}
         data={filterData ?? []}
         headers={tableHeader}
-        // actions={true}
-        // actionName={"Actions"}
+        actions={true}
+        actionName={"Actions"}
         handleActionClick={handleActionClick}
-        // actionValue={{ edit: true, delete: true }}
+        actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (
@@ -144,7 +103,7 @@ const ManageQuizCategory = () => {
           body={
             <DeleteConfirmModalBody
               title={`Delete   ${selectedCategory.name}`}
-              onDeleteItem={() => deleteFoodUpdate(selectedCategory)}
+              onDeleteItem={() => deleteCategory(selectedCategory)}
             />
           }
         />

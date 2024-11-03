@@ -26,7 +26,8 @@ const ManageLiveQuizQuestion = () => {
 
   const { liveQuiz } = useLiveQuiz();
 
-  const { allLiveQuestionData, questionDelete } = useAllLiveQuestion();
+  const { allLiveQuestionData, questionDelete, questionUpdate } =
+    useAllLiveQuestion();
 
   useEffect(() => {
     if (allLiveQuestionData?.length > 0 && liveQuiz?.data?.length > 0) {
@@ -130,8 +131,8 @@ const ManageLiveQuizQuestion = () => {
             <EditQuestionModal
               question={selectQuestion}
               allLiveQuiz={liveQuiz?.data}
-              slectCategory={slectCategory}
               setModal={setShowEditModal}
+              questionUpdate={questionUpdate}
             />
           }
         />

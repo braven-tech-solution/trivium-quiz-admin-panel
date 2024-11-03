@@ -3,7 +3,9 @@ import { getAllLiveQuiz } from "../services/liveQuiz/liveQuiz";
 import {
   deleteQuestion,
   getAllLiveQuestion,
+  updateQuestion,
 } from "../services/question/question";
+import { toast } from "react-toastify";
 
 export const useAllLiveQuestion = () => {
   const queryClient = useQueryClient();
@@ -15,9 +17,34 @@ export const useAllLiveQuestion = () => {
     queryFn: getAllLiveQuestion,
   });
 
+  const updateQuestionMutation = useMutation({
+    mutationFn: updateQuestion,
+  });
+
   const deleteQuestionMutation = useMutation({
     mutationFn: deleteQuestion,
   });
+
+  const questionUpdate = async (id, data) => {
+    console.log(id, data);
+
+    updateQuestionMutation.mutate(
+      {
+        id,
+        data,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries(["allLiveQuestionData"]);
+          toast.success("Question update successfully");
+          setModal(false);
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
+  };
 
   const questionDelete = async (data) => {
     console.log(data);
@@ -34,5 +61,9 @@ export const useAllLiveQuestion = () => {
       }
     );
   };
-  return { allLiveQuestionData: allQuestionData || [], questionDelete };
+  return {
+    allLiveQuestionData: allQuestionData || [],
+    questionDelete,
+    questionUpdate,
+  };
 };

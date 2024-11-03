@@ -1,24 +1,22 @@
 /* eslint-disable react/prop-types */
 
-import editSvg from "../../../assets/icons/edit.svg";
-import previewSvg from "../../../assets/icons/preview.svg";
 import { useEffect, useRef, useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../../hooks/useAuth";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
 import Field from "../../../components/Field";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MdDelete } from "react-icons/md";
 
-const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
+const EditQuestionModal = ({
+  question,
+  allLiveQuiz,
+  setModal,
+  questionUpdate,
+}) => {
   const [option, setOption] = useState("");
   const [options, setOptions] = useState({
-    option1: "",
-    option2: "",
-    option3: "",
-    option4: "",
+    option1: question?.option1,
+    option2: question?.option2,
+    option3: question?.option3,
+    option4: question?.option4,
   });
 
   const {
@@ -31,7 +29,7 @@ const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
 
   useEffect(() => {
     if (question?._id) {
-      console.log("  question.categoryType", question.categoryType);
+      // console.log("  question.categoryType", question.categoryType);
       setValue("categoryType", question.categoryType);
       setValue("title", question?.title);
       setValue("option1", question?.option1);
@@ -44,26 +42,15 @@ const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
         question?.status === "deactive" ? "deactive" : "active"
       );
 
-      setOptions({
-        option1: question?.option1,
-        option2: question?.option2,
-        option3: question?.option3,
-        option4: question?.option4,
-      });
-
       const cTyepe = allLiveQuiz?.find(
         (option) => option._id === question.model_id
       );
 
       setValue("categoryType", cTyepe.name);
 
-      console.log({ cTyepe });
+      // console.log({ cTyepe });
     }
   }, [question?._id]);
-
-  const submitForm = async (data) => {
-    console.log(data);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -73,8 +60,13 @@ const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
     }));
   };
 
-  console.log(question);
-  // console.log("slectCategory", slectCategory);
+  const submitForm = async (data) => {
+    console.log(data);
+
+    await questionUpdate(question?._id, data);
+
+    setModal(false);
+  };
 
   return (
     <main className=" pt-4">
@@ -181,10 +173,10 @@ const EditQuestionModal = ({ question, allLiveQuiz, slectCategory }) => {
                 id="correctAnswer"
                 className="bg-slate-200 auth-input py-3"
               >
-                <option value="option1">{options.option1}</option>
-                <option value="option2">{options.option2}</option>
-                <option value="option3">{options.option3}</option>
-                <option value="option4">{options.option4}</option>
+                <option value={options.option1}>{options.option1}</option>
+                <option value={options.option2}>{options.option2}</option>
+                <option value={options.option3}>{options.option3}</option>
+                <option value={options.option4}>{options.option4}</option>
               </select>
             </Field>
 

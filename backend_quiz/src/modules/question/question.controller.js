@@ -98,23 +98,17 @@ const totalQuestionCount = catchAsync(async (req, res) => {
 const updateQuestionById = catchAsync(async (req, res) => {
   const payload = { ...req.body };
 
-  const { scheduleId } = req.params;
-  if (req.files) {
-    if (req.files.image) {
-      const image = req.files.image[0].filename;
-      payload.image = `/uploads/schedule/${image}`;
-    }
-  }
+  const { questionId } = req.params;
 
-  const schedule = await questionService.updateQuestionById(
-    scheduleId,
+  const question = await questionService.updateQuestionById(
+    questionId,
     payload
   );
 
-  if (schedule) {
-    sendResponse(res, 201, true, "schedule update successfully", schedule);
+  if (question) {
+    sendResponse(res, 201, true, "question update successfully", question);
   } else {
-    sendResponse(res, 400, false, "Failed to update schedule", {});
+    sendResponse(res, 400, false, "Failed to update question", {});
   }
 });
 

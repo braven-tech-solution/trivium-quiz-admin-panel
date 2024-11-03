@@ -13,7 +13,7 @@ export const addQuestion = async ({ payload }) => {
         throw new Error(JSON.stringify(errorResponse));
       });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     throw new Error(error);
   }
@@ -73,6 +73,24 @@ export const questionCount = async () => {
   }
 };
 
+export const updateQuestion = async ({ id, data }) => {
+  try {
+    console.log(id, data);
+    const response = await axiosInstance
+      .patch(`/question/${id}`, data)
+      .catch((error) => {
+        console.log(error);
+        const errorResponse = error?.response?.data || {};
+
+        throw new Error(JSON.stringify(errorResponse));
+      });
+
+    return response?.data?.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const deleteQuestion = async ({ id }) => {
   try {
     console.log({ id });
@@ -87,7 +105,7 @@ export const deleteQuestion = async ({ id }) => {
 
     console.log({ response });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     throw new Error(error);
   }

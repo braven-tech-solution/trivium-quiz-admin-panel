@@ -13,7 +13,7 @@ export const createNewCategory = async ({ formData }) => {
         throw new Error(JSON.stringify(errorResponse));
       });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     throw new Error(error);
   }
@@ -60,7 +60,7 @@ export const updateCategory = async ({ id, formData }) => {
         throw new Error(JSON.stringify(errorResponse));
       });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     throw new Error(error);
   }

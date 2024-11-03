@@ -22,7 +22,7 @@ const tableHeader = [
   { name: "Require Point", key: "requirePoint" },
   { name: "Total Submit ", key: "totalCompleteQuiz" },
   { name: "Avg Strength", key: "averageStrength" },
-  { name: "Status", key: "status" },
+  { name: "Status", key: "status1" },
 ];
 
 const ManageLiveQuiz = () => {
@@ -48,7 +48,7 @@ const ManageLiveQuiz = () => {
           sTime: getFormattedDate(item.startTime),
           eTime: getFormattedDate(item.endTime),
           image: `${imageBaseURL}${item?.image}`,
-          status: item?.status === "deactive" ? "Deactive" : "Active",
+          status1: item?.status === "deactive" ? "Deactive" : "Active",
         };
       });
 

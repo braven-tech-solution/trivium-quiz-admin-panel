@@ -49,9 +49,9 @@ const totalQuestionCount = async () => {
   return { scheduleCount, levelCount };
 };
 
-const updateQuestionById = async (questionId) => {
+const updateQuestionById = async (questionId, data) => {
   // console.log({ questionId });
-  const res = await Question.findByIdAndDelete(questionId);
+  const res = await Question.findByIdAndUpdate(questionId, data);
 
   return res;
 };

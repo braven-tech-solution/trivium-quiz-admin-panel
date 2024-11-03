@@ -27,7 +27,7 @@ export const updateSetting = async ({ payload }) => {
         throw new Error(JSON.stringify(errorResponse));
       });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     throw new Error(error);
   }

@@ -19,7 +19,7 @@ export const login = async (data) => {
     });
 
   if (response?.data?.success) {
-    let data = response.data.data;
+    let data = response.data?.data;
 
     // console.log(data);
     cookies.set("quiz_userId", data?._id, { path: "/" });
@@ -76,7 +76,7 @@ export const updatePassword = async ({ password }) => {
 
     console.log({ response });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     console.log({ error });
     throw new Error(error);
