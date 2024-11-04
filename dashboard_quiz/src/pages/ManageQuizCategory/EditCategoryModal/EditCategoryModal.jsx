@@ -4,24 +4,13 @@ import previewSvg from "../../../assets/icons/preview.svg";
 import { useEffect, useRef, useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../../hooks/useAuth";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
 import Field from "../../../components/Field";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateCategory } from "../../../services/category/category";
 
-const EditCategoryModal = ({ category, setModal }) => {
+const EditCategoryModal = ({ category, setModal, handleUpdateCategory }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
-  const { auth } = useAuth();
-
   const fileUploaderRef = useRef();
-
-  const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
 
   // console.log(category);
 
@@ -32,10 +21,6 @@ const EditCategoryModal = ({ category, setModal }) => {
     setValue,
     setError,
   } = useForm();
-
-  const categoryUpdateMutation = useMutation({
-    mutationFn: updateCategory,
-  });
 
   useEffect(() => {
     if (category?.id) {
@@ -70,31 +55,15 @@ const EditCategoryModal = ({ category, setModal }) => {
   };
 
   const submitForm = async (data) => {
-    console.log(data);
-    console.log(category?.id);
-
     const formData = new FormData();
 
     for (const key in data) {
       formData.append(key, data[key]);
     }
 
-    categoryUpdateMutation.mutate(
-      {
-        id: category?.id,
-        formData,
-      },
-      {
-        onSuccess: (data) => {
-          queryClient.invalidateQueries(["allCategory"]);
-          toast.success("Category update successfully");
-          setModal(false);
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      }
-    );
+    await handleUpdateCategory(category?.id, formData);
+
+    setModal(false);
   };
 
   return (

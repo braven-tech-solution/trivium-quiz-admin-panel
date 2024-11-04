@@ -144,24 +144,6 @@ const CategoryAddModal = ({ setModal }) => {
                 className="auth-input  "
               />
             </Field>
-            <Field
-              error={errors.priority}
-              label={"Category Priority ( 1 - 500 )"}
-            >
-              <input
-                {...register("priority", {
-                  required: "Priority is Required ",
-                  min: { value: 1, message: "Minimum value is 1" },
-                  max: { value: 500, message: "Maximum value is 500" },
-                })}
-                type="number"
-                name="priority"
-                id="priority"
-                placeholder="Enter category priority"
-                className="auth-input  "
-                defaultValue="1"
-              />
-            </Field>
 
             <Field
               error={errors.priority}

@@ -52,7 +52,7 @@ userRouter
   .patch("/otp/forget-password", userController.verifyForgetOtp)
   .put(
     "",
-    upload.fields([{ name: "photo", maxCount: 1 }]),
+    upload.fields([{ name: "image", maxCount: 1 }]),
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     userController.updateUser
   )

@@ -269,20 +269,19 @@ const getTotalUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const { fullName, phone, address, photo, current_password } = { ...req.body };
+  const { email, role, current_password, ...rest } = { ...req.body };
   const { id: userID } = req.user;
 
   const updateData = {
-    fullName,
-    phone,
-    address,
-    photo,
+    ...rest,
   };
 
+  console.log(req.files.image);
+  console.log(updateData);
   if (req.files) {
-    if (req.files.photo) {
-      const photoFileName = req.files.photo[0].filename;
-      updateData.photo = `/uploads/profile/${photoFileName}`;
+    if (req.files.image) {
+      const photoFileName = req.files.image[0]?.path;
+      updateData.image = `/uploads/profile/${photoFileName}`;
     }
   }
 

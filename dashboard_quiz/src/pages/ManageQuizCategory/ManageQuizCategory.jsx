@@ -21,7 +21,8 @@ const ManageQuizCategory = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
 
-  const { allCategoryData } = useCategory();
+  const { allCategoryData, handleUpdateCategory, handleDeleteCategory } =
+    useCategory();
 
   useEffect(() => {
     if (allCategoryData?.length > 0) {
@@ -50,8 +51,9 @@ const ManageQuizCategory = () => {
     }
   };
 
-  const deleteCategory = (category) => {
+  const deleteCategory = async (category) => {
     console.log(category);
+    await handleDeleteCategory(category);
     setShowDeleteModal(false);
   };
 
@@ -90,6 +92,7 @@ const ManageQuizCategory = () => {
             <EditCategoryModal
               category={selectedCategory}
               setModal={setShowEditModal}
+              handleUpdateCategory={handleUpdateCategory}
             />
           }
         />

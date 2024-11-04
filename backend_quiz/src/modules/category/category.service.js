@@ -28,11 +28,19 @@ const updateCategory = async (categoryId, payload) => {
   return result;
 };
 
+const deleteCategoryById = async (categoryId) => {
+  // console.log({ questionId });
+  const res = await Category.findByIdAndDelete(categoryId);
+
+  return res;
+};
+
 const categoryService = {
   addCategory,
   getAllCategory,
   getTotalCategoryQuiz,
   updateCategory,
+  deleteCategoryById,
 };
 
 module.exports = categoryService;

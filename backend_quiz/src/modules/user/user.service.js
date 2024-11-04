@@ -200,7 +200,7 @@ const updateUser = async (userId, userBody, levelId) => {
 
   const user = await User.findByIdAndUpdate(userId, payload, {
     new: true,
-  });
+  }).select("-password");
   nodeCache.flushAll();
   return user;
 };

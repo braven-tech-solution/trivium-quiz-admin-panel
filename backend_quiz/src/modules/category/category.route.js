@@ -20,6 +20,11 @@ categoryRouter
     "/:categoryId",
     upload.fields([{ name: "image", maxCount: 1 }]),
     categoryController.updateCategory
+  )
+  .delete(
+    "/:categoryId",
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    categoryController.deleteCategoryById
   );
 
 module.exports = categoryRouter;
