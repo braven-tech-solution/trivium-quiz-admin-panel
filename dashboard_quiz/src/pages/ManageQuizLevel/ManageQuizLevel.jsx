@@ -4,12 +4,13 @@ import FilterCategory from "./FilterCategory/FilterCategory";
 import Modal from "../../components/Modal";
 import LevelAddModal from "./LevelAddModal/LevelAddModal";
 import DeleteConfirmModalBody from "../../components/DeleteConfirmModalBody/DeleteConfirmModalBody";
-import EditCategoryModal from "./EditLevelModal/EditLevelModal";
+import EditLevelModal from "./EditLevelModal/EditLevelModal";
 import { getAllCategory } from "../../services/category/category";
 import { useQuery } from "@tanstack/react-query";
 import { baseURL, imageBaseURL } from "../../config";
 import { getAllLevelByCategoryId } from "../../services/level/level";
 import useCategory from "../../hooks/useCategory";
+import useLevel from "../../hooks/useLevel";
 
 const tableHeader = [
   { name: "Image", key: "image" },
@@ -18,7 +19,7 @@ const tableHeader = [
   { name: "Per Question Mark", key: "perQuestionMark" },
   { name: "Negative Answer Mark", key: "negativeAnswerMark" },
   { name: "Priority", key: "priority" },
-  { name: "Status", key: "status" },
+  { name: "Status", key: "status1" },
 ];
 
 const ManageQuizLevel = () => {
@@ -28,34 +29,19 @@ const ManageQuizLevel = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [slectCategory, setSlectCategory] = useState("");
-  // const [categoryId, setCategoryId] = useState("");
   const [selectedLevel, setSelectedLevel] = useState({});
 
   const { allCategoryData } = useCategory();
-  // console.log(categoryData?.[0]?._id);
-
-  const { data: levelData } = useQuery({
-    queryKey: ["levelData", slectCategory],
-    queryFn: () => getAllLevelByCategoryId(slectCategory),
-  });
+  const { levelData, handleUpdateLevel } = useLevel(slectCategory);
 
   useEffect(() => {
-    // console.log("object");
-    // console.log(allCategoryData?.length);
-
     if (allCategoryData?.length > 0) {
-      // console.log(allCategoryData?.[0].id);
       setSlectCategory(allCategoryData?.[0]?.id);
     }
   }, [allCategoryData]);
 
-  // console.log(levelData);
-
   useEffect(() => {
-    // console.log({ bandata: data });
-    // console.log(imageBaseURL);
     if (levelData?.data?.data?.length > 0) {
-      console.log(levelData?.data?.data);
       const tempData = levelData?.data?.data?.map((item, index) => {
         return {
           id: item._id,
@@ -65,7 +51,7 @@ const ManageQuizLevel = () => {
           duration: item?.duration,
           perQuestionMark: item?.perQuestionMark,
           negativeAnswerMark: item?.negativeAnswerMark,
-          status: item?.status === "Deactive" ? "Deactive" : "Active",
+          status1: item?.status === "deactive" ? "Deactive" : "Active",
         };
       });
       setAllLevelData(tempData);
@@ -76,11 +62,8 @@ const ManageQuizLevel = () => {
     }
   }, [levelData?.data?.data, slectCategory]);
 
-  console.log(levelData?.data);
-
   const handleActionClick = async (type, id) => {
     let clickLevel = filterData?.find((item) => item.id == id);
-    // console.log({ clickCategory });
 
     setSelectedLevel(clickLevel);
 
@@ -96,13 +79,10 @@ const ManageQuizLevel = () => {
     }
   };
 
-  const deleteFoodUpdate = (food) => {
+  const deleteFoodUpdate = (level) => {
+    console.log({ level });
     setShowDeleteModal(false);
   };
-
-  // console.log(data);
-
-  // console.log(slectCategory);
 
   return (
     <div className="w-[100%]">
@@ -115,19 +95,19 @@ const ManageQuizLevel = () => {
         setFilterData={setFilterData}
       />
       <Table
-        title={"All Quiz Category List"}
+        title={"All   Level List"}
         data={filterData ?? []}
         headers={tableHeader}
-        // actions={true}
-        // actionName={"Actions"}
+        actions={true}
+        actionName={"Actions"}
         handleActionClick={handleActionClick}
-        // actionValue={{ edit: true, delete: true }}
+        actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (
         <Modal
           width={"w-[900px]"}
-          title={"Category Add"}
+          title={"Level Add"}
           setModal={setAddModal}
           body={
             <LevelAddModal
@@ -144,10 +124,11 @@ const ManageQuizLevel = () => {
           title={selectedLevel.name}
           setModal={setShowEditModal}
           body={
-            <EditCategoryModal
+            <EditLevelModal
               level={selectedLevel}
               setModal={setShowEditModal}
               allCategoryData={allCategoryData}
+              handleUpdateLevel={handleUpdateLevel}
             />
           }
         />
@@ -156,12 +137,12 @@ const ManageQuizLevel = () => {
       {showDeleteModal && (
         <Modal
           width={"w-[500px]"}
-          title={selectedCategory.name}
+          title={selectedLevel.name}
           setModal={setShowDeleteModal}
           body={
             <DeleteConfirmModalBody
-              title={`Delete   ${selectedCategory.name}`}
-              onDeleteItem={() => deleteFoodUpdate(selectedCategory)}
+              title={`Delete   ${selectedLevel.name}`}
+              onDeleteItem={() => deleteFoodUpdate(selectedLevel)}
             />
           }
         />

@@ -27,6 +27,11 @@ levelRouter
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     levelController.getResultViewByLevelId
   )
-  .get("/app/:categoryId", levelController.getAllLevelByCategoryId);
+  .get("/app/:categoryId", levelController.getAllLevelByCategoryId)
+  .patch(
+    "/:levelId",
+    upload.fields([{ name: "image", maxCount: 1 }]),
+    levelController.updateLevel
+  );
 
 module.exports = levelRouter;

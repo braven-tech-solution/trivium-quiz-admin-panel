@@ -183,21 +183,10 @@ const getAllSchedule = catchAsync(async (req, res) => {
 });
 
 const getAllQuestionByLiveId = catchAsync(async (req, res) => {
-  const { id } = req.params;
   const user = req.user;
 
-  const level = await levelService.getSingleLeveById(id);
-
-  if (level) {
-    sendResponse(res, 400, false, "Failed to get question", {});
-  }
-
-  const liveQuiz = await scheduleService.getLiveQuizById(id);
+  const liveQuiz = await scheduleService.getRunningLiveQuiz();
   const userData = await userService.getSingleUser(user?.id);
-
-  if (!liveQuiz) {
-    return sendResponse(res, 400, false, "Live Quiz not found", {});
-  }
 
   const currentTime = moment(); // Get the current time
   const startTime = moment(liveQuiz.startTime);

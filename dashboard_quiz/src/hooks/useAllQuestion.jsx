@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteQuestion, getAllQuestion } from "../services/question/question";
 
 export const useAllQuestion = () => {

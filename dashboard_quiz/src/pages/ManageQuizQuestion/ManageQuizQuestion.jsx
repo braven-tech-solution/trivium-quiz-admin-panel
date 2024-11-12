@@ -128,10 +128,10 @@ const ManageQuizQuestion = () => {
         title={`${selectLeveldata?.name} Level Question List`}
         data={filterData ?? []}
         headers={tableHeader}
-        // actions={true}
-        // actionName={"Actions"}
+        actions={true}
+        actionName={"Actions"}
         handleActionClick={handleActionClick}
-        // actionValue={{ edit: true, delete: true }}
+        actionValue={{ edit: true, delete: true }}
       />
 
       {showAddModal && (

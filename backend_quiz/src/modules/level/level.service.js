@@ -53,6 +53,14 @@ const updateNumberOfQuestions = async (levelId) => {
   return res;
 };
 
+const updateLevel = async (levelId, payload) => {
+  const result = await Level.findByIdAndUpdate(levelId, payload, {
+    new: true,
+  });
+  // nodeCache.flushAll();
+  return result;
+};
+
 const levelService = {
   addLevel,
   getAllLevelByCategoryId,
@@ -60,6 +68,7 @@ const levelService = {
   getAllLevel,
   updateLevelById,
   updateNumberOfQuestions,
+  updateLevel,
 };
 
 module.exports = levelService;

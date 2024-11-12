@@ -58,10 +58,10 @@ export const getAllLevel = async () => {
   }
 };
 
-export const updateCategory = async ({ id, formData }) => {
+export const updateLevel = async ({ id, formData }) => {
   try {
     const response = await axios
-      .patch(`${baseURL}/category/${id}`, formData)
+      .patch(`${baseURL}/level/${id}`, formData)
       .catch((error) => {
         console.log(error);
         const errorResponse = error?.response?.data || {};

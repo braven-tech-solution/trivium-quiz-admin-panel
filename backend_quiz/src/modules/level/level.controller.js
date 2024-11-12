@@ -223,12 +223,33 @@ const getAllLevel = catchAsync(async (req, res) => {
   }
 });
 
+const updateLevel = catchAsync(async (req, res) => {
+  const payload = { ...req.body };
+
+  const { levelId } = req.params;
+  if (req.files) {
+    if (req.files.image) {
+      const image = req.files.image[0].filename;
+      payload.image = `/uploads/category/${image}`;
+    }
+  }
+
+  const level = await levelService.updateLevel(levelId, payload);
+
+  if (level) {
+    sendResponse(res, 201, true, "level update successfully", level);
+  } else {
+    sendResponse(res, 400, false, "Failed to add category", {});
+  }
+});
+
 const levelController = {
   addLevel,
   submitQuiz,
   getAllLevelByCategoryId,
   getResultViewByLevelId,
   getAllLevel,
+  updateLevel,
 };
 
 module.exports = levelController;

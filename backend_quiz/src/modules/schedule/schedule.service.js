@@ -21,6 +21,14 @@ const getLiveQuizById = async (id) => {
   return getSchedule;
 };
 
+const getRunningLiveQuiz = async () => {
+  const schedule = await Schedule.findOne({
+    startTime: { $lte: now },
+    endTime: { $gte: now },
+  });
+  return schedule;
+};
+
 const getTotalScheduleQuiz = async (email, phone) => {
   const totalUserCount = await Schedule.countDocuments({});
   return totalUserCount;
@@ -60,6 +68,7 @@ const scheduleService = {
   addSchedule,
   getAllSchedule,
   getLiveQuizById,
+  getRunningLiveQuiz,
   getTotalScheduleQuiz,
   updateLiveQuizById,
   updateNumberOfQuestionsOfSchedule,

@@ -144,7 +144,7 @@ const LevelAddModal = ({ setModal, allCategoryData }) => {
                 className="auth-input py-3"
               >
                 {allCategoryData?.map((option) => (
-                  <option key={option} value={option.id} className="py-2">
+                  <option key={option.id} value={option.id} className="py-2">
                     {option.name}
                   </option>
                 ))}
@@ -197,11 +197,12 @@ const LevelAddModal = ({ setModal, allCategoryData }) => {
                 {...register("negativeAnswerMark", {
                   required: "Nagative Answer Mark is Required",
                 })}
-                type="text"
+                type="number"
                 name="negativeAnswerMark"
                 id="negativeAnswerMark"
                 placeholder="Enter Nagative Answer Mark"
                 className="auth-input  "
+                step="0.05"
               />
             </Field>
             <Field error={errors.priority} label={"Level Priority"}>

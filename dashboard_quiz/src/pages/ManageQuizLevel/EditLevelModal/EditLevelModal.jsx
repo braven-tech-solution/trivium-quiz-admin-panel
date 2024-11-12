@@ -10,8 +10,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import Field from "../../../components/Field";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCategory } from "../../../services/category/category";
+import { updateLevel } from "../../../services/level/level";
 
-const EditLevelModal = ({ level, setModal, allCategoryData }) => {
+const EditLevelModal = ({
+  level,
+  setModal,
+  allCategoryData,
+  handleUpdateLevel,
+}) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -33,8 +39,8 @@ const EditLevelModal = ({ level, setModal, allCategoryData }) => {
     setError,
   } = useForm();
 
-  const categoryUpdateMutation = useMutation({
-    mutationFn: updateCategory,
+  const levelUpdateMutation = useMutation({
+    mutationFn: updateLevel,
   });
 
   useEffect(() => {
@@ -70,7 +76,7 @@ const EditLevelModal = ({ level, setModal, allCategoryData }) => {
 
   const submitForm = async (data) => {
     console.log(data);
-    console.log(category?.id);
+    console.log(level);
 
     const formData = new FormData();
 
@@ -78,7 +84,9 @@ const EditLevelModal = ({ level, setModal, allCategoryData }) => {
       formData.append(key, data[key]);
     }
 
-    // categoryUpdateMutation.mutate(
+    await handleUpdateLevel(level.id, data);
+
+    // levelUpdateMutation.mutate(
     //   {
     //     id: category?.id,
     //     formData,
@@ -146,7 +154,7 @@ const EditLevelModal = ({ level, setModal, allCategoryData }) => {
                 className="auth-input py-3"
               >
                 {allCategoryData?.map((option) => (
-                  <option key={option} value={option.id} className="py-2">
+                  <option key={option.id} value={option.id} className="py-2">
                     {option.name}
                   </option>
                 ))}
@@ -189,6 +197,7 @@ const EditLevelModal = ({ level, setModal, allCategoryData }) => {
                 id="negativeAnswerMark"
                 placeholder="Enter Nagative Answer Mark"
                 className="auth-input  "
+                step="0.05"
               />
             </Field>
             <Field error={errors.priority} label={"Level Priority"}>
