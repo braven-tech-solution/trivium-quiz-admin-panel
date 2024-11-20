@@ -33,13 +33,27 @@ const getAllQuestionByLevelId = async (id) => {
   return getQuestion;
 };
 const getAllQuestionByLivelId = async (id) => {
-  const getQuestion = await Question.find({
+  const questions = await Question.find({
     model_id: id,
     model_type: { $ne: "Level" },
   }).select("-correctAnswer");
   // nodeCache.flushAll();
-  return getQuestion;
+
+  // console.log({ questions });
+  return questions;
 };
+
+const getAllQuestionByLivelIdWithAnswer = async (id) => {
+  const questions = await Question.find({
+    model_id: id,
+    model_type: { $ne: "Level" },
+  });
+  // nodeCache.flushAll();
+
+  // console.log({ questions });
+  return questions;
+};
+
 const totalQuestionCount = async () => {
   const scheduleCount = await Question.countDocuments({
     model_type: "Schedule",
@@ -70,6 +84,7 @@ const questionService = {
   getLiveQuestion,
   getAllQuestionByLevelId,
   getAllQuestionByLivelId,
+  getAllQuestionByLivelIdWithAnswer,
   totalQuestionCount,
   updateQuestionById,
   deleteQuestionById,

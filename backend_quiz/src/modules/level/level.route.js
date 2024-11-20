@@ -16,6 +16,11 @@ levelRouter
     levelController.addLevel
   )
   .post(
+    "/:levelId",
+    upload.fields([{ name: "image", maxCount: 3 }]),
+    levelController.updateLevel
+  )
+  .post(
     "/submit/:id",
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     levelController.submitQuiz
@@ -27,11 +32,6 @@ levelRouter
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     levelController.getResultViewByLevelId
   )
-  .get("/app/:categoryId", levelController.getAllLevelByCategoryId)
-  .patch(
-    "/:levelId",
-    upload.fields([{ name: "image", maxCount: 1 }]),
-    levelController.updateLevel
-  );
+  .get("/app/:categoryId", levelController.getAllLevelByCategoryId);
 
 module.exports = levelRouter;

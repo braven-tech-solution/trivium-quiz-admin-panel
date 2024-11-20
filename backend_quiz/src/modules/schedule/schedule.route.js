@@ -10,35 +10,50 @@ const scheduleRouter = express.Router();
 scheduleRouter
   .post(
     "",
-    // auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     upload.fields([{ name: "image", maxCount: 1 }]),
     scheduleController.addSchedule
   )
   .post(
-    "/submit/:id",
+    "/submit",
     auth.verifyRole(USER_ROLE.USER),
     scheduleController.submitQuiz
   )
-  .get("", scheduleController.getAllSchedule)
-  .get("/total-schedule-quiz", scheduleController.getTotalScheduleQuiz)
   .get(
-    "/questions",
-    auth.verifyRole(USER_ROLE.USER),
-    scheduleController.getAllQuestionByLiveId
+    "",
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    scheduleController.getAllSchedule
   )
   .get(
-    "/result/:scheduleId",
+    "/total-schedule-quiz",
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    scheduleController.getTotalScheduleQuiz
+  )
+  .get("/running", scheduleController.getRunningLiveQuiz)
+  .get(
+    "/running/questions",
+    auth.verifyRole(USER_ROLE.USER),
+    scheduleController.getRunningQuestion
+  )
+  .get(
+    "/running/my-result",
+    auth.verifyRole(USER_ROLE.USER),
+    scheduleController.getMyResultView
+  )
+  .get(
+    "/running/leaderboard",
     auth.verifyRole(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
-    scheduleController.getResultViewByScheduleId
+    scheduleController.getLeaderboardOfLastLiveQuiz
   )
   .patch(
     "/:scheduleId",
     upload.fields([{ name: "image", maxCount: 1 }]),
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     scheduleController.updateLiveQuiz
   )
   .delete(
     "/:scheduleId",
-    auth.verifyRole(USER_ROLE.USER),
+    auth.verifyRole(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     scheduleController.deleteiveQuizById
   );
 

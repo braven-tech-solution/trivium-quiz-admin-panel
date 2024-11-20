@@ -104,16 +104,10 @@ const getSingleUserLeaderboard = async (id) => {
   return user?.[0];
 };
 
-const getSingleUserByEmailAndPhone = async (email, phone) => {
-  let user;
-  if (nodeCache.has(`users${email}${phone}`)) {
-    user = JSON.parse(nodeCache.get(`users${email}${phone}`));
-  } else {
-    user = await User.findOne({
-      $or: [{ email }, { phone }],
-    });
-    // nodeCache.set(`users${email}${phone}`, JSON.stringify(user));
-  }
+const getSingleUserByEmailAndPhone = async (email) => {
+  let user = await User.findOne({
+    email,
+  });
 
   return user;
 };

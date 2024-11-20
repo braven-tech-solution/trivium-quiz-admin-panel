@@ -9,6 +9,9 @@ const levelQuizSubmissionHistoryService = require("../levelQuizSubmissionHistory
 const addLevel = catchAsync(async (req, res) => {
   const payload = { ...req.body };
 
+  console.log({ ab: "object" });
+  console.log(req.files);
+
   if (req.files) {
     if (req.files.image) {
       const image = req.files.image[0].filename;
@@ -227,10 +230,16 @@ const updateLevel = catchAsync(async (req, res) => {
   const payload = { ...req.body };
 
   const { levelId } = req.params;
+
+  console.log({ levelId });
+
+  console.log({ ab: "object" });
+  console.log(req.files);
+
   if (req.files) {
     if (req.files.image) {
       const image = req.files.image[0].filename;
-      payload.image = `/uploads/category/${image}`;
+      payload.image = `/uploads/level/${image}`;
     }
   }
 

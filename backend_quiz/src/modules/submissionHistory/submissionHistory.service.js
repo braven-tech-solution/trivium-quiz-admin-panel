@@ -16,7 +16,19 @@ const getSubmissionHistoryByUserId = async (userId) => {
   return getSchedule;
 };
 
-const getSubmissionHistoryByScheduleId = async (userId, scheduleId) => {
+const getSubmissionHistoryByScheduleId = async (scheduleId) => {
+  const getSchedule = await SubmissionHistory.find({ scheduleId })
+    .populate({
+      path: "userId",
+      select: "_id fullName phone email image",
+    })
+    .select("-answer")
+    .sort("-toatalSubmitPoint");
+
+  return getSchedule;
+};
+
+const getSubmissionHistoryByUserAndScheduleId = async (userId, scheduleId) => {
   const getSchedule = await SubmissionHistory.findOne({
     userId,
     scheduleId,
@@ -31,6 +43,7 @@ const submissionHistoryService = {
   addSubmissionHistory,
   getSubmissionHistoryByUserId,
   getSubmissionHistoryByScheduleId,
+  getSubmissionHistoryByUserAndScheduleId,
 };
 
 module.exports = submissionHistoryService;

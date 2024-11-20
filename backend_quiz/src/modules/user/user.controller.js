@@ -38,8 +38,7 @@ const addUser = catchAsync(async (req, res) => {
   }
 
   const userExist = await userService.getSingleUserByEmailAndPhone(
-    userData.email,
-    userData.phone
+    userData.email
   );
 
   console.log(userExist);

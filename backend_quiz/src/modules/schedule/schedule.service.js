@@ -21,10 +21,39 @@ const getLiveQuizById = async (id) => {
   return getSchedule;
 };
 
+const getLiveQuiz = async () => {
+  const schedule = await Schedule.findOne({
+    status: "active",
+    // startTime: { $gte: new Date() },
+    // endTime: { $gte: new Date() },
+  });
+  return schedule;
+};
+
 const getRunningLiveQuiz = async () => {
   const schedule = await Schedule.findOne({
-    startTime: { $lte: now },
-    endTime: { $gte: now },
+    status: "active",
+    startTime: { $lte: new Date() },
+    endTime: { $gte: new Date() },
+  });
+  return schedule;
+};
+
+const getRunningLiveQuizSubmit = async () => {
+  const oneMinuteFromNow = new Date(Date.now() + 1 * 60 * 1000); // Add 1 minute
+  const schedule = await Schedule.findOne({
+    status: "active",
+    startTime: { $lte: new Date() },
+    endTime: { $gte: oneMinuteFromNow },
+  });
+  return schedule;
+};
+
+const getLastCompleteLiveQuiz = async () => {
+  const schedule = await Schedule.findOne({
+    status: "active",
+    startTime: { $lte: new Date() },
+    endTime: { $lte: new Date() },
   });
   return schedule;
 };
@@ -67,8 +96,11 @@ const deleteiveQuizById = async (scheduleId) => {
 const scheduleService = {
   addSchedule,
   getAllSchedule,
-  getLiveQuizById,
+  getLiveQuiz,
   getRunningLiveQuiz,
+  getRunningLiveQuizSubmit,
+  getLastCompleteLiveQuiz,
+  getLiveQuizById,
   getTotalScheduleQuiz,
   updateLiveQuizById,
   updateNumberOfQuestionsOfSchedule,
