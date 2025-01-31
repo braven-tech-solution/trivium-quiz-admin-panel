@@ -1,8 +1,5 @@
-// export const baseURL = "https://quiz.bd.coopersbakery.com/api/v1";
-// export const imageBaseURL = "https://quiz.bd.coopersbakery.com/";
-export const baseURL = "http://localhost:8000/api/v1";
-export const imageBaseURL = "http://localhost:8000"; //todo
+const baseDomain = import.meta.env.PROD ? import.meta.env.VITE_BACKEND_URL : "http://localhost:8000";
+export const baseURL = `${baseDomain}/api/v1`;
+export const imageBaseURL = `${baseDomain}`;
 
 export const productsPerPage = 10;
-
-// export const baseURL = "https://quiz.bd.coopersbakery.com/api/v1";
